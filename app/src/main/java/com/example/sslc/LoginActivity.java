@@ -22,6 +22,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * People who not admin ( Student, Teacher ) cannot register.
+ * Only admin can create new user for students and teachers.
+ * After admin create new user and provide login info (userID and Password), teachers and students can login
+ * with provided info.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @SuppressLint("NonConstantResourceId")

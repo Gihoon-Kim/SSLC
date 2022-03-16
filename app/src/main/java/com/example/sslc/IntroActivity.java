@@ -14,6 +14,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/*
+ * Splash Screen
+ */
 public class IntroActivity extends AppCompatActivity {
 
     @SuppressLint("NonConstantResourceId")
