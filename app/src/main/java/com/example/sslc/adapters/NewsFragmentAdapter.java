@@ -13,7 +13,6 @@ import com.example.sslc.R;
 import com.example.sslc.data.NewsData;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,11 +71,16 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
             ButterKnife.bind(this, itemView);
         }
 
-        void onBind(String title, String description, Date createdAt) {
+        @SuppressLint("SetTextI18n")
+        void onBind(String title, String description, String createdAt) {
 
             tv_NewsTitle.setText(title);
-            tv_NewsSummary.setText(description);
-            tv_NewsDate.setText(createdAt.toString());
+            if (description.length() > 30) {
+                tv_NewsSummary.setText(description.substring(0, 30) + "...");
+            } else {
+                tv_NewsSummary.setText(description);
+            }
+            tv_NewsDate.setText(createdAt);
         }
     }
 }

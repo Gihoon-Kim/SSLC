@@ -1,27 +1,15 @@
 package com.example.sslc.data;
 
-import android.annotation.SuppressLint;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class NewsData {
 
     private String title;
     private String description;
-    private Date createdAt;
+    private String createdAt;
 
     public NewsData(String title, String description, String createdAt) {
         this.title = title;
         this.description = description;
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy/MM/dd");
-        try {
-            this.createdAt = simpleDateFormat.parse(createdAt);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.createdAt = createdAt;
     }
 
     public String getTitle() {
@@ -40,11 +28,11 @@ public class NewsData {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 }
