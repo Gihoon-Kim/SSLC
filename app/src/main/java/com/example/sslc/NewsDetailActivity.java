@@ -1,23 +1,36 @@
 package com.example.sslc;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.sslc.databinding.ActivityNewsDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
+import com.example.sslc.requests.UpdateNewsRequest;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONObject;
 
 import java.util.Objects;
 
 public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialog.ChangeNewsTitleDialogListener {
 
+    private static final String TAG = "NewsDetailActivity";
+
     private ActivityNewsDetailBinding binding;
+
+    int newsID;
+    EditText et_NewsContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +41,7 @@ public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsT
 
         // Get Data through Intent
         Intent intent = getIntent();
+        newsID = intent.getIntExtra("NewsID", 0);
         String newsTitle = intent.getStringExtra("NewsTitle");
         String newsDescription = intent.getStringExtra("NewsDescription");
 
@@ -44,16 +58,53 @@ public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsT
             changeNewsTitleDialog.show(getSupportFragmentManager(), "ChangeTitleDialog");
         });
 
-        FloatingActionButton fab = binding.fab;
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        FloatingActionButton fab = binding.fabUpdate;
+        fab.setOnClickListener(view -> updateNews());
 
-        EditText et_NewsContent = binding.includeView.getRoot().findViewById(R.id.et_NewsContent);
+        et_NewsContent = binding.includeView.getRoot().findViewById(R.id.et_NewsContent);
         et_NewsContent.setText(newsDescription);
     }
 
     @Override
     public void applyNewTitle(String newTitle) {
         binding.toolbarLayout.setTitle(newTitle);
+    }
+
+    private void updateNews() {
+
+        ProgressDialog progressDialog = new ProgressDialog(NewsDetailActivity.this);
+        progressDialog.setTitle("Updating");
+        progressDialog.setMessage("Please Wait.\nUpdating in progress");
+        progressDialog.show();
+
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+
+                Log.i(TAG, response);
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean success = jsonResponse.getBoolean("success");
+                progressDialog.dismiss();
+
+                if (success) {
+
+                    finish();
+                } else {
+
+                    Toast.makeText(this, "Update Failure", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        UpdateNewsRequest updateNewsRequest = new UpdateNewsRequest(
+                newsID,
+                Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString(),
+                et_NewsContent.getText().toString(),
+                responseListener
+        );
+        RequestQueue queue = Volley.newRequestQueue(NewsDetailActivity.this);
+        queue.add(updateNewsRequest);
     }
 }

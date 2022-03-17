@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sslc.AdminMainActivity;
 import com.example.sslc.NewsDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.NewsData;
@@ -57,6 +55,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
         holder.cv_Item.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, NewsDetailActivity.class);
+            intent.putExtra("NewsID", newsDataList.get(position).getNewsID());
             intent.putExtra("NewsTitle", newsDataList.get(position).getTitle());
             intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());
             context.startActivity(intent);

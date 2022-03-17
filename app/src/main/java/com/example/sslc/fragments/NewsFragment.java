@@ -66,7 +66,7 @@ public class NewsFragment extends Fragment {
         // Get News
         newsDataList.clear();
 
-        Response.Listener<String> responseListener = response -> {
+        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
 
             try {
 
@@ -83,10 +83,12 @@ public class NewsFragment extends Fragment {
 
                     if (success) {
 
+                        int newsID = newsItem.getInt("newsNumber");
                         String newsTitle = newsItem.getString("newsTitle");
                         String newsDescription = newsItem.getString("newsDescription");
                         String newsCreatedAt = newsItem.getString("newsCreatedAt");
                         NewsData newsData = new NewsData(
+                                newsID,
                                 newsTitle,
                                 newsDescription,
                                 newsCreatedAt
@@ -101,7 +103,7 @@ public class NewsFragment extends Fragment {
         };
 
         GetNewsRequest getNewsRequest = new GetNewsRequest(responseListener);
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getNewsRequest);
     }
 

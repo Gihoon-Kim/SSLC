@@ -8,8 +8,9 @@
 
      $result = mysqli_query(
          $conn,
-         "SELECT newsTitle, newsDescription, createdAt
-            FROM SSLC_News"
+         "SELECT *
+            FROM SSLC_News
+            ORDER BY createdAt DESC"
      );
      $response = array();
      while ($row = mysqli_fetch_array($result)) {
@@ -18,9 +19,10 @@
             $response,
             array(
                 'success' => true,
-                'newsTitle' => $row[0],
-                'newsDescription' => $row[1],
-                'newsCreatedAt' => $row[2]
+                'newsNumber' => $row[0],
+                'newsTitle' => $row[1],
+                'newsDescription' => $row[2],
+                'newsCreatedAt' => $row[3]
             )
             );
      }

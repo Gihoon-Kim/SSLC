@@ -6,11 +6,23 @@ public class NewsData {
     private String description;
     private String createdAt;
 
-    public NewsData(String title, String description, String createdAt) {
+    private int newsID;
+
+    public NewsData(int newsID, String title, String description, String createdAt) {
+        this.newsID = newsID;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
     }
+
+    public int getNewsID() {
+        return newsID;
+    }
+
+    public void setNewsID(int newsID) {
+        this.newsID = newsID;
+    }
+
 
     public String getTitle() {
         return title;
