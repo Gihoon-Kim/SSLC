@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.sslc.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TeacherFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TeacherFragment extends Fragment {
 
     public TeacherFragment() {

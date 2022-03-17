@@ -21,20 +21,14 @@ public class TabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
 
-            case 0:
-                NewsFragment notificationFragment = new NewsFragment();
-                return notificationFragment;
             case 1:
-                TeacherFragment teacherFragment = new TeacherFragment();
-                return teacherFragment;
+                return new TeacherFragment();
             case 2:
-                StudentFragment studentFragment = new StudentFragment();
-                return studentFragment;
+                return new StudentFragment();
             case 3:
-                ClassFragment classFragment = new ClassFragment();
-                return classFragment;
+                return new ClassFragment();
             default:
-                return null;
+                return new NewsFragment();
         }
     }
 

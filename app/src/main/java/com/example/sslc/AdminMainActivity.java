@@ -1,11 +1,12 @@
 package com.example.sslc;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.WindowManager;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
-
-import android.os.Bundle;
 
 import com.example.sslc.adapters.TabAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -21,8 +22,10 @@ import butterknife.ButterKnife;
  */
 public class AdminMainActivity extends AppCompatActivity {
 
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 

@@ -12,4 +12,14 @@
         android:text="Student Fragment"
         android:textColor="@color/black"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_Student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_baseline_add_24"
+        android:contentDescription="Example Description"
+        android:backgroundTint="#FF0000"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="64dp" />
 </FrameLayout>
