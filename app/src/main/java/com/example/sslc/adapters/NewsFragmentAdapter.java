@@ -1,14 +1,20 @@
 package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sslc.AdminMainActivity;
+import com.example.sslc.NewsDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.NewsData;
 
@@ -20,10 +26,12 @@ import butterknife.ButterKnife;
 public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapter.NewsFragmentViewHolder> {
 
     ArrayList<NewsData> newsDataList;
+    Context context;
 
-    public NewsFragmentAdapter(ArrayList<NewsData> newsDataList) {
+    public NewsFragmentAdapter(Context context, ArrayList<NewsData> newsDataList) {
 
         this.newsDataList = newsDataList;
+        this.context = context;
     }
 
     @NonNull
@@ -46,6 +54,13 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
                 newsDataList.get(position).getDescription(),
                 newsDataList.get(position).getCreatedAt()
         );
+        holder.cv_Item.setOnClickListener(view -> {
+
+            Intent intent = new Intent(context, NewsDetailActivity.class);
+            intent.putExtra("NewsTitle", newsDataList.get(position).getTitle());
+            intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -64,6 +79,9 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
         @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_NewsSummary)
         TextView tv_NewsSummary;
+        @SuppressLint("NonConstantResourceId")
+        @BindView(R.id.cv_Item)
+        CardView cv_Item;
 
         public NewsFragmentViewHolder(@NonNull View itemView) {
             super(itemView);

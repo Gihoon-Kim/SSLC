@@ -54,12 +54,14 @@ public class NewsFragment extends Fragment {
         // Create RecyclerView
         rv_News.setHasFixedSize(true);
         rv_News.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        newsFragmentAdapter = new NewsFragmentAdapter(newsDataList);
+        newsFragmentAdapter = new NewsFragmentAdapter(getContext(), newsDataList);
         rv_News.setAdapter(newsFragmentAdapter);
 
         return view;
     }
 
+    // This method is to get news from database.
+    // When Activity is resumed, it is executed.
     private void GetNews() {
         // Get News
         newsDataList.clear();

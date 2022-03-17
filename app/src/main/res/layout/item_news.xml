@@ -6,6 +6,7 @@
     android:layout_margin="10dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_Item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="#ff99cccc"

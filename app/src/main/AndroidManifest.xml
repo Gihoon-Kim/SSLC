@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".NewsDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_news_detail"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
             android:name=".AdminAddNewsActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_news"
