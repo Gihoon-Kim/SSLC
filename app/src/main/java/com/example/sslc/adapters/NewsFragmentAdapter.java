@@ -1,21 +1,31 @@
 package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.sslc.AdminNewsDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.NewsData;
+import com.example.sslc.requests.DeleteNewsRequest;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,9 +34,12 @@ import butterknife.ButterKnife;
 
 public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapter.NewsFragmentViewHolder> {
 
+    private static final String TAG = "NewsFragmentAdapter";
+
     ArrayList<NewsData> newsDataList;
     Context context;
     ActivityResultLauncher<Intent> updateNewsActivityResultLauncher;
+    ProgressDialog progressDialog;
 
     public NewsFragmentAdapter(Context context, ArrayList<NewsData> newsDataList, ActivityResultLauncher<Intent> updateNewsActivityResultLauncher) {
 
@@ -47,6 +60,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
         return new NewsFragmentAdapter.NewsFragmentViewHolder(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull NewsFragmentViewHolder holder, int position) {
 
@@ -55,6 +69,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
                 newsDataList.get(position).getDescription(),
                 newsDataList.get(position).getCreatedAt()
         );
+
         holder.cv_Item.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, AdminNewsDetailActivity.class);
@@ -63,6 +78,53 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
             intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());
             updateNewsActivityResultLauncher.launch(intent);
         });
+
+        holder.cv_Item.setOnLongClickListener(view -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Do you really want to remove this News?")
+                    .setTitle("Delete News : " + newsDataList.get(position).getTitle())
+                    .setPositiveButton("Delete", (dialogInterface, i) ->
+                            deleteNewsFromDatabase(position, newsDataList.get(position).getNewsID()))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            return true;
+        });
+    }
+
+    private void deleteNewsFromDatabase(int position, int newsID) {
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Delete News");
+        progressDialog.setMessage("Please Wait.\nDeleting in progress");
+        progressDialog.show();
+
+        @SuppressLint("NotifyDataSetChanged")
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+
+                Log.i(TAG, response);
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean success = jsonResponse.getBoolean("success");
+                progressDialog.dismiss();
+
+                if (success) {
+
+                    newsDataList.remove(position);
+                    notifyDataSetChanged();
+                } else {
+
+                    Toast.makeText(context, "Delete News Failed", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        DeleteNewsRequest deleteNewsRequest = new DeleteNewsRequest(newsID, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(deleteNewsRequest);
     }
 
     @Override

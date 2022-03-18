@@ -178,10 +178,4 @@ public class NewsFragment extends Fragment {
         Intent intent = new Intent(getContext(), AdminAddNewsActivity.class);
         addNewsActivityResultLauncher.launch(intent);
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 }
