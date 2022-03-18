@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.sslc.databinding.ActivityNewsDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
+import com.example.sslc.fragments.NewsFragment;
 import com.example.sslc.requests.UpdateNewsRequest;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -88,6 +89,11 @@ public class AdminNewsDetailActivity extends AppCompatActivity implements Change
 
                 if (success) {
 
+                    Intent intent = new Intent(getApplicationContext(), NewsFragment.class);
+                    intent.putExtra("newsID", newsID);
+                    intent.putExtra("newTitle", Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
+                    intent.putExtra("newDesc", et_NewsContent.getText().toString());
+                    setResult(9002, intent);
                     finish();
                 } else {
 

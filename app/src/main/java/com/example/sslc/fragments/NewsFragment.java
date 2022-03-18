@@ -26,7 +26,9 @@ import com.example.sslc.requests.GetNewsRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -45,6 +47,7 @@ public class NewsFragment extends Fragment {
     ArrayList<NewsData> newsDataList = new ArrayList<>();
 
     ActivityResultLauncher<Intent> addNewsActivityResultLauncher;
+    ActivityResultLauncher<Intent> updateNewsActivityResultLauncher;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -57,14 +60,27 @@ public class NewsFragment extends Fragment {
         // Get News from database
         GetNews();
 
+        // Initialize activityResult Launchers
+        activityResultLauncherInit();
+
         // Create RecyclerView
         rv_News.setHasFixedSize(true);
         rv_News.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        newsFragmentAdapter = new NewsFragmentAdapter(getContext(), newsDataList);
+        newsFragmentAdapter = new NewsFragmentAdapter(getContext(), newsDataList, updateNewsActivityResultLauncher);
         rv_News.setAdapter(newsFragmentAdapter);
 
-        // activityResultLauncher Initialize
-        addNewsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        return view;
+    }
+
+    // To add, to update a news, it requires open new activity.
+    // the launchers are to get newly added / updated result of NewsData.
+    @SuppressLint("NotifyDataSetChanged")
+    private void activityResultLauncherInit() {
+
+        // addActivityResultLauncher Initialize
+        addNewsActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
 
             if (result.getResultCode() == 9001) {
 
@@ -76,7 +92,38 @@ public class NewsFragment extends Fragment {
                 newsFragmentAdapter.notifyDataSetChanged();
             }
         });
-        return view;
+
+        // updateActivityResultLauncher Initialize
+        updateNewsActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+            if (result.getResultCode() == 9002) {
+
+                Intent intent = result.getData();
+                int newsID = Objects.requireNonNull(intent).getIntExtra("newsID", 0);
+                String newTitle = Objects.requireNonNull(intent).getStringExtra("newTitle");
+                String newDesc = intent.getStringExtra("newDesc");
+
+                Log.i(TAG, "News ID : " + newsID + "\nNew Title : " + newTitle + "\nNew Content" + newDesc);
+
+                // find Index of newsDataList
+                for (int i = 0; i < newsDataList.size(); i++) {
+
+                    if (newsDataList.get(i).getNewsID() == newsID) {
+
+                        newsDataList.get(i).setTitle(newTitle);
+                        newsDataList.get(i).setDescription(newDesc);
+
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        Date date = new Date();
+                        newsDataList.get(i).setCreatedAt(dateFormat.format(date));
+                        newsFragmentAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     // This method is to get news from database.
@@ -130,5 +177,11 @@ public class NewsFragment extends Fragment {
 
         Intent intent = new Intent(getContext(), AdminAddNewsActivity.class);
         addNewsActivityResultLauncher.launch(intent);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

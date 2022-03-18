@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,11 +26,13 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
 
     ArrayList<NewsData> newsDataList;
     Context context;
+    ActivityResultLauncher<Intent> updateNewsActivityResultLauncher;
 
-    public NewsFragmentAdapter(Context context, ArrayList<NewsData> newsDataList) {
+    public NewsFragmentAdapter(Context context, ArrayList<NewsData> newsDataList, ActivityResultLauncher<Intent> updateNewsActivityResultLauncher) {
 
         this.newsDataList = newsDataList;
         this.context = context;
+        this.updateNewsActivityResultLauncher = updateNewsActivityResultLauncher;
     }
 
     @NonNull
@@ -58,7 +61,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
             intent.putExtra("NewsID", newsDataList.get(position).getNewsID());
             intent.putExtra("NewsTitle", newsDataList.get(position).getTitle());
             intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());
-            context.startActivity(intent);
+            updateNewsActivityResultLauncher.launch(intent);
         });
     }
 
