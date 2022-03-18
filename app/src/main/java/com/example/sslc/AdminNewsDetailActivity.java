@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialog.ChangeNewsTitleDialogListener {
+public class AdminNewsDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialog.ChangeNewsTitleDialogListener {
 
     private static final String TAG = "NewsDetailActivity";
 
@@ -72,7 +72,7 @@ public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsT
 
     private void updateNews() {
 
-        ProgressDialog progressDialog = new ProgressDialog(NewsDetailActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(AdminNewsDetailActivity.this);
         progressDialog.setTitle("Updating");
         progressDialog.setMessage("Please Wait.\nUpdating in progress");
         progressDialog.show();
@@ -104,7 +104,7 @@ public class NewsDetailActivity extends AppCompatActivity implements ChangeNewsT
                 et_NewsContent.getText().toString(),
                 responseListener
         );
-        RequestQueue queue = Volley.newRequestQueue(NewsDetailActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(AdminNewsDetailActivity.this);
         queue.add(updateNewsRequest);
     }
 }

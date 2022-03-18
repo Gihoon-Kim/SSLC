@@ -1,6 +1,7 @@
 package com.example.sslc;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.sslc.databinding.ActivityAdminAddNewsBinding;
+import com.example.sslc.fragments.NewsFragment;
 import com.example.sslc.requests.AddNewsRequest;
 
 import org.json.JSONObject;
@@ -55,7 +57,10 @@ public class AdminAddNewsActivity extends AppCompatActivity {
 
                         if (success) {
 
-                            Toast.makeText(AdminAddNewsActivity.this, response, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), NewsFragment.class);
+                            intent.putExtra("newsDataTitle", newsTitle);
+                            intent.putExtra("newsDataDesc", newsDescription);
+                            setResult(9001, intent);
                             finish();
                         } else {
 

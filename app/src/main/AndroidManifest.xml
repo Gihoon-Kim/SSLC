@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
-            android:name=".NewsDetailActivity"
+            android:name=".AdminNewsDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_news_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />

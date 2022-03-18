@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sslc.NewsDetailActivity;
+import com.example.sslc.AdminNewsDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.NewsData;
 
@@ -54,7 +54,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
         );
         holder.cv_Item.setOnClickListener(view -> {
 
-            Intent intent = new Intent(context, NewsDetailActivity.class);
+            Intent intent = new Intent(context, AdminNewsDetailActivity.class);
             intent.putExtra("NewsID", newsDataList.get(position).getNewsID());
             intent.putExtra("NewsTitle", newsDataList.get(position).getTitle());
             intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());

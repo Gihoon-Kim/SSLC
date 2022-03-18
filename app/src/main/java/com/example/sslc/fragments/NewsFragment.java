@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +44,7 @@ public class NewsFragment extends Fragment {
     NewsFragmentAdapter newsFragmentAdapter;
     ArrayList<NewsData> newsDataList = new ArrayList<>();
 
-    public NewsFragment() { }
+    ActivityResultLauncher<Intent> addNewsActivityResultLauncher;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -51,12 +54,28 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, view);
 
+        // Get News from database
+        GetNews();
+
         // Create RecyclerView
         rv_News.setHasFixedSize(true);
         rv_News.setLayoutManager(new LinearLayoutManager(this.getContext()));
         newsFragmentAdapter = new NewsFragmentAdapter(getContext(), newsDataList);
         rv_News.setAdapter(newsFragmentAdapter);
 
+        // activityResultLauncher Initialize
+        addNewsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+
+            if (result.getResultCode() == 9001) {
+
+                Intent intent = result.getData();
+                String newsDataTitle = Objects.requireNonNull(intent).getStringExtra("newsDataTitle");
+                String newsDataDesc = intent.getStringExtra("newsDataDesc");
+                NewsData newsData = new NewsData(newsDataTitle, newsDataDesc);
+                newsDataList.add(0, newsData);
+                newsFragmentAdapter.notifyDataSetChanged();
+            }
+        });
         return view;
     }
 
@@ -73,8 +92,6 @@ public class NewsFragment extends Fragment {
                 Log.i(TAG, "response : " + response);
                 JSONObject jsonResponse = new JSONObject(response);
                 JSONArray jsonArray = jsonResponse.getJSONArray("News");
-
-                Log.i(TAG, jsonArray.toString());
 
                 for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -107,17 +124,11 @@ public class NewsFragment extends Fragment {
         queue.add(getNewsRequest);
     }
 
-    @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
+    @SuppressLint({"NonConstantResourceId"})
     @OnClick(R.id.fab_News)
     public void onFabNewsClicked() {
 
-        startActivity(new Intent(getContext(), AdminAddNewsActivity.class));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        GetNews();
+        Intent intent = new Intent(getContext(), AdminAddNewsActivity.class);
+        addNewsActivityResultLauncher.launch(intent);
     }
 }
