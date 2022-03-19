@@ -17,6 +17,19 @@ public class Teacher extends People {
         this.isTeacher = isTeacher;
     }
 
+    public Teacher(int teacherId,
+                   String name,
+                   String image,
+                   String dob,
+                   String myClass,
+                   String aboutMe,
+                   boolean isTeacher
+    ) {
+        super(name, image, dob, myClass, aboutMe);
+        this.teacherId = teacherId;
+        this.isTeacher = isTeacher;
+    }
+
     public int getTeacherId() {
         return teacherId;
     }

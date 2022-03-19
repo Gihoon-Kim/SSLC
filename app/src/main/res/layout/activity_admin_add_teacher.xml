@@ -55,7 +55,8 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/add_teacher_content_scrolling" />
+    <include layout="@layout/add_teacher_content_scrolling"
+        android:id="@+id/teacherInclude"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_AddTeacher"

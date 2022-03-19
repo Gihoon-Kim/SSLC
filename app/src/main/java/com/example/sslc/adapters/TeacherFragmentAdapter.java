@@ -91,7 +91,8 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 String teacherIntroduce
         ) {
 
-            if (teacherProfileImage != null) {
+            if (teacherProfileImage == null
+            || teacherProfileImage.equals("")) {
 
                 // TODO: set teacher profile image if teacherProfileImage is not null
             } else {
