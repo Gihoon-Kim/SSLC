@@ -1,6 +1,7 @@
 package com.example.sslc.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sslc.AdminAddTeacherActivity;
 import com.example.sslc.R;
 import com.example.sslc.adapters.TeacherFragmentAdapter;
 import com.example.sslc.data.Teacher;
@@ -54,15 +56,7 @@ public class TeacherFragment extends Fragment {
     @OnClick(R.id.fab_Teacher)
     public void onFabTeacherClicked() {
 
-        Teacher testTeacher = new Teacher(
-                "Gihoon Kim",
-                null,
-                "12/05/94",
-                "Power Speaking",
-                "He is a great teacher",
-                true
-        );
-        teacherList.add(testTeacher);
-        teacherFragmentAdapter.notifyDataSetChanged();
+        Intent intent = new Intent(getContext(), AdminAddTeacherActivity.class);
+        startActivity(intent);
     }
 }

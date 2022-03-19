@@ -3,13 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/edittext_box.xml" value="0.1925" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.145" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/add_news_content_scrolling.xml" value="0.132421875" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/add_teacher_content_scrolling.xml" value="0.1" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.1" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w936dp/add_news_content_scrolling.xml" value="0.190625" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w936dp/content_scrolling.xml" value="0.101171875" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_admin_add_news.xml" value="0.1" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_admin_add_teacher.xml" value="0.264" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_admin_main.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_intro.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_news_detail.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_news_detail.xml" value="0.1" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/add_news_content_scrolling.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/add_teacher_content_scrolling.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/content_scrolling.xml" value="0.1875" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/dialog_change_news_title.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class.xml" value="0.1" />
