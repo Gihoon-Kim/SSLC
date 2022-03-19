@@ -1,25 +1,68 @@
 package com.example.sslc.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sslc.R;
+import com.example.sslc.adapters.TeacherFragmentAdapter;
+import com.example.sslc.data.Teacher;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class TeacherFragment extends Fragment {
 
-    public TeacherFragment() {
-        // Required empty public constructor
-    }
+    @SuppressLint("NonConstantResourceId")
+    @BindView(R.id.rv_Teacher)
+    RecyclerView rv_Teacher;
+
+    TeacherFragmentAdapter teacherFragmentAdapter;
+    ArrayList<Teacher> teacherList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_teacher, container, false);
+        View view = inflater.inflate(R.layout.fragment_teacher, container, false);
+        ButterKnife.bind(this, view);
+
+        rv_Teacher.setHasFixedSize(true);
+        rv_Teacher.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        rv_Teacher.addItemDecoration(new DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL));
+
+        teacherFragmentAdapter = new TeacherFragmentAdapter(teacherList);
+        rv_Teacher.setAdapter(teacherFragmentAdapter);
+
+        return view;
+    }
+
+    @SuppressLint({"NotifyDataSetChanged", "NonConstantResourceId"})
+    @OnClick(R.id.fab_Teacher)
+    public void onFabTeacherClicked() {
+
+        Teacher testTeacher = new Teacher(
+                "Gihoon Kim",
+                null,
+                "12/05/94",
+                "Power Speaking",
+                "He is a great teacher",
+                true
+        );
+        teacherList.add(testTeacher);
+        teacherFragmentAdapter.notifyDataSetChanged();
     }
 }

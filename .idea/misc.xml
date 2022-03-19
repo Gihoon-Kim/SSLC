@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.145" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_admin_add_news.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_admin_main.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_intro.xml" value="0.25416666666666665" />
@@ -17,6 +18,7 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_student.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_teacher.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_news.xml" value="0.128" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_teacher.xml" value="0.264" />
       </map>
     </option>
   </component>

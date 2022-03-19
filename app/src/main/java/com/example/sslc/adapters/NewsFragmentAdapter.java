@@ -51,7 +51,9 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
     @NonNull
     @Override
     public NewsFragmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(
+        View view = LayoutInflater
+                .from(parent.getContext())
+                .inflate(
                 R.layout.item_news,
                 parent,
                 false
@@ -85,14 +87,14 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
             builder.setMessage("Do you really want to remove this News?")
                     .setTitle("Delete News : " + newsDataList.get(position).getTitle())
                     .setPositiveButton("Delete", (dialogInterface, i) ->
-                            deleteNewsFromDatabase(position, newsDataList.get(position).getNewsID()))
+                            deleteNewsFromListAndDatabase(position, newsDataList.get(position).getNewsID()))
                     .setNegativeButton("Cancel", null)
                     .show();
             return true;
         });
     }
 
-    private void deleteNewsFromDatabase(int position, int newsID) {
+    private void deleteNewsFromListAndDatabase(int position, int newsID) {
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("Delete News");
