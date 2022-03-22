@@ -2,6 +2,7 @@ package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.sslc.AdminTeacherDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Teacher;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -59,6 +62,29 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 teacherList.get(position).getMyClass(),
                 teacherList.get(position).getAboutMe()
         );
+
+        holder.itemView.setOnClickListener(view -> {
+
+            Intent intent = new Intent(context, AdminTeacherDetailActivity.class);
+            intent.putExtra("teacherName", teacherList.get(holder.getAdapterPosition()).getName());
+            intent.putExtra("teacherClass", teacherList.get(holder.getAdapterPosition()).getMyClass());
+            intent.putExtra("teacherDOB", teacherList.get(holder.getAdapterPosition()).getDob());
+            intent.putExtra("teacherIntroduce", teacherList.get(holder.getAdapterPosition()).getAboutMe());
+
+            if (teacherList.get(holder.getAdapterPosition()).getImage() == null) {
+
+                intent.putExtra("isThereImage", false);
+                intent.putExtra("teacherProfileImage", "null");
+            } else {
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                teacherList.get(holder.getAdapterPosition()).getImage().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                intent.putExtra("isThereImage", true);
+                intent.putExtra("teacherProfileImage", byteArray);
+            }
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -101,7 +127,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
             Log.i("TeacherFragmentAdapter", "image : " + teacherProfileImage);
 
-            if (teacherProfileImage.equals("")) {
+            if (teacherProfileImage == null || teacherProfileImage.equals("")) {
 
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
             } else {
@@ -109,7 +135,6 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 Glide.with(context)
                         .load(teacherProfileImage)
                         .into(iv_TeacherProfileImage);
-
             }
 
             tv_TeacherName.setText(teacherName);

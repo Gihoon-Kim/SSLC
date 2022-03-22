@@ -13,11 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".AdminDetailTeacherActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_detail_teacher"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
+            android:name=".AdminTeacherDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_teacher_detail"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
             android:name=".AdminAddTeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_teacher"
-            android:theme="@style/Theme.SSLC.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
             android:name=".AdminNewsDetailActivity"
             android:exported="false"
@@ -37,7 +46,6 @@
         <activity
             android:name=".IntroActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
