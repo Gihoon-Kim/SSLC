@@ -1,16 +1,18 @@
 package com.example.sslc.data;
 
+import android.graphics.Bitmap;
+
 public class People {
 
     String name;
-    String image;
+    Bitmap image;
     String dob;
     String myClass;
     String aboutMe;
 
     public People(
             String name,
-            String image,
+            Bitmap image,
             String dob,
             String myClass,
             String aboutMe
@@ -30,11 +32,11 @@ public class People {
         this.name = name;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 

@@ -2,7 +2,10 @@ package com.example.sslc.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +70,7 @@ public class TeacherFragment extends Fragment {
         // Initialize activityResult Launchers
         activityResultLauncherInit();
 
-        teacherFragmentAdapter = new TeacherFragmentAdapter(teacherList);
+        teacherFragmentAdapter = new TeacherFragmentAdapter(requireContext(), teacherList);
         rv_Teacher.setAdapter(teacherFragmentAdapter);
 
         return view;
@@ -76,7 +80,7 @@ public class TeacherFragment extends Fragment {
 
         teacherList.clear();
 
-        Response.Listener<String> responseListener = response -> {
+        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
 
             try {
 
@@ -98,10 +102,13 @@ public class TeacherFragment extends Fragment {
                         String teacherIntroduce = teacherItem.getString("teacherIntroduce");
                         String teacherImage = teacherItem.getString("teacherImage");
 
+                        byte [] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
+                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
                         Teacher teacher = new Teacher(
                                 teacherID,
                                 teacherName,
-                                teacherImage,
+                                profileBitmap,
                                 teacherDOB,
                                 teacherClass,
                                 teacherIntroduce,
@@ -121,6 +128,7 @@ public class TeacherFragment extends Fragment {
         queue.add(getTeacherRequest);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void activityResultLauncherInit() {
 
         addTeacherActivityResultLauncher = registerForActivityResult(
@@ -130,15 +138,18 @@ public class TeacherFragment extends Fragment {
                     if (result.getResultCode() == 9003) {
 
                         Intent intent = result.getData();
-                        String teacherName = intent.getStringExtra("teacherName");
+                        String teacherName = Objects.requireNonNull(intent).getStringExtra("teacherName");
                         String teacherClass = intent.getStringExtra("teacherClass");
                         String teacherImage = intent.getStringExtra("teacherImage");
                         String teacherDOB = intent.getStringExtra("teacherDOB");
                         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
 
+                        byte [] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
+                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
                         Teacher teacher = new Teacher(
                                 teacherName,
-                                teacherImage,
+                                profileBitmap,
                                 teacherDOB,
                                 teacherClass,
                                 teacherIntroduce,

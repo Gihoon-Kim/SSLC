@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sslc">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +16,8 @@
             android:name=".AdminAddTeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_teacher"
-            android:theme="@style/Theme.SSLC.NoActionBar" />
+            android:theme="@style/Theme.SSLC.NoActionBar" >
+        </activity>
         <activity
             android:name=".AdminNewsDetailActivity"
             android:exported="false"

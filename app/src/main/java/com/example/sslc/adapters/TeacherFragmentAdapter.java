@@ -1,6 +1,9 @@
 package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.sslc.R;
 import com.example.sslc.data.Teacher;
 
@@ -20,10 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragmentAdapter.TeacherFragmentViewHolder> {
 
+    Context context;
     ArrayList<Teacher> teacherList;
 
-    public TeacherFragmentAdapter(ArrayList<Teacher> teacherList) {
+    public TeacherFragmentAdapter(Context context, ArrayList<Teacher> teacherList) {
 
+        this.context = context;
         this.teacherList = teacherList;
     }
 
@@ -46,6 +52,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
     public void onBindViewHolder(@NonNull TeacherFragmentViewHolder holder, int position) {
 
         holder.onBind(
+                context,
                 teacherList.get(position).getImage(),
                 teacherList.get(position).getName(),
                 teacherList.get(position).getDob(),
@@ -84,20 +91,25 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
         }
 
         void onBind(
-                String teacherProfileImage,
+                Context context,
+                Bitmap teacherProfileImage,
                 String teacherName,
                 String teacherDOB,
                 String teacherClass,
                 String teacherIntroduce
         ) {
 
-            if (teacherProfileImage == null
-            || teacherProfileImage.equals("")) {
+            Log.i("TeacherFragmentAdapter", "image : " + teacherProfileImage);
 
-                // TODO: set teacher profile image if teacherProfileImage is not null
-            } else {
+            if (teacherProfileImage.equals("")) {
 
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
+            } else {
+
+                Glide.with(context)
+                        .load(teacherProfileImage)
+                        .into(iv_TeacherProfileImage);
+
             }
 
             tv_TeacherName.setText(teacherName);
