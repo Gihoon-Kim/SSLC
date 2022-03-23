@@ -49,6 +49,7 @@ public class TeacherFragment extends Fragment {
     ArrayList<Teacher> teacherList = new ArrayList<>();
 
     ActivityResultLauncher<Intent> addTeacherActivityResultLauncher;
+    ActivityResultLauncher<Intent> updateTeacherActivityResultLauncher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +71,7 @@ public class TeacherFragment extends Fragment {
         // Initialize activityResult Launchers
         activityResultLauncherInit();
 
-        teacherFragmentAdapter = new TeacherFragmentAdapter(requireContext(), teacherList);
+        teacherFragmentAdapter = new TeacherFragmentAdapter(requireContext(), teacherList, updateTeacherActivityResultLauncher);
         rv_Teacher.setAdapter(teacherFragmentAdapter);
 
         return view;
@@ -159,6 +160,41 @@ public class TeacherFragment extends Fragment {
                         teacherFragmentAdapter.notifyDataSetChanged();
                     }
         });
+
+        updateTeacherActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+                    if (result.getResultCode() == 9004) {
+
+                        Intent intent = result.getData();
+                        int teacherID = Objects.requireNonNull(intent).getIntExtra("teacherID", 0);
+                        String teacherName = intent.getStringExtra("teacherName");
+                        String teacherClass = intent.getStringExtra("teacherClass");
+                        String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
+                        String teacherImageBLOB = intent.getStringExtra("teacherImage");
+                        String teacherDOB = intent.getStringExtra("teacherDOB");
+
+                        Log.i(TAG, "teacherID = " + teacherID + "teacherName = " + teacherName);
+                        byte [] encodeByte = Base64.decode(teacherImageBLOB, Base64.DEFAULT);
+                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
+                        for (int i = 0; i < teacherList.size(); i++) {
+
+                            if (teacherList.get(i).getTeacherId() == teacherID) {
+
+                                teacherList.get(i).setName(teacherName);
+                                teacherList.get(i).setDob(teacherDOB);
+                                teacherList.get(i).setMyClass(teacherClass);
+                                teacherList.get(i).setAboutMe(teacherIntroduce);
+                                teacherList.get(i).setImage(profileBitmap);
+                                teacherFragmentAdapter.notifyItemChanged(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     @SuppressLint({"NotifyDataSetChanged", "NonConstantResourceId"})

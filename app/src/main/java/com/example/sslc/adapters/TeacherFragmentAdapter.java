@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +30,17 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
     Context context;
     ArrayList<Teacher> teacherList;
+    ActivityResultLauncher<Intent> updateTeacherActivityResultLauncher;
 
-    public TeacherFragmentAdapter(Context context, ArrayList<Teacher> teacherList) {
+    public TeacherFragmentAdapter(
+            Context context,
+            ArrayList<Teacher> teacherList,
+            ActivityResultLauncher<Intent> updateTeacherActivityResultLauncher
+    ) {
 
         this.context = context;
         this.teacherList = teacherList;
+        this.updateTeacherActivityResultLauncher = updateTeacherActivityResultLauncher;
     }
 
     @NonNull
@@ -66,6 +73,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
         holder.itemView.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, AdminTeacherDetailActivity.class);
+            intent.putExtra("teacherID", teacherList.get(holder.getAdapterPosition()).getTeacherId());
             intent.putExtra("teacherName", teacherList.get(holder.getAdapterPosition()).getName());
             intent.putExtra("teacherClass", teacherList.get(holder.getAdapterPosition()).getMyClass());
             intent.putExtra("teacherDOB", teacherList.get(holder.getAdapterPosition()).getDob());
@@ -83,7 +91,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 intent.putExtra("isThereImage", true);
                 intent.putExtra("teacherProfileImage", byteArray);
             }
-            context.startActivity(intent);
+            updateTeacherActivityResultLauncher.launch(intent);
         });
     }
 
