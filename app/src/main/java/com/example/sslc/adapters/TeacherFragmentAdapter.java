@@ -148,7 +148,13 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
             tv_TeacherName.setText(teacherName);
             tv_TeacherDOB.setText(teacherDOB);
             tv_TeacherClass.setText(teacherClass);
-            tv_TeacherIntroduce.setText(teacherIntroduce);
+            if (teacherIntroduce.length() > 15) {
+
+                tv_TeacherIntroduce.setText(teacherIntroduce.substring(0, 15).concat(".."));
+            } else {
+
+                tv_TeacherIntroduce.setText(teacherIntroduce);
+            }
         }
     }
 }
