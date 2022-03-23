@@ -56,7 +56,11 @@ public class TeacherFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_teacher, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_teacher,
+                container,
+                false
+        );
         ButterKnife.bind(this, view);
 
         rv_Teacher.setHasFixedSize(true);

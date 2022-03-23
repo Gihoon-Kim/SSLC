@@ -6,8 +6,6 @@ public class Teacher extends People {
 
     int teacherId;
 
-    boolean isTeacher;
-
     public Teacher(String name,
                    Bitmap image,
                    String dob,
@@ -15,7 +13,7 @@ public class Teacher extends People {
                    String aboutMe,
                    boolean isTeacher
     ) {
-        super(name, image, dob, myClass, aboutMe);
+        super(name, image, dob, myClass, aboutMe, isTeacher);
         this.isTeacher = isTeacher;
     }
 
@@ -27,9 +25,8 @@ public class Teacher extends People {
                    String aboutMe,
                    boolean isTeacher
     ) {
-        super(name, image, dob, myClass, aboutMe);
+        super(name, image, dob, myClass, aboutMe, isTeacher);
         this.teacherId = teacherId;
-        this.isTeacher = isTeacher;
     }
 
     public int getTeacherId() {
@@ -38,14 +35,5 @@ public class Teacher extends People {
 
     public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
-    }
-
-
-    public boolean isTeacher() {
-        return isTeacher;
-    }
-
-    public void setTeacher(boolean teacher) {
-        isTeacher = teacher;
     }
 }

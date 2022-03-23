@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".AdminAddStudentActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_add_student"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
             android:name=".AdminDetailTeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_detail_teacher"

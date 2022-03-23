@@ -9,19 +9,21 @@ public class People {
     String dob;
     String myClass;
     String aboutMe;
+    boolean isTeacher;
 
     public People(
             String name,
             Bitmap image,
             String dob,
             String myClass,
-            String aboutMe
-    ) {
+            String aboutMe,
+            boolean isTeacher) {
         this.name = name;
         this.image = image;
         this.dob = dob;
         this.myClass = myClass;
         this.aboutMe = aboutMe;
+        this.isTeacher = isTeacher;
     }
 
     public String getName() {
@@ -62,5 +64,13 @@ public class People {
 
     public void setAboutMe(String aboutMe) {
         this.aboutMe = aboutMe;
+    }
+
+    public boolean isTeacher() {
+        return isTeacher;
+    }
+
+    public void setTeacher(boolean teacher) {
+        isTeacher = teacher;
     }
 }
