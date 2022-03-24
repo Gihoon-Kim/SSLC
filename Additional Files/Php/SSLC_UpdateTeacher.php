@@ -21,7 +21,7 @@
                 TeacherClass = '$teacherClass',
                 TeacherIntroduce = '$teacherIntroduce',
                 TeacherImage = '$teacherImage'
-            WHERE TeacherID = '$teacherID'"
+            WHERE teacherNumber = '$teacherID'"
     );
     mysqli_stmt_execute($statement);
 
