@@ -143,6 +143,7 @@ public class TeacherFragment extends Fragment {
                     if (result.getResultCode() == 9003) {
 
                         Intent intent = result.getData();
+                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra("teacherNumber", 0);
                         String teacherName = Objects.requireNonNull(intent).getStringExtra("teacherName");
                         String teacherClass = intent.getStringExtra("teacherClass");
                         String teacherImage = intent.getStringExtra("teacherImage");
@@ -153,6 +154,7 @@ public class TeacherFragment extends Fragment {
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         Teacher teacher = new Teacher(
+                                teacherNumber,
                                 teacherName,
                                 profileBitmap,
                                 teacherDOB,
@@ -172,20 +174,20 @@ public class TeacherFragment extends Fragment {
                     if (result.getResultCode() == 9004) {
 
                         Intent intent = result.getData();
-                        int teacherID = Objects.requireNonNull(intent).getIntExtra("teacherID", 0);
+                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra("teacherID", 0);
                         String teacherName = intent.getStringExtra("teacherName");
                         String teacherClass = intent.getStringExtra("teacherClass");
                         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
                         String teacherImageBLOB = intent.getStringExtra("teacherImage");
                         String teacherDOB = intent.getStringExtra("teacherDOB");
 
-                        Log.i(TAG, "teacherID = " + teacherID + "teacherName = " + teacherName);
+                        Log.i(TAG, "teacherID = " + teacherNumber + "teacherName = " + teacherName);
                         byte [] encodeByte = Base64.decode(teacherImageBLOB, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         for (int i = 0; i < teacherList.size(); i++) {
 
-                            if (teacherList.get(i).getTeacherId() == teacherID) {
+                            if (teacherList.get(i).getTeacherNumber() == teacherNumber) {
 
                                 teacherList.get(i).setName(teacherName);
                                 teacherList.get(i).setDob(teacherDOB);

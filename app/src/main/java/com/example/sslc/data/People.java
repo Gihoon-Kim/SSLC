@@ -10,6 +10,22 @@ public class People {
     String myClass;
     String aboutMe;
     boolean isTeacher;
+    String id;
+    String password;
+
+    public People(
+            String name,
+            String dob,
+            String myClass,
+            boolean isTeacher,
+            String introduce
+    ) {
+        this.name = name;
+        this.dob = dob;
+        this.myClass = myClass;
+        this.isTeacher = isTeacher;
+        this.aboutMe = introduce;
+    }
 
     public People(
             String name,
@@ -17,13 +33,31 @@ public class People {
             String dob,
             String myClass,
             String aboutMe,
-            boolean isTeacher) {
+            boolean isTeacher
+    ) {
+
         this.name = name;
         this.image = image;
         this.dob = dob;
         this.myClass = myClass;
         this.aboutMe = aboutMe;
         this.isTeacher = isTeacher;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {

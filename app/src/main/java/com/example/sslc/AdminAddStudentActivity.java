@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.fragments.StudentFragment;
 import com.example.sslc.requests.AddStudentRequest;
 
 import org.json.JSONObject;
@@ -30,16 +32,22 @@ public class AdminAddStudentActivity extends AppCompatActivity {
 
     private static final String TAG = "AddStudentActivity";
 
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentName)
     EditText et_StudentName;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentID)
     EditText et_StudentID;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentPassword)
     EditText et_StudentPassword;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.tv_StudentDOB)
     TextView tv_StudentDOB;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentCountry)
     EditText et_StudentCountry;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentClass)
     EditText et_StudentClass;
 
@@ -51,6 +59,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick(R.id.tv_StudentDOB)
     public void onStudentDOBClicked() {
 
@@ -75,6 +84,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
         ).show();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick(R.id.btn_StudentRegister)
     public void onRegisterButtonClicked() {
 
@@ -114,6 +124,14 @@ public class AdminAddStudentActivity extends AppCompatActivity {
                 } else {
 
                     if (success) {
+
+                        Intent intent = new Intent(getApplicationContext(), StudentFragment.class);
+                        intent.putExtra("studentNumber", jsonResponse.getInt("rowCount") + 1);
+                        intent.putExtra("studentName", et_StudentName.getText().toString().trim());
+                        intent.putExtra("studentClass", et_StudentClass.getText().toString().trim());
+                        intent.putExtra("studentDOB", tv_StudentDOB.getText().toString());
+                        intent.putExtra("studentCountry", et_StudentCountry.getText().toString().trim());
+                        setResult(9005, intent);
 
                         Toast.makeText(this, "Student Created Successfully", Toast.LENGTH_SHORT).show();
                         finish();

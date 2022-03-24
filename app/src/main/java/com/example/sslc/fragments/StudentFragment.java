@@ -5,16 +5,17 @@ import static com.android.volley.VolleyLog.TAG;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +44,8 @@ public class StudentFragment extends Fragment {
     StudentFragmentAdapter studentFragmentAdapter;
 
     ArrayList<Student> studentList = new ArrayList<>();
+
+    ActivityResultLauncher<Intent> addStudentActivityResult;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +70,9 @@ public class StudentFragment extends Fragment {
         // Get Students from database
         getStudents();
 
+        // Initialize activityResult Launchers
+        activityResultLauncherInit();
+
         studentFragmentAdapter = new StudentFragmentAdapter(requireContext(), studentList);
         rv_Student.setAdapter(studentFragmentAdapter);
 
@@ -77,14 +84,46 @@ public class StudentFragment extends Fragment {
     public void onFabStudentClicked() {
 
         Intent intent = new Intent(requireContext(), AdminAddStudentActivity.class);
-        startActivity(intent);
+        addStudentActivityResult.launch(intent);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void activityResultLauncherInit() {
+
+        addStudentActivityResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+                    if (result.getResultCode() == 9005) {
+
+                        Intent intent = result.getData();
+                        int studentNumber = Objects.requireNonNull(intent).getIntExtra("studentNumber", 0);
+                        String studentName = intent.getStringExtra("studentName");
+                        String studentClass = intent.getStringExtra("studentClass");
+                        String studentDOB = intent.getStringExtra("studentDOB");
+                        String studentCountry = intent.getStringExtra("studentCountry");
+
+                        Student student = new Student(
+                                studentNumber,
+                                studentName,
+                                studentDOB,
+                                studentClass,
+                                false,
+                                studentCountry
+                        );
+
+                        studentList.add(student);
+                        studentFragmentAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
     }
 
     private void getStudents() {
 
         studentList.clear();
 
-        Response.Listener<String> responseListener = response -> {
+        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
 
             try {
 
@@ -104,16 +143,16 @@ public class StudentFragment extends Fragment {
                         String studentDOB = studentItem.getString("StudentDOB");
                         String studentClass = studentItem.getString("StudentClass");
                         String studentCountry = studentItem.getString("Country");
+                        String studentIntroduce = studentItem.getString("StudentIntroduce");
 
                         Student student = new Student(
                                 studentNumber,
                                 studentName,
-                                null,
                                 studentDOB,
                                 studentClass,
-                                "",
-                                studentCountry,
-                                false
+                                false,
+                                studentIntroduce,
+                                studentCountry
                         );
                         studentList.add(student);
                         studentFragmentAdapter.notifyDataSetChanged();

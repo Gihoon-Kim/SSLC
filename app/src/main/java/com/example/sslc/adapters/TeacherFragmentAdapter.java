@@ -82,7 +82,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
         holder.itemView.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, AdminTeacherDetailActivity.class);
-            intent.putExtra("teacherID", teacherList.get(holder.getAdapterPosition()).getTeacherId());
+            intent.putExtra("teacherID", teacherList.get(holder.getAdapterPosition()).getTeacherNumber());
             intent.putExtra("teacherName", teacherList.get(holder.getAdapterPosition()).getName());
             intent.putExtra("teacherClass", teacherList.get(holder.getAdapterPosition()).getMyClass());
             intent.putExtra("teacherDOB", teacherList.get(holder.getAdapterPosition()).getDob());
@@ -144,7 +144,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                     };
 
                     DeleteTeacherRequest deleteTeacherRequest = new DeleteTeacherRequest(
-                            teacherList.get(position).getTeacherId(),
+                            teacherList.get(position).getTeacherNumber(),
                             responseListener
                     );
                     RequestQueue queue = Volley.newRequestQueue(context);

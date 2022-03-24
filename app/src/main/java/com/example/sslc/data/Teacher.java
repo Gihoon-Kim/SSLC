@@ -4,35 +4,27 @@ import android.graphics.Bitmap;
 
 public class Teacher extends People {
 
-    int teacherId;
+    int teacherNumber;
 
-    public Teacher(String name,
-                   Bitmap image,
-                   String dob,
-                   String myClass,
-                   String aboutMe,
-                   boolean isTeacher
+    public Teacher(
+            int teacherNumber,
+            String name,
+            Bitmap image,
+            String dob,
+            String myClass,
+            String aboutMe,
+            boolean isTeacher
     ) {
         super(name, image, dob, myClass, aboutMe, isTeacher);
+
+        this.teacherNumber = teacherNumber;
     }
 
-    public Teacher(int teacherId,
-                   String name,
-                   Bitmap image,
-                   String dob,
-                   String myClass,
-                   String aboutMe,
-                   boolean isTeacher
-    ) {
-        super(name, image, dob, myClass, aboutMe, isTeacher);
-        this.teacherId = teacherId;
+    public int getTeacherNumber() {
+        return teacherNumber;
     }
 
-    public int getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacherNumber(int teacherNumber) {
+        this.teacherNumber = teacherNumber;
     }
 }

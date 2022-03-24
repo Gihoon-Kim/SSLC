@@ -1,5 +1,6 @@
 package com.example.sslc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,14 +63,19 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
 
     public static class StudentFragmentViewHolder extends RecyclerView.ViewHolder {
 
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_StudentName)
         TextView tv_StudentName;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_StudentDOB)
         TextView tv_StudentDOB;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_StudentClass)
         TextView tv_StudentClass;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_StudentCountry)
         TextView tv_StudentCountry;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.cv_Item)
         CardView cv_Item;
 
