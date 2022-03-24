@@ -13,11 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".AdminStudentDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminAddStudentActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_student"
-            android:theme="@style/Theme.SSLC.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.SSLC.NoActionBar"></activity>
         <activity
             android:name=".AdminTeacherDetailActivity"
             android:exported="false"
@@ -47,7 +49,6 @@
         <activity
             android:name=".IntroActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

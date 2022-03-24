@@ -54,6 +54,13 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
                 studentList.get(position).getDob(),
                 studentList.get(position).getStudentCountry()
         );
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
