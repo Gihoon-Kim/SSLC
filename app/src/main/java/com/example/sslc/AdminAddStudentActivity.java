@@ -116,6 +116,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
                     if (success) {
 
                         Toast.makeText(this, "Student Created Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
 
                         Toast.makeText(this, "Fail create student", Toast.LENGTH_SHORT).show();

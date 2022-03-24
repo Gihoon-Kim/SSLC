@@ -1,5 +1,7 @@
 package com.example.sslc.fragments;
 
+import static com.android.volley.VolleyLog.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +11,24 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.sslc.AdminAddStudentActivity;
 import com.example.sslc.R;
 import com.example.sslc.adapters.StudentFragmentAdapter;
+import com.example.sslc.data.Student;
+import com.example.sslc.requests.GetStudentRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +40,8 @@ public class StudentFragment extends Fragment {
     @BindView(R.id.rv_Student)
     RecyclerView rv_Student;
     StudentFragmentAdapter studentFragmentAdapter;
+
+    ArrayList<Student> studentList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +63,10 @@ public class StudentFragment extends Fragment {
                 )
         );
 
-        studentFragmentAdapter = new StudentFragmentAdapter();
+        // Get Students from database
+        getStudents();
+
+        studentFragmentAdapter = new StudentFragmentAdapter(requireContext(), studentList);
         rv_Student.setAdapter(studentFragmentAdapter);
 
         return view;
@@ -60,5 +78,55 @@ public class StudentFragment extends Fragment {
 
         Intent intent = new Intent(requireContext(), AdminAddStudentActivity.class);
         startActivity(intent);
+    }
+
+    private void getStudents() {
+
+        studentList.clear();
+
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+
+                Log.i(TAG, "response : " + response);
+                JSONObject jsonResponse = new JSONObject(response);
+                JSONArray jsonArray = jsonResponse.getJSONArray("Student");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject studentItem = jsonArray.getJSONObject(i);
+                    boolean success = studentItem.getBoolean("success");
+
+                    if (success) {
+
+                        int studentNumber = studentItem.getInt("StudentNumber");
+                        String studentName = studentItem.getString("StudentName");
+                        String studentDOB = studentItem.getString("StudentDOB");
+                        String studentClass = studentItem.getString("StudentClass");
+                        String studentCountry = studentItem.getString("Country");
+
+                        Student student = new Student(
+                                studentNumber,
+                                studentName,
+                                null,
+                                studentDOB,
+                                studentClass,
+                                "",
+                                studentCountry,
+                                false
+                        );
+                        studentList.add(student);
+                        studentFragmentAdapter.notifyDataSetChanged();
+                    }
+                }
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+        };
+
+        GetStudentRequest getStudentRequest = new GetStudentRequest(responseListener);
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(getStudentRequest);
     }
 }

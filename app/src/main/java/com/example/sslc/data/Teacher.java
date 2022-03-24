@@ -14,7 +14,6 @@ public class Teacher extends People {
                    boolean isTeacher
     ) {
         super(name, image, dob, myClass, aboutMe, isTeacher);
-        this.isTeacher = isTeacher;
     }
 
     public Teacher(int teacherId,

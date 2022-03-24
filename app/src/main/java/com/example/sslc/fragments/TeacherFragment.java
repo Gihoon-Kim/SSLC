@@ -70,7 +70,7 @@ public class TeacherFragment extends Fragment {
                 DividerItemDecoration.VERTICAL));
 
         // Get Teachers from database
-        GetTeachers();
+        getTeachers();
 
         // Initialize activityResult Launchers
         activityResultLauncherInit();
@@ -81,7 +81,7 @@ public class TeacherFragment extends Fragment {
         return view;
     }
 
-    private void GetTeachers() {
+    private void getTeachers() {
 
         teacherList.clear();
 
