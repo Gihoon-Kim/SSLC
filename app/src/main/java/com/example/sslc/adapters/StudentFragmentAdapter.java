@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragmentAdapter.StudentFragmentViewHolder> {
 
     @NonNull
@@ -28,6 +31,8 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
 
         public StudentFragmentViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
     }
 }

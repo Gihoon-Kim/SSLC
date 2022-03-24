@@ -100,7 +100,7 @@ public class TeacherFragment extends Fragment {
 
                     if (success) {
 
-                        int teacherID = teacherItem.getInt("teacherID");
+                        int teacherNumber = teacherItem.getInt("teacherNumber");
                         String teacherName = teacherItem.getString("teacherName");
                         String teacherClass = teacherItem.getString("teacherClass");
                         String teacherDOB = teacherItem.getString("teacherDOB");
@@ -111,7 +111,7 @@ public class TeacherFragment extends Fragment {
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         Teacher teacher = new Teacher(
-                                teacherID,
+                                teacherNumber,
                                 teacherName,
                                 profileBitmap,
                                 teacherDOB,

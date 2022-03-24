@@ -1,6 +1,8 @@
 package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,15 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.sslc.AdminTeacherDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Teacher;
+import com.example.sslc.requests.DeleteTeacherRequest;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -93,6 +102,56 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
             }
             updateTeacherActivityResultLauncher.launch(intent);
         });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            deleteTeacherFromListAndDatabase(position);
+            return true;
+        });
+    }
+
+    private void deleteTeacherFromListAndDatabase(int position) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Do you really want to remove ".concat(teacherList.get(position).getName()))
+                .setTitle("Delete Teacher : " + teacherList.get(position).getName())
+                .setPositiveButton("Delete", (dialogInterface, i) -> {
+
+                    ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setTitle("Delete Teacher");
+                    progressDialog.setMessage("Please Wait...\nDeleting in progress");
+                    progressDialog.show();
+
+                    @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
+
+                        try {
+
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+
+                            if (success) {
+
+                                teacherList.remove(position);
+                                notifyDataSetChanged();
+                            } else {
+
+                                Toast.makeText(context, "Delete Teacher Failed", Toast.LENGTH_SHORT).show();
+                            }
+
+                            progressDialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    };
+
+                    DeleteTeacherRequest deleteTeacherRequest = new DeleteTeacherRequest(
+                            teacherList.get(position).getTeacherId(),
+                            responseListener
+                    );
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    queue.add(deleteTeacherRequest);
+                        })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     @Override

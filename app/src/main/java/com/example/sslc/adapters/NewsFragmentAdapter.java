@@ -90,6 +90,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
                             deleteNewsFromListAndDatabase(position, newsDataList.get(position).getNewsID()))
                     .setNegativeButton("Cancel", null)
                     .show();
+
             return true;
         });
     }
