@@ -2,15 +2,18 @@ package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sslc.AdminStudentDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Student;
 
@@ -23,11 +26,17 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
 
     Context context;
     ArrayList<Student> studentList;
+    ActivityResultLauncher<Intent> updateStudentActivityResultLauncher;
 
-    public StudentFragmentAdapter(Context context, ArrayList<Student> studentList) {
+    public StudentFragmentAdapter(
+            Context context,
+            ArrayList<Student> studentList,
+            ActivityResultLauncher<Intent> updateStudentActivityResultLauncher
+    ) {
 
         this.context = context;
         this.studentList = studentList;
+        this.updateStudentActivityResultLauncher = updateStudentActivityResultLauncher;
     }
 
     @NonNull
@@ -55,11 +64,16 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
                 studentList.get(position).getStudentCountry()
         );
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.itemView.setOnClickListener(view -> {
 
-            }
+            Intent intent = new Intent(
+                    context,
+                    AdminStudentDetailActivity.class
+            );
+            intent.putExtra("studentNumber", studentList.get(holder.getAdapterPosition()).getStudentNumber());
+            intent.putExtra("studentName", studentList.get(holder.getAdapterPosition()).getName());
+            intent.putExtra("studentClass", studentList.get(holder.getAdapterPosition()).getMyClass());
+            updateStudentActivityResultLauncher.launch(intent);
         });
     }
 

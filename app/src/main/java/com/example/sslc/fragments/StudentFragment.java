@@ -45,7 +45,8 @@ public class StudentFragment extends Fragment {
 
     ArrayList<Student> studentList = new ArrayList<>();
 
-    ActivityResultLauncher<Intent> addStudentActivityResult;
+    ActivityResultLauncher<Intent> addStudentActivityResultLauncher;
+    ActivityResultLauncher<Intent> updateStudentActivityResultLauncher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +74,11 @@ public class StudentFragment extends Fragment {
         // Initialize activityResult Launchers
         activityResultLauncherInit();
 
-        studentFragmentAdapter = new StudentFragmentAdapter(requireContext(), studentList);
+        studentFragmentAdapter = new StudentFragmentAdapter(
+                requireContext(),
+                studentList,
+                updateStudentActivityResultLauncher
+        );
         rv_Student.setAdapter(studentFragmentAdapter);
 
         return view;
@@ -84,13 +89,13 @@ public class StudentFragment extends Fragment {
     public void onFabStudentClicked() {
 
         Intent intent = new Intent(requireContext(), AdminAddStudentActivity.class);
-        addStudentActivityResult.launch(intent);
+        addStudentActivityResultLauncher.launch(intent);
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void activityResultLauncherInit() {
 
-        addStudentActivityResult = registerForActivityResult(
+        addStudentActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
 
@@ -114,6 +119,29 @@ public class StudentFragment extends Fragment {
 
                         studentList.add(student);
                         studentFragmentAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
+
+        updateStudentActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+                    if (result.getResultCode() == 9006) {
+
+                        Intent intent = result.getData();
+                        int studentNumber = Objects.requireNonNull(intent).getIntExtra("studentNumber", 0);
+                        String studentClass = intent.getStringExtra("studentClass");
+
+                        for (int i = 0; i < studentList.size(); i++) {
+
+                            if (studentList.get(i).getStudentNumber() == studentNumber) {
+
+                                studentList.get(i).setMyClass(studentClass);
+                                studentFragmentAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
                     }
                 }
         );

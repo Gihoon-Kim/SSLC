@@ -46,18 +46,23 @@
          );
          mysqli_stmt_execute($statement);
     
-         $sql = "SELECT * from SSLC_Student";
+         $getNumberSQL = mysqli_query(
+            $conn,
+            "SELECT StudentNumber 
+               FROM `SSLC_Student` 
+               ORDER BY StudentID DESC LIMIT 1"
+         );
 
-      if ($result = mysqli_query($conn, $sql)) {
+         while ($row = mysqli_fetch_array($getNumberSQL)) {
 
             // Return the number of rows in result set
-            $rowcount = mysqli_num_rows( $result );
-            $response["rowCount"] = $rowcount;
-      }
-      $response["success"] = true;
+            $response["rowCount"] = (int)$row[0] + 1;
+         }
+      
+         $response["success"] = true;
     
-      echo json_encode($response);
-     }
+         echo json_encode($response);
+      }
 
      
 ?>
