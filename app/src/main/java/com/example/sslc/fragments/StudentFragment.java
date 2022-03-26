@@ -127,6 +127,7 @@ public class StudentFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
 
+                    // Student Class Update
                     if (result.getResultCode() == 9006) {
 
                         Intent intent = result.getData();
@@ -138,6 +139,23 @@ public class StudentFragment extends Fragment {
                             if (studentList.get(i).getStudentNumber() == studentNumber) {
 
                                 studentList.get(i).setMyClass(studentClass);
+                                studentFragmentAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+
+                    // Student Delete
+                    else if (result.getResultCode() == 9007) {
+
+                        Intent intent = result.getData();
+                        int studentNumber = Objects.requireNonNull(intent).getIntExtra("studentNumber", 0);
+
+                        for (int i = 0; i < studentList.size(); i++) {
+
+                            if (studentList.get(i).getStudentNumber() == studentNumber) {
+
+                                studentList.remove(i);
                                 studentFragmentAdapter.notifyDataSetChanged();
                                 break;
                             }

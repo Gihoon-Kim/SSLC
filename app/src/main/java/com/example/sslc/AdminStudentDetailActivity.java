@@ -1,8 +1,7 @@
 package com.example.sslc;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.sslc.fragments.StudentFragment;
+import com.example.sslc.requests.DeleteStudentRequest;
 import com.example.sslc.requests.UpdateStudentClassRequest;
 
 import org.json.JSONObject;
@@ -115,6 +117,53 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     @OnClick(R.id.btn_DeleteStudent)
     public void onBtnDeleteStudentClicked() {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you really want to delete student " + tv_StudentName.getText() + "?")
+                .setTitle("Deleting a student")
+                .setPositiveButton("Yes", (dialogInterface, i) -> deleteStudent())
+                .setNegativeButton("No", null)
+                .show();
+    }
 
+    private void deleteStudent() {
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Deleting");
+        progressDialog.setMessage("Please Wait..\nDeleting is in progress");
+
+        Response.Listener<String> responseListener = response -> {
+
+            try {
+
+                progressDialog.show();
+                Log.i(TAG, response);
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean success = jsonResponse.getBoolean("success");
+
+                if (success) {
+
+                    Toast.makeText(this, "Delete Complete", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(this, StudentFragment.class);
+                    intent.putExtra("studentNumber", studentNumber);
+                    setResult(9007, intent);
+
+                    finish();
+                } else {
+
+                    Toast.makeText(this, "Delete Student failed", Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        DeleteStudentRequest deleteStudentRequest = new DeleteStudentRequest(
+                studentNumber,
+                responseListener
+        );
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(deleteStudentRequest);
     }
 }
