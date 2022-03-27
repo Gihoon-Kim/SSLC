@@ -106,4 +106,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_admin_detail_teacher">AdminDetailTeacherActivity</string>
     <string name="title_activity_admin_add_student">AdminAddStudentActivity</string>
+    <string name="title_activity_admin_add_class">AdminAddClassActivity</string>
 </resources>

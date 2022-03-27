@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ClassFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Class Fragment"
-        android:textColor="@color/black"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_Class"
         android:layout_width="wrap_content"
@@ -22,4 +15,10 @@
         android:backgroundTint="#FF0000"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="64dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Class"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp" />
 </FrameLayout>
