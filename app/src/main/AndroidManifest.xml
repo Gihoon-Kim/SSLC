@@ -14,15 +14,9 @@
         android:theme="@style/Theme.SSLC">
         <activity
             android:name=".AdminAddClassActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_admin_add_class"
-            android:theme="@style/Theme.SSLC.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
             android:name=".AdminStudentDetailActivity"
             android:exported="false" />
@@ -60,7 +54,11 @@
         <activity
             android:name=".IntroActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

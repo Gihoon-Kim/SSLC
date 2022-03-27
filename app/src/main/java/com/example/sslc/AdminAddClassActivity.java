@@ -1,6 +1,7 @@
 package com.example.sslc;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.sslc.databinding.ActivityAdminAddClassBinding;
+import com.example.sslc.fragments.ClassFragment;
 import com.example.sslc.requests.AddClassRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -54,7 +56,7 @@ public class AdminAddClassActivity extends AppCompatActivity {
     private void addNewClass() {
 
         String classTitle = binding.etClassTitle.getText().toString().trim();
-        String classTeacher = Objects.requireNonNull(binding.include.tvClassTeacher).getText().toString().trim();
+        String classTeacher = Objects.requireNonNull(binding.include.etClassTeacher).getText().toString().trim();
         String classStartTime = Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString();
         String classEndTime = Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString();
         String classDescription = Objects.requireNonNull(binding.include.etClassDescription).getText().toString().trim();
@@ -82,6 +84,16 @@ public class AdminAddClassActivity extends AppCompatActivity {
                     boolean success = jsonResponse.getBoolean("success");
 
                     if (success) {
+
+                        Intent intent = new Intent(this, ClassFragment.class);
+                        intent.putExtra("classNumber", jsonResponse.getInt("rowCount") + 1);
+                        intent.putExtra("classTitle", classTitle);
+                        intent.putExtra("classTeacher", classTeacher);
+                        intent.putExtra("classDescription", classDescription);
+                        intent.putExtra("classStartTime", classStartTime);
+                        intent.putExtra("classEndTime", classEndTime);
+                        intent.putExtra("classRoom", classRoom);
+                        setResult(9008, intent);
 
                         Toast.makeText(this, "New class created", Toast.LENGTH_SHORT).show();
                         finish();

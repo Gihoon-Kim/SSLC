@@ -31,7 +31,21 @@
     );
     mysqli_stmt_execute($statement);
 
+    $getNumberSQL = mysqli_query(
+        $conn,
+        "SELECT classNumber 
+           FROM `SSLC_Class` 
+           ORDER BY classNumber DESC LIMIT 1"
+     );
+     
     $response = array();
+    $response["rowCount"] = 0;
+    while ($row = mysqli_fetch_array($getNumberSQL)) {
+
+        // Return the number of rows in result set
+        $response["rowCount"] = (int)$row[0] + 1;
+     }
+
     $response["success"] = true;
 
     echo json_encode($response);

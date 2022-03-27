@@ -53,6 +53,7 @@
                ORDER BY StudentID DESC LIMIT 1"
          );
 
+         $response["rowCount"] = 0;
          while ($row = mysqli_fetch_array($getNumberSQL)) {
 
             // Return the number of rows in result set

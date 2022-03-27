@@ -10,6 +10,25 @@ public class Programs {
     String programDescription;
     String programClassRoom;
 
+    public Programs(
+            int classNumber,
+            String classTitle,
+            String classTeacher,
+            String classDescription,
+            String classStartTime,
+            String classEndTime,
+            String classRoom
+    ) {
+
+        this.programNumber = classNumber;
+        this.programTitle = classTitle;
+        this.programTeacher = classTeacher;
+        this.programDescription = classDescription;
+        this.programStartTime = classStartTime;
+        this.programEndTime = classEndTime;
+        this.programClassRoom = classRoom;
+    }
+
     public String getProgramClassRoom() {
         return programClassRoom;
     }
