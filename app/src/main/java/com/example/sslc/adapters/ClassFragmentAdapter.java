@@ -1,5 +1,6 @@
 package com.example.sslc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,8 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
                 programDataList.get(position).getProgramTitle(),
                 programDataList.get(position).getProgramTeacher(),
                 programDataList.get(position).getProgramDescription(),
-                programDataList.get(position).getProgramStartTime() + " to " + programDataList.get(position).getProgramEndTime()
+                programDataList.get(position).getProgramStartTime() + " to " + programDataList.get(position).getProgramEndTime(),
+                programDataList.get(position).getProgramClassRoom()
         );
     }
 
@@ -61,16 +63,24 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
 
     public static class ClassFragmentViewHolder extends RecyclerView.ViewHolder {
 
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.cv_Item)
         CardView cv_Item;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_ProgramTitle)
         TextView tv_ProgramTitle;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_ProgramTeacher)
         TextView tv_ProgramTeacher;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_ProgramDescription)
         TextView tv_ProgramDescription;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_ProgramTime)
         TextView tv_ProgramTime;
+        @SuppressLint("NonConstantResourceId")
+        @BindView(R.id.tv_ProgramClassRoom)
+        TextView tv_ProgramClassRoom;
 
         public ClassFragmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,7 +88,8 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
             ButterKnife.bind(this, itemView);
         }
 
-        void onBind(String programTitle, String programTeacher, String programDescription, String programTime) {
+        @SuppressLint("SetTextI18n")
+        void onBind(String programTitle, String programTeacher, String programDescription, String programTime, String classRoom) {
 
             tv_ProgramTitle.setText(programTitle);
             tv_ProgramTeacher.setText(programTeacher);
@@ -88,7 +99,7 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
                 tv_ProgramDescription.setText(programDescription);
             }
             tv_ProgramTime.setText(programTime);
-
+            tv_ProgramClassRoom.setText(classRoom);
         }
     }
 }

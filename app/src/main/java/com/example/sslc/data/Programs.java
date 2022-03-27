@@ -8,6 +8,15 @@ public class Programs {
     String programEndTime;
     String programTeacher;
     String programDescription;
+    String programClassRoom;
+
+    public String getProgramClassRoom() {
+        return programClassRoom;
+    }
+
+    public void setProgramClassRoom(String programClassRoom) {
+        this.programClassRoom = programClassRoom;
+    }
 
     public int getProgramNumber() {
         return programNumber;

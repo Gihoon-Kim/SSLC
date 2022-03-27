@@ -29,6 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
+                android:id="@+id/et_ClassTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -73,6 +74,24 @@
                 app:layout_constraintLeft_toRightOf="@id/tv_ClassEndTime"
                 app:layout_constraintTop_toTopOf="@id/tv_ClassStartTime" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Class Room :"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@id/tv_ClassTeacher"
+                app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime" />
+
+            <EditText
+                android:id="@+id/et_ClassRoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Class Room"
+                app:layout_constraintStart_toStartOf="@id/et_ClassTeacher"
+                app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime"
+                android:ems="10" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -86,6 +105,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/et_ClassDescription"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_gravity="fill"
