@@ -47,6 +47,7 @@ public class ClassFragment extends Fragment {
     ArrayList<Programs> programDataList = new ArrayList<>();
 
     ActivityResultLauncher<Intent> addClassResultLauncher;
+    ActivityResultLauncher<Intent> updateClassResultLauncher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +68,11 @@ public class ClassFragment extends Fragment {
         // Create RecyclerView
         rv_Class.setHasFixedSize(true);
         rv_Class.setLayoutManager(new LinearLayoutManager(requireContext()));
-        classFragmentAdapter = new ClassFragmentAdapter(requireContext(), programDataList);
+        classFragmentAdapter = new ClassFragmentAdapter(
+                requireContext(),
+                programDataList,
+                updateClassResultLauncher
+        );
         rv_Class.setAdapter(classFragmentAdapter);
 
         return view;
@@ -155,6 +160,39 @@ public class ClassFragment extends Fragment {
                         );
                         programDataList.add(programs);
                         classFragmentAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
+
+        updateClassResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+                    if (result.getResultCode() == 9009) {
+
+                        Intent intent = result.getData();
+                        int classNumber = Objects.requireNonNull(intent).getIntExtra("classNumber", 0);
+                        String classTitle = intent.getStringExtra("classTitle");
+                        String classTeacher = intent.getStringExtra("classTeacher");
+                        String classDescription = intent.getStringExtra("classDescription");
+                        String classStartTime = intent.getStringExtra("classStartTime");
+                        String classEndTime = intent.getStringExtra("classEndTime");
+                        String classRoom = intent.getStringExtra("classRoom");
+
+                        for (int i = 0; i < programDataList.size(); i++) {
+
+                            if (programDataList.get(i).getProgramNumber() == classNumber) {
+
+                                programDataList.get(i).setProgramTitle(classTitle);
+                                programDataList.get(i).setProgramTeacher(classTeacher);
+                                programDataList.get(i).setProgramDescription(classDescription);
+                                programDataList.get(i).setProgramStartTime(classStartTime);
+                                programDataList.get(i).setProgramEndTime(classEndTime);
+                                programDataList.get(i).setProgramClassRoom(classRoom);
+                                classFragmentAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
                     }
                 }
         );

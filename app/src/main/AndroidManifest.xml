@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".AdminClassDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_class_detail"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
             android:name=".AdminAddClassActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_class"

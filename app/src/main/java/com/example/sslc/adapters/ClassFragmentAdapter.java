@@ -2,15 +2,18 @@ package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sslc.AdminClassDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Programs;
 
@@ -23,10 +26,16 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
 
     ArrayList<Programs> programDataList;
     Context context;
+    ActivityResultLauncher<Intent> updateClassResultLauncher;
 
-    public ClassFragmentAdapter(Context context, ArrayList<Programs> programDataList) {
+    public ClassFragmentAdapter(
+            Context context,
+            ArrayList<Programs> programDataList,
+            ActivityResultLauncher<Intent> updateClassResultLauncher
+    ) {
         this.programDataList = programDataList;
         this.context = context;
+        this.updateClassResultLauncher = updateClassResultLauncher;
     }
 
     @NonNull
@@ -54,6 +63,20 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
                 programDataList.get(position).getProgramStartTime() + " to " + programDataList.get(position).getProgramEndTime(),
                 programDataList.get(position).getProgramClassRoom()
         );
+
+        holder.cv_Item.setOnClickListener(view -> {
+
+            Intent intent = new Intent(context, AdminClassDetailActivity.class);
+            intent.putExtra("classNumber", programDataList.get(holder.getAdapterPosition()).getProgramNumber());
+            intent.putExtra("classTitle", programDataList.get(holder.getAdapterPosition()).getProgramTitle());
+            intent.putExtra("classTeacher", programDataList.get(holder.getAdapterPosition()).getProgramTeacher());
+            intent.putExtra("classDescription", programDataList.get(holder.getAdapterPosition()).getProgramDescription());
+            intent.putExtra("classStartTime", programDataList.get(holder.getAdapterPosition()).getProgramStartTime());
+            intent.putExtra("classEndTime", programDataList.get(holder.getAdapterPosition()).getProgramEndTime());
+            intent.putExtra("classRoom", programDataList.get(holder.getAdapterPosition()).getProgramClassRoom());
+
+            updateClassResultLauncher.launch(intent);
+        });
     }
 
     @Override

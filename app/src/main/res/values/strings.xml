@@ -107,4 +107,5 @@
     <string name="title_activity_admin_detail_teacher">AdminDetailTeacherActivity</string>
     <string name="title_activity_admin_add_student">AdminAddStudentActivity</string>
     <string name="title_activity_admin_add_class">AdminAddClassActivity</string>
+    <string name="title_activity_admin_class_detail">AdminClassDetailActivity</string>
 </resources>
