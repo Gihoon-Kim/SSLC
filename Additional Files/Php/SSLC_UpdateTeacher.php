@@ -16,11 +16,11 @@
     $statement = mysqli_prepare(
         $conn,
         "UPDATE SSLC_Teacher
-            SET TeacherName = '$teacherName',
-                TeacherDOB = '$teacherDOB',
-                TeacherClass = '$teacherClass',
-                TeacherIntroduce = '$teacherIntroduce',
-                TeacherImage = '$teacherImage'
+            SET teacherName = '$teacherName',
+                teacherDOB = '$teacherDOB',
+                teacherClass = '$teacherClass',
+                teacherIntroduce = '$teacherIntroduce',
+                teacherImage = '$teacherImage'
             WHERE teacherNumber = '$teacherID'"
     );
     mysqli_stmt_execute($statement);

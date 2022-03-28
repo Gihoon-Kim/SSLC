@@ -54,11 +54,54 @@
                     android:textSize="16sp"
                     android:layout_marginEnd="10dp" />
 
+                <Spinner
+                    android:id="@+id/spinner_TeacherClass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Teacher ID : "
+                    android:textSize="16sp"
+                    android:layout_marginEnd="10dp" />
+
                 <EditText
-                    android:id="@+id/et_TeacherClass"
+                    android:id="@+id/et_TeacherID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Teacher Class" />
+                    android:hint="Teacher ID"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Teacher Password : "
+                    android:textSize="16sp"
+                    android:layout_marginEnd="10dp" />
+
+                <EditText
+                    android:id="@+id/et_TeacherPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Teacher Password"
+                    android:inputType="textPassword"/>
             </LinearLayout>
 
             <LinearLayout

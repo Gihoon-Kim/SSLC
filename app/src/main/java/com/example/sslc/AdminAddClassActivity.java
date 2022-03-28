@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddClassBinding;
 import com.example.sslc.fragments.ClassFragment;
 import com.example.sslc.requests.AddClassRequest;
@@ -94,6 +95,8 @@ public class AdminAddClassActivity extends AppCompatActivity {
                         intent.putExtra("classEndTime", classEndTime);
                         intent.putExtra("classRoom", classRoom);
                         setResult(9008, intent);
+
+                        ((AppData)getApplication()).getClassList().add(classTitle);
 
                         Toast.makeText(this, "New class created", Toast.LENGTH_SHORT).show();
                         finish();

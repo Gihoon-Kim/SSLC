@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,16 +22,21 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddTeacherBinding;
 import com.example.sslc.fragments.TeacherFragment;
 import com.example.sslc.requests.AddTeacherRequest;
+import com.example.sslc.requests.GetAllClassRequest;
 import com.example.sslc.requests.UploadImageRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -53,6 +59,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
 
         FloatingActionButton fab = binding.fabAddTeacher;
         fab.setOnClickListener(view -> onFabAddTeacherClicked());
+
+        initSpinner();
 
         initActivityResultLauncher();
 
@@ -78,6 +86,20 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
         ).show());
+    }
+
+    private void initSpinner() {
+
+        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
+        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Objects.requireNonNull(binding.teacherInclude.spinnerTeacherClass).setAdapter(spinnerAdapter);
     }
 
     private void updateLabel() {
@@ -109,71 +131,71 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void onFabAddTeacherClicked() {
 
+        progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
+        progressDialog.setTitle("Upload the profile image");
+        progressDialog.setMessage("Uploading photo is in progress");
+        progressDialog.show();
+
         if (!binding.etTeacherName.getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.tvTeacherDOB).getText().toString().trim().equals("dd/mm/yyyy") &&
-                !Objects.requireNonNull(binding.teacherInclude.etTeacherIntroduce).getText().toString().trim().equals("")) {
+                !Objects.requireNonNull(binding.teacherInclude.etTeacherIntroduce).getText().toString().trim().equals("") &&
+                !Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim().equals("") &&
+                !Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim().equals("")) {
 
             String teacherName = binding.etTeacherName.getText().toString().trim();
             String teacherDOB = String.valueOf(binding.teacherInclude.tvTeacherDOB.getText());
             String teacherIntroduce = binding.teacherInclude.etTeacherIntroduce.getText().toString();
             String teacherImage = "";
-            String teacherClass = Objects.requireNonNull(binding.teacherInclude.etTeacherClass).getText().toString();
+            String teacherClass = Objects.requireNonNull(binding.teacherInclude.spinnerTeacherClass).getSelectedItem().toString();
+            String teacherID = Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim();
+            String teacherPassword = Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim();
 
-            if (binding.ivTeacherProfileImage.getDrawable().toString().contains("VectorDrawable")) {
-
-                Response.Listener<String> responseListener = addTeacherListenerInit(teacherName, teacherDOB, teacherIntroduce, teacherImage, teacherClass);
-//            Add Teacher in database and return teacher data
-                AddTeacherRequest addTeacherRequest = new AddTeacherRequest(
-                        teacherName,
-                        teacherDOB,
-                        teacherClass,
-                        teacherImage,
-                        teacherIntroduce,
-                        responseListener
-                );
-                RequestQueue queue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
-                queue.add(addTeacherRequest);
-            } else {
+            if (!binding.ivTeacherProfileImage.getDrawable().toString().contains("VectorDrawable")) {
 
                 BitmapDrawable drawable = (BitmapDrawable) binding.ivTeacherProfileImage.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
                 teacherImage = bitmapToString(bitmap);
 
-                progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
-                progressDialog.setTitle("Upload the profile image");
-                progressDialog.setMessage("Uploading photo is in progress");
-                progressDialog.show();
-
                 Response.Listener<String> uploadImageListener = uploadTeacherImageListenerInit();
-                String isTeacher = "teacher";
                 UploadImageRequest uploadImageRequest = new UploadImageRequest(
                         teacherName,
-                        isTeacher,
+                        true,
                         teacherImage,
                         uploadImageListener
                 );
                 RequestQueue uploadImageQueue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
                 uploadImageQueue.add(uploadImageRequest);
-
-                Response.Listener<String> responseListener = addTeacherListenerInit(teacherName, teacherDOB, teacherIntroduce, teacherImage, teacherClass);
-                AddTeacherRequest addTeacherRequest = new AddTeacherRequest(
-                        teacherName,
-                        teacherDOB,
-                        teacherClass,
-                        teacherImage,
-                        teacherIntroduce,
-                        responseListener
-                );
-                RequestQueue addTeacherQueue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
-                addTeacherQueue.add(addTeacherRequest);
             }
+
+            Response.Listener<String> responseListener = addTeacherListenerInit(
+                    teacherName,
+                    teacherDOB,
+                    teacherClass,
+                    teacherID,
+                    teacherPassword,
+                    teacherIntroduce,
+                    teacherImage
+            );
+//            Add Teacher in database and return teacher data
+            AddTeacherRequest addTeacherRequest = new AddTeacherRequest(
+                    teacherName,
+                    teacherDOB,
+                    teacherClass,
+                    teacherID,
+                    teacherPassword,
+                    teacherImage,
+                    teacherIntroduce,
+                    responseListener
+            );
+            RequestQueue queue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
+            queue.add(addTeacherRequest);
         } else {
 
             Toast.makeText(this, "Required Fields should be filled", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private String bitmapToString(Bitmap bitmap) {
+    private String bitmapToString(@NonNull Bitmap bitmap) {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
@@ -206,7 +228,15 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Response.Listener<String> addTeacherListenerInit(String teacherName, String teacherDOB, String teacherIntroduce, String teacherImage, String teacherClass) {
+    private Response.Listener<String> addTeacherListenerInit(
+            String teacherName,
+            String teacherDOB,
+            String teacherClass,
+            String teacherID,
+            String teacherPassword,
+            String teacherIntroduce,
+            String teacherImage
+    ) {
         return response -> {
 
             progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
@@ -225,9 +255,11 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), TeacherFragment.class);
                     intent.putExtra("teacherName", teacherName);
                     intent.putExtra("teacherDOB", teacherDOB);
+                    intent.putExtra("teacherClass", teacherClass);
+                    intent.putExtra("teacherID", teacherID);
+                    intent.putExtra("teacherPassword", teacherPassword);
                     intent.putExtra("teacherIntroduce", teacherIntroduce);
                     intent.putExtra("teacherImage", teacherImage);
-                    intent.putExtra("teacherClass", teacherClass);
                     setResult(9003, intent);
                     finish();
                 } else {

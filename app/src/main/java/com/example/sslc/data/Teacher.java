@@ -9,13 +9,13 @@ public class Teacher extends People {
     public Teacher(
             int teacherNumber,
             String name,
-            Bitmap image,
             String dob,
             String myClass,
+            Bitmap image,
             String aboutMe,
             boolean isTeacher
     ) {
-        super(name, image, dob, myClass, aboutMe, isTeacher);
+        super(name, dob, myClass, image, aboutMe, isTeacher);
 
         this.teacherNumber = teacherNumber;
     }

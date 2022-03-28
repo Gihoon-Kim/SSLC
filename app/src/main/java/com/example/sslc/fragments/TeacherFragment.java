@@ -102,20 +102,20 @@ public class TeacherFragment extends Fragment {
 
                         int teacherNumber = teacherItem.getInt("teacherNumber");
                         String teacherName = teacherItem.getString("teacherName");
-                        String teacherClass = teacherItem.getString("teacherClass");
                         String teacherDOB = teacherItem.getString("teacherDOB");
+                        String teacherClass = teacherItem.getString("teacherClass");
                         String teacherIntroduce = teacherItem.getString("teacherIntroduce");
                         String teacherImage = teacherItem.getString("teacherImage");
 
-                        byte [] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
+                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         Teacher teacher = new Teacher(
                                 teacherNumber,
                                 teacherName,
-                                profileBitmap,
                                 teacherDOB,
                                 teacherClass,
+                                profileBitmap,
                                 teacherIntroduce,
                                 true
                         );
@@ -150,22 +150,22 @@ public class TeacherFragment extends Fragment {
                         String teacherDOB = intent.getStringExtra("teacherDOB");
                         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
 
-                        byte [] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
+                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         Teacher teacher = new Teacher(
                                 teacherNumber,
                                 teacherName,
-                                profileBitmap,
                                 teacherDOB,
                                 teacherClass,
+                                profileBitmap,
                                 teacherIntroduce,
                                 true
                         );
                         teacherList.add(teacher);
                         teacherFragmentAdapter.notifyDataSetChanged();
                     }
-        });
+                });
 
         updateTeacherActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -182,7 +182,7 @@ public class TeacherFragment extends Fragment {
                         String teacherDOB = intent.getStringExtra("teacherDOB");
 
                         Log.i(TAG, "teacherID = " + teacherNumber + "teacherName = " + teacherName);
-                        byte [] encodeByte = Base64.decode(teacherImageBLOB, Base64.DEFAULT);
+                        byte[] encodeByte = Base64.decode(teacherImageBLOB, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         for (int i = 0; i < teacherList.size(); i++) {
@@ -210,4 +210,5 @@ public class TeacherFragment extends Fragment {
         Intent intent = new Intent(getContext(), AdminAddTeacherActivity.class);
         addTeacherActivityResultLauncher.launch(intent);
     }
+
 }

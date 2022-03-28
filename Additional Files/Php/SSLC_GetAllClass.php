@@ -8,8 +8,8 @@
 
      $result = mysqli_query(
          $conn,
-         "SELECT teacherNumber, teacherName, teacherDOB, teacherClass, teacherIntroduce, teacherImage
-            FROM SSLC_Teacher"
+         "SELECT classTitle
+            FROM SSLC_Class"
      );
      $response = array();
      while ($row = mysqli_fetch_array($result)) {
@@ -18,16 +18,11 @@
             $response,
             array(
                 'success' => true,
-                'teacherNumber' => $row[0],
-                'teacherName' => $row[1],
-                'teacherDOB' => $row[2],
-                'teacherClass' => $row[3],
-                'teacherIntroduce' => $row[4],
-                'teacherImage' => $row[5]
+                'classTitle' => $row[0]
             )
             );
      }
 
-     echo json_encode(array("Teacher"=>$response));
+     echo json_encode(array("allClass"=>$response));
      mysqli_close($conn);
 ?>

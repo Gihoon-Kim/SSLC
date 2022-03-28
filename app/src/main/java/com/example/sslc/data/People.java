@@ -29,9 +29,9 @@ public class People {
 
     public People(
             String name,
-            Bitmap image,
             String dob,
             String myClass,
+            Bitmap image,
             String aboutMe,
             boolean isTeacher
     ) {

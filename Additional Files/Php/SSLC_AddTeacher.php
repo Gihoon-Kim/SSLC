@@ -7,8 +7,10 @@
      $conn = mysqli_connect($servername, $username, $password, $db_name);
      
      $teacherName = $_POST["teacherName"];
-     $teacherClass = $_POST["teacherClass"];
      $teacherDOB = $_POST["teacherDOB"];
+     $teacherClass = $_POST["teacherClass"];
+     $teacherID = $_POST["teacherID"];
+     $teacherPassword = $_POST["teacherPassword"];
      $teacherIntroduce = $_POST["teacherIntroduce"];
      $teacherImage = $_POST["teacherImage"];
 
@@ -18,14 +20,16 @@
                         teacherName,
                         teacherDOB,
                         teacherClass,
+                        teacherID,
+                        teacherPassword,
                         teacherIntroduce,
                         teacherImage) 
-            VALUES (?, ?, ?, ?, ?)"
+            VALUES (?, ?, ?, ?, ?, ?, ?)"
     );
     mysqli_stmt_bind_param(
         $statement, 
         "sssss", 
-        $teacherName, $teacherDOB, $teacherClass, $teacherIntroduce, $teacherImage
+        $teacherName, $teacherDOB, $teacherClass, $teacherID, $teacherPassword, $teacherIntroduce, $teacherImage
     );
     mysqli_stmt_execute($statement);
 
