@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,7 +23,9 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddTeacherBinding;
+import com.example.sslc.dialog.TeacherClassesDialog;
 import com.example.sslc.fragments.TeacherFragment;
+import com.example.sslc.interfaces.ApplyClassListListener;
 import com.example.sslc.requests.AddTeacherRequest;
 import com.example.sslc.requests.UploadImageRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,10 +34,11 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class AdminAddTeacherActivity extends AppCompatActivity {
+public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyClassListListener {
 
     private static final String TAG = "AdminAddTeacher";
 
@@ -56,8 +58,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
         FloatingActionButton fab = binding.fabAddTeacher;
         fab.setOnClickListener(view -> onFabAddTeacherClicked());
 
-        initSpinner();
-
         initActivityResultLauncher();
 
         binding.ivTeacherProfileImage.setOnClickListener(view -> {
@@ -65,6 +65,15 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
             addTeacherActivityResultLauncher.launch(intent);
+        });
+
+        Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).setOnClickListener(view -> {
+
+            TeacherClassesDialog teacherClassesDialog = new TeacherClassesDialog(
+                    this,
+                    ((AppData)getApplication()).getClassList()
+            );
+            teacherClassesDialog.callDialog();
         });
 
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
@@ -82,20 +91,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
         ).show());
-    }
-
-    private void initSpinner() {
-
-        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
-        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
-
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                allClass
-        );
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        Objects.requireNonNull(binding.teacherInclude.spinnerTeacherClass).setAdapter(spinnerAdapter);
     }
 
     private void updateLabel() {
@@ -142,7 +137,7 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
             String teacherDOB = String.valueOf(binding.teacherInclude.tvTeacherDOB.getText());
             String teacherIntroduce = binding.teacherInclude.etTeacherIntroduce.getText().toString();
             String teacherImage = "";
-            String teacherClass = Objects.requireNonNull(binding.teacherInclude.spinnerTeacherClass).getSelectedItem().toString();
+            String teacherClass = Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).getText().toString();
             String teacherID = Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim();
             String teacherPassword = Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim();
 
@@ -268,5 +263,12 @@ public class AdminAddTeacherActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         };
+    }
+
+    @Override
+    public void applyClassList(ArrayList<String> classList) {
+
+        Log.i(TAG, "apply Class List");
+        Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).setText(classList.toString());
     }
 }

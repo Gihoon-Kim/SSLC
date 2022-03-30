@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.sslc.databinding.ActivityAdminClassDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
 import com.example.sslc.fragments.ClassFragment;
+import com.example.sslc.interfaces.ChangeNewsTitleDialogListener;
 import com.example.sslc.requests.UpdateClassRequest;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class AdminClassDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialog.ChangeNewsTitleDialogListener {
+public class AdminClassDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialogListener {
 
     private static final String TAG = "ClassDetailActivity";
     private ActivityAdminClassDetailBinding binding;

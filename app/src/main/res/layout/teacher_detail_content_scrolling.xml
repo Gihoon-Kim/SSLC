@@ -54,10 +54,12 @@
                     android:textSize="16sp"
                     android:layout_marginEnd="10dp" />
 
-                <Spinner
-                    android:id="@+id/spinner_TeacherClass"
+                <TextView
+                    android:id="@+id/tv_TeacherClass"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Click to set Class"
+                    android:textSize="16sp"/>
             </LinearLayout>
 
             <LinearLayout

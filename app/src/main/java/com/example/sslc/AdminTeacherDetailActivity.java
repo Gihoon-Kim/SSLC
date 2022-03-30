@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,7 +25,10 @@ import com.bumptech.glide.Glide;
 import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminTeacherDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
+import com.example.sslc.dialog.TeacherClassesDialog;
 import com.example.sslc.fragments.TeacherFragment;
+import com.example.sslc.interfaces.ApplyClassListListener;
+import com.example.sslc.interfaces.ChangeNewsTitleDialogListener;
 import com.example.sslc.requests.UpdateTeacherRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -34,10 +36,11 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class AdminTeacherDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialog.ChangeNewsTitleDialogListener {
+public class AdminTeacherDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialogListener, ApplyClassListListener {
 
     private static final String TAG = "TeacherDetailActivity";
 
@@ -59,6 +62,14 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         binding.ivTeacherProfileImage.setOnClickListener(view -> changeProfileImage());
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setOnClickListener(view -> changeDOB());
         binding.tvTeacherName.setOnClickListener(view -> changeTeacherName());
+        Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).setOnClickListener(view -> {
+
+            TeacherClassesDialog teacherClassesDialog = new TeacherClassesDialog(
+                    this,
+                    ((AppData)getApplication()).getClassList()
+            );
+            teacherClassesDialog.callDialog();
+        });
 
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(view -> updateTeacher());
@@ -66,23 +77,13 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
 
     public void setBasicUI() {
 
-        initSpinner();
-
         // Get Data and set basic UI
         Intent intent = getIntent();
         teacherID = intent.getIntExtra("teacherID", 0);
         String teacherName = intent.getStringExtra("teacherName");
         binding.tvTeacherName.setText(teacherName);
         String teacherClass = intent.getStringExtra("teacherClass");
-
-        for (int i = 0; i < binding.teacherDetailContents.spinnerTeacherClass.getCount(); i++) {
-
-            if (binding.teacherDetailContents.spinnerTeacherClass.getItemAtPosition(i).toString().equals(teacherClass)) {
-
-                Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).setSelection(i);
-                break;
-            }
-        }
+        Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).setText(teacherClass);
         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
         Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).setText(teacherIntroduce);
         String teacherDOB = intent.getStringExtra("teacherDOB");
@@ -104,20 +105,6 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         }
 
         initActivityResultLauncher();
-    }
-
-    private void initSpinner() {
-
-        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
-        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
-
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                allClass
-        );
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).setAdapter(spinnerAdapter);
     }
 
     public void initActivityResultLauncher() {
@@ -228,7 +215,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
                     Intent intent = new Intent(this, TeacherFragment.class);
                     intent.putExtra("teacherID", teacherID);
                     intent.putExtra("teacherName", binding.tvTeacherName.getText().toString());
-                    intent.putExtra("teacherClass", Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).getSelectedItem().toString());
+                    intent.putExtra("teacherClass", Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
                     intent.putExtra("teacherIntroduce", Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString());
                     intent.putExtra("teacherDOB", Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
                     intent.putExtra("teacherImage", teacherImage);
@@ -246,7 +233,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         UpdateTeacherRequest updateTeacherRequest = new UpdateTeacherRequest(
                 teacherID,
                 binding.tvTeacherName.getText().toString(),
-                Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).getSelectedItem().toString(),
+                Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString(),
                 teacherImage,
@@ -262,5 +249,11 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
         byte[] byteArrayVar = outputStream.toByteArray();
         return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+    }
+
+    @Override
+    public void applyClassList(ArrayList<String> classList) {
+
+        Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).setText(classList.toString());
     }
 }

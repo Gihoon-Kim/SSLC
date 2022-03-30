@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.sslc.R;
+import com.example.sslc.interfaces.ChangeNewsTitleDialogListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,12 +71,6 @@ public class ChangeNewsTitleDialog extends AppCompatDialogFragment {
     void onCancelButtonClicked() {
 
         dismiss();
-    }
-
-    // interface to send new Title to Detail Activity
-    public interface ChangeNewsTitleDialogListener {
-
-        void applyNewTitle(String newTitle);
     }
 
     @Override
