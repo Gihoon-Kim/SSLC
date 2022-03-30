@@ -56,7 +56,9 @@ public class IntroActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+
                 startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+                finish();
             }
 
             @Override
@@ -69,7 +71,7 @@ public class IntroActivity extends AppCompatActivity {
 
     public void getAllClass() {
 
-        ArrayList<String> classList = ((AppData)getApplication()).getClassList();
+        ((AppData) getApplication()).getClassList().clear();
         Response.Listener<String> responseListener = response -> {
 
             try {
@@ -84,7 +86,7 @@ public class IntroActivity extends AppCompatActivity {
 
                     if (success) {
 
-                        classList.add(teacherItem.getString("classTitle"));
+                        ((AppData) getApplication()).getClassList().add(teacherItem.getString("classTitle"));
                     }
                 }
             } catch (Exception e) {

@@ -28,7 +28,7 @@
     );
     mysqli_stmt_bind_param(
         $statement, 
-        "sssss", 
+        "sssssss", 
         $teacherName, $teacherDOB, $teacherClass, $teacherID, $teacherPassword, $teacherIntroduce, $teacherImage
     );
     mysqli_stmt_execute($statement);

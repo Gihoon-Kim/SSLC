@@ -136,7 +136,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="0dp"
@@ -147,14 +148,11 @@
                 android:textStyle="bold"
                 android:layout_marginRight="10dp"/>
 
-            <EditText
-                android:id="@+id/et_StudentClass"
+            <Spinner
+                android:id="@+id/spinner_StudentClass"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="Class"
-                android:textSize="20sp"
-                android:inputType="textPersonName" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout

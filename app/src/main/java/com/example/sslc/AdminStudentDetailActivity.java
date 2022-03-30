@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.data.AppData;
 import com.example.sslc.fragments.StudentFragment;
 import com.example.sslc.requests.DeleteStudentRequest;
 import com.example.sslc.requests.UpdateStudentClassRequest;
@@ -38,8 +41,8 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_CurrentClass)
     TextView tv_CurrentClass;
     @SuppressLint("NonConstantResourceId")
-    @BindView(R.id.et_NewClass)
-    EditText et_NewClass;
+    @BindView(R.id.spinner_StudentClass)
+    Spinner spinner_StudentClass;
 
     int studentNumber;
 
@@ -62,55 +65,65 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
         studentNumber = intent.getIntExtra("studentNumber", 0);
         tv_StudentName.setText(intent.getStringExtra("studentName"));
         tv_CurrentClass.setText(intent.getStringExtra("studentClass"));
+
+        initSpinner();
+    }
+
+    void initSpinner() {
+
+        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
+        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner_StudentClass.setAdapter(spinnerAdapter);
     }
 
     @SuppressLint("NonConstantResourceId")
     @OnClick(R.id.btn_UpdateStudent)
     public void onBtnUpdateStudentClicked() {
 
-        if (et_NewClass.getText().toString().trim().equals("")) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Updating");
+        progressDialog.setMessage("Please Wait..\nUpdating is in progress");
+        Response.Listener<String> responseListener = response -> {
 
-            Toast.makeText(this, "New Class cannot be empty", Toast.LENGTH_SHORT).show();
-        } else {
+            try {
 
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Updating");
-            progressDialog.setMessage("Please Wait..\nUpdating is in progress");
-            Response.Listener<String> responseListener = response -> {
+                Log.i(TAG, response);
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean success = jsonResponse.getBoolean("success");
 
-                try {
+                if (success) {
 
-                    Log.i(TAG, response);
-                    JSONObject jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
+                    Intent intent = new Intent(this, StudentFragment.class);
+                    intent.putExtra("studentNumber", studentNumber);
+                    intent.putExtra("studentClass", spinner_StudentClass.getSelectedItem().toString());
+                    setResult(9006, intent);
+                    finish();
+                } else {
 
-                    if (success) {
-
-                        Intent intent = new Intent(this, StudentFragment.class);
-                        intent.putExtra("studentNumber", studentNumber);
-                        intent.putExtra("studentClass", et_NewClass.getText().toString().trim());
-                        setResult(9006, intent);
-                        finish();
-                    } else {
-
-                        Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
-                    }
-
-                    progressDialog.dismiss();
-                } catch (Exception e) {
-
-                    e.printStackTrace();
+                    Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
                 }
-            };
 
-            UpdateStudentClassRequest updateStudentClassRequest = new UpdateStudentClassRequest(
-                    studentNumber,
-                    et_NewClass.getText().toString().trim(),
-                    responseListener
-            );
-            RequestQueue queue = Volley.newRequestQueue(this);
-            queue.add(updateStudentClassRequest);
-        }
+                progressDialog.dismiss();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+        };
+
+        UpdateStudentClassRequest updateStudentClassRequest = new UpdateStudentClassRequest(
+                studentNumber,
+                spinner_StudentClass.getSelectedItem().toString(),
+                responseListener
+        );
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(updateStudentClassRequest);
     }
 
     @SuppressLint("NonConstantResourceId")

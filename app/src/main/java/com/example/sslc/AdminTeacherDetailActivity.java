@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminTeacherDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
 import com.example.sslc.fragments.TeacherFragment;
@@ -64,13 +66,23 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
 
     public void setBasicUI() {
 
+        initSpinner();
+
         // Get Data and set basic UI
         Intent intent = getIntent();
         teacherID = intent.getIntExtra("teacherID", 0);
         String teacherName = intent.getStringExtra("teacherName");
         binding.tvTeacherName.setText(teacherName);
         String teacherClass = intent.getStringExtra("teacherClass");
-        Objects.requireNonNull(binding.teacherDetailContents.etTeacherClass).setText(teacherClass);
+
+        for (int i = 0; i < binding.teacherDetailContents.spinnerTeacherClass.getCount(); i++) {
+
+            if (binding.teacherDetailContents.spinnerTeacherClass.getItemAtPosition(i).toString().equals(teacherClass)) {
+
+                Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).setSelection(i);
+                break;
+            }
+        }
         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
         Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).setText(teacherIntroduce);
         String teacherDOB = intent.getStringExtra("teacherDOB");
@@ -92,6 +104,20 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         }
 
         initActivityResultLauncher();
+    }
+
+    private void initSpinner() {
+
+        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
+        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).setAdapter(spinnerAdapter);
     }
 
     public void initActivityResultLauncher() {
@@ -202,7 +228,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
                     Intent intent = new Intent(this, TeacherFragment.class);
                     intent.putExtra("teacherID", teacherID);
                     intent.putExtra("teacherName", binding.tvTeacherName.getText().toString());
-                    intent.putExtra("teacherClass", Objects.requireNonNull(binding.teacherDetailContents.etTeacherClass).getText().toString());
+                    intent.putExtra("teacherClass", Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).getSelectedItem().toString());
                     intent.putExtra("teacherIntroduce", Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString());
                     intent.putExtra("teacherDOB", Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
                     intent.putExtra("teacherImage", teacherImage);
@@ -220,7 +246,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         UpdateTeacherRequest updateTeacherRequest = new UpdateTeacherRequest(
                 teacherID,
                 binding.tvTeacherName.getText().toString(),
-                Objects.requireNonNull(binding.teacherDetailContents.etTeacherClass).getText().toString(),
+                Objects.requireNonNull(binding.teacherDetailContents.spinnerTeacherClass).getSelectedItem().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString(),
                 teacherImage,

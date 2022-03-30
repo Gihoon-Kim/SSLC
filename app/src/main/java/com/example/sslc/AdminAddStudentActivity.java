@@ -8,13 +8,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.data.AppData;
 import com.example.sslc.fragments.StudentFragment;
 import com.example.sslc.requests.AddStudentRequest;
 
@@ -48,8 +51,8 @@ public class AdminAddStudentActivity extends AppCompatActivity {
     @BindView(R.id.et_StudentCountry)
     EditText et_StudentCountry;
     @SuppressLint("NonConstantResourceId")
-    @BindView(R.id.et_StudentClass)
-    EditText et_StudentClass;
+    @BindView(R.id.spinner_StudentClass)
+    Spinner spinner_StudentClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,22 @@ public class AdminAddStudentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_add_student);
 
         ButterKnife.bind(this);
+
+        initSpinner();
+    }
+
+    void initSpinner() {
+
+        String[] allClass = new String[((AppData)getApplication()).getClassList().size()];
+        allClass = ((AppData)getApplication()).getClassList().toArray(allClass);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner_StudentClass.setAdapter(spinnerAdapter);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -128,7 +147,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), StudentFragment.class);
                         intent.putExtra("studentNumber", jsonResponse.getInt("rowCount") + 1);
                         intent.putExtra("studentName", et_StudentName.getText().toString().trim());
-                        intent.putExtra("studentClass", et_StudentClass.getText().toString().trim());
+                        intent.putExtra("studentClass", spinner_StudentClass.getSelectedItem().toString().trim());
                         intent.putExtra("studentDOB", tv_StudentDOB.getText().toString());
                         intent.putExtra("studentCountry", et_StudentCountry.getText().toString().trim());
                         setResult(9005, intent);
@@ -148,7 +167,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
         AddStudentRequest addStudentRequest = new AddStudentRequest(
                 et_StudentName.getText().toString().trim(),
                 tv_StudentDOB.getText().toString().trim(),
-                et_StudentClass.getText().toString().trim(),
+                spinner_StudentClass.getSelectedItem().toString(),
                 et_StudentCountry.getText().toString().trim(),
                 et_StudentID.getText().toString().trim(),
                 et_StudentPassword.getText().toString().trim(),

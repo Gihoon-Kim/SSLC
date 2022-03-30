@@ -26,17 +26,13 @@ import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddTeacherBinding;
 import com.example.sslc.fragments.TeacherFragment;
 import com.example.sslc.requests.AddTeacherRequest;
-import com.example.sslc.requests.GetAllClassRequest;
 import com.example.sslc.requests.UploadImageRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
 

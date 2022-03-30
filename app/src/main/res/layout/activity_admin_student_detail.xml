@@ -78,18 +78,15 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="@id/tv_CurrentClassTextView"
                 app:layout_constraintTop_toBottomOf="@id/tv_CurrentClassTextView"
-                app:layout_constraintBottom_toBottomOf="@id/et_NewClass"/>
+                app:layout_constraintBottom_toBottomOf="@id/spinner_StudentClass"/>
 
-            <EditText
-                android:id="@+id/et_NewClass"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/spinner_StudentClass"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:ems="5"
-                android:hint="new class"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_CurrentClass"
-                app:layout_constraintTop_toBottomOf="@id/tv_CurrentClass" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_NewClassTextView"
+                app:layout_constraintStart_toStartOf="@id/tv_CurrentClass"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
