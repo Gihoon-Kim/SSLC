@@ -28,18 +28,14 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/et_ClassTeacher"
+            <Spinner
+                android:id="@+id/spinner_ClassTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:ems="10"
-                android:hint="Teacher Name"
-                android:inputType="text"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_ClassTeacher"
                 app:layout_constraintStart_toEndOf="@id/tv_ClassTeacher"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/tv_ClassTeacher" />
 
             <TextView
                 android:id="@+id/tv_ClassStartTime"
@@ -88,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Class Room"
-                app:layout_constraintStart_toStartOf="@id/et_ClassTeacher"
+                app:layout_constraintStart_toStartOf="@id/spinner_ClassTeacher"
                 app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime"
                 android:ems="10" />
 

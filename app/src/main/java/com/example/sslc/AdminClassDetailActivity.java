@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminClassDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;
 import com.example.sslc.fragments.ClassFragment;
@@ -65,7 +66,14 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
         toolBarLayout.setOnClickListener(view -> changeTitle(toolBarLayout));
         setSpinner();
 
-        Objects.requireNonNull(binding.include.etClassTeacher).setText(classTeacher);
+        for (int i = 0; i < ((AppData)getApplication()).getTeacherList().size(); i++) {
+
+            if (((AppData)getApplication()).getTeacherList().get(i).equals(classTeacher)) {
+
+                Objects.requireNonNull(binding.include.spinnerClassTeacher).setSelection(i);
+                break;
+            }
+        }
         Objects.requireNonNull(binding.include.etClassDescription).setText(classDescription);
         Objects.requireNonNull(binding.include.etClassRoom).setText(classRoom);
 
@@ -92,6 +100,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
 
     private void setSpinner() {
 
+        // Spinners for Start time and End time
         String[] times = getResources().getStringArray(R.array.time);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 this,
@@ -101,6 +110,18 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Objects.requireNonNull(binding.include.spinnerStartTime).setAdapter(spinnerAdapter);
         Objects.requireNonNull(binding.include.spinnerEndTime).setAdapter(spinnerAdapter);
+
+        // Spinner for Teacher Name
+        String[] allClass = new String[((AppData)getApplication()).getTeacherList().size()];
+        allClass = ((AppData)getApplication()).getTeacherList().toArray(allClass);
+
+        spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Objects.requireNonNull(binding.include.spinnerClassTeacher).setAdapter(spinnerAdapter);
     }
 
     private void updateClass() {
@@ -123,7 +144,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
                     Intent intent = new Intent(this, ClassFragment.class);
                     intent.putExtra("classNumber", classNumber);
                     intent.putExtra("classTitle", Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
-                    intent.putExtra("classTeacher", Objects.requireNonNull(binding.include.etClassTeacher).getText().toString());
+                    intent.putExtra("classTeacher", Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString());
                     intent.putExtra("classDescription", Objects.requireNonNull(binding.include.etClassDescription).getText().toString());
                     intent.putExtra("classStartTime", Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString());
                     intent.putExtra("classEndTime", Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString());
@@ -146,7 +167,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
         UpdateClassRequest updateClassRequest = new UpdateClassRequest(
                 classNumber,
                 Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString(),
-                Objects.requireNonNull(binding.include.etClassTeacher).getText().toString(),
+                Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString(),
                 Objects.requireNonNull(binding.include.etClassDescription).getText().toString(),
                 Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString(),
                 Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString(),

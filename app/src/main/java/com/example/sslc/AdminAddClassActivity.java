@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.adapters.TeacherClassDialogAdapter;
 import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddClassBinding;
 import com.example.sslc.fragments.ClassFragment;
@@ -44,6 +45,7 @@ public class AdminAddClassActivity extends AppCompatActivity {
 
     private void setSpinner() {
 
+        // Spinner Times
         String[] times = getResources().getStringArray(R.array.time);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 this,
@@ -53,11 +55,23 @@ public class AdminAddClassActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Objects.requireNonNull(binding.include.spinnerStartTime).setAdapter(spinnerAdapter);
         Objects.requireNonNull(binding.include.spinnerEndTime).setAdapter(spinnerAdapter);
+
+        // Spinner Teacher Name
+        String[] allClass = new String[((AppData)getApplication()).getTeacherList().size()];
+        allClass = ((AppData)getApplication()).getTeacherList().toArray(allClass);
+
+        spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allClass
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Objects.requireNonNull(binding.include.spinnerClassTeacher).setAdapter(spinnerAdapter);
     }
     private void addNewClass() {
 
         String classTitle = binding.etClassTitle.getText().toString().trim();
-        String classTeacher = Objects.requireNonNull(binding.include.etClassTeacher).getText().toString().trim();
+        String classTeacher = Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString();
         String classStartTime = Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString();
         String classEndTime = Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString();
         String classDescription = Objects.requireNonNull(binding.include.etClassDescription).getText().toString().trim();
