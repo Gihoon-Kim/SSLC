@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -25,13 +26,21 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class AdminNewsDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialogListener {
+/*
+ * When an admin clicks a News recycler view item.
+ * Admin can check News's data (Title, Script),
+ * and also update News's data.
+ */
+public class AdminNewsDetailActivity
+        extends AppCompatActivity
+        implements ChangeNewsTitleDialogListener
+{
 
-    private static final String TAG = "NewsDetailActivity";
+    private static final String TAG = AdminNewsDetailActivity.class.getSimpleName();
 
     private ActivityNewsDetailBinding binding;
 
-    int newsID;
+    int newsNumber;
     EditText et_NewsContent;
 
     @Override
@@ -43,9 +52,9 @@ public class AdminNewsDetailActivity extends AppCompatActivity implements Change
 
         // Get Data through Intent
         Intent intent = getIntent();
-        newsID = intent.getIntExtra("NewsID", 0);
-        String newsTitle = intent.getStringExtra("NewsTitle");
-        String newsDescription = intent.getStringExtra("NewsDescription");
+        newsNumber = intent.getIntExtra(getString(R.string.news_number), 0);
+        String newsTitle = intent.getStringExtra(getString(R.string.news_title));
+        String newsDescription = intent.getStringExtra(getString(R.string.news_description));
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -53,18 +62,23 @@ public class AdminNewsDetailActivity extends AppCompatActivity implements Change
         toolBarLayout.setTitle(newsTitle);
 
         // If toolbarLayout is clicked, new dialog shows up to change title of the news
-        toolBarLayout.setOnClickListener(view -> {
-
-            // New Dialog to let admin change news title
-            ChangeNewsTitleDialog changeNewsTitleDialog = new ChangeNewsTitleDialog(Objects.requireNonNull(toolBarLayout.getTitle()).toString());
-            changeNewsTitleDialog.show(getSupportFragmentManager(), "ChangeTitleDialog");
-        });
+        toolBarLayout.setOnClickListener(view -> changeNewsTitle(toolBarLayout));
 
         FloatingActionButton fab = binding.fabUpdate;
         fab.setOnClickListener(view -> updateNews());
 
         et_NewsContent = binding.includeView.getRoot().findViewById(R.id.et_NewsContent);
         et_NewsContent.setText(newsDescription);
+    }
+
+    private void changeNewsTitle(@NonNull CollapsingToolbarLayout toolBarLayout) {
+
+        // New Dialog to let admin change news title
+        ChangeNewsTitleDialog changeNewsTitleDialog = new ChangeNewsTitleDialog(Objects.requireNonNull(toolBarLayout.getTitle()).toString());
+        changeNewsTitleDialog.show(
+                getSupportFragmentManager(),
+                TAG + ChangeNewsTitleDialog.class.getSimpleName()
+        );
     }
 
     @Override
@@ -75,43 +89,44 @@ public class AdminNewsDetailActivity extends AppCompatActivity implements Change
     private void updateNews() {
 
         ProgressDialog progressDialog = new ProgressDialog(AdminNewsDetailActivity.this);
-        progressDialog.setTitle("Updating");
-        progressDialog.setMessage("Please Wait.\nUpdating in progress");
+        progressDialog.setTitle(getString(R.string.updating));
+        progressDialog.setMessage(getString(R.string.update_in_progress));
         progressDialog.show();
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-                progressDialog.dismiss();
-
-                if (success) {
-
-                    Intent intent = new Intent(getApplicationContext(), NewsFragment.class);
-                    intent.putExtra("newsID", newsID);
-                    intent.putExtra("newTitle", Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
-                    intent.putExtra("newDesc", et_NewsContent.getText().toString());
-                    setResult(9002, intent);
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Update Failure", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = response -> updateNewsRequest(progressDialog, response);
         UpdateNewsRequest updateNewsRequest = new UpdateNewsRequest(
-                newsID,
+                newsNumber,
                 Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString(),
                 et_NewsContent.getText().toString(),
                 responseListener
         );
         RequestQueue queue = Volley.newRequestQueue(AdminNewsDetailActivity.this);
         queue.add(updateNewsRequest);
+    }
+
+    private void updateNewsRequest(ProgressDialog progressDialog, String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Intent intent = new Intent(getApplicationContext(), NewsFragment.class);
+                intent.putExtra(getString(R.string.news_number), newsNumber);
+                intent.putExtra(getString(R.string.news_title), Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
+                intent.putExtra(getString(R.string.news_description), et_NewsContent.getText().toString());
+                setResult(9002, intent);
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.update_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

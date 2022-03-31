@@ -30,7 +30,6 @@ import com.example.sslc.fragments.TeacherFragment;
 import com.example.sslc.interfaces.ApplyClassListListener;
 import com.example.sslc.interfaces.ChangeNewsTitleDialogListener;
 import com.example.sslc.requests.UpdateTeacherRequest;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
@@ -40,14 +39,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class AdminTeacherDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialogListener, ApplyClassListListener {
+/*
+ * When an admin clicks a teacher recycler view item.
+ * Admin can check teacher's information (Name, Class, DOB, Introduce, Profile Image),
+ * and also update teacher's profile.
+ */
+public class AdminTeacherDetailActivity
+        extends AppCompatActivity
+        implements ChangeNewsTitleDialogListener, ApplyClassListListener
+{
 
-    private static final String TAG = "TeacherDetailActivity";
+    private static final String TAG = AdminTeacherDetailActivity.class.getSimpleName();
 
     private ActivityAdminTeacherDetailBinding binding;
-    private ActivityResultLauncher<Intent> updateTeacherProfileImageResultLauncher;
+    private ActivityResultLauncher<Intent> updateTeacherProfileImageFromGalleryResultLauncher;
 
-    int teacherID;
+    int teacherNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +77,14 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
             );
             teacherClassesDialog.callDialog();
         });
-
-        FloatingActionButton fab = binding.fab;
-        fab.setOnClickListener(view -> updateTeacher());
+        binding.fab.setOnClickListener(view -> updateTeacher());
     }
 
     public void setBasicUI() {
 
         // Get Data and set basic UI
         Intent intent = getIntent();
-        teacherID = intent.getIntExtra("teacherID", 0);
+        teacherNumber = intent.getIntExtra("teacherNumber", 0);
         String teacherName = intent.getStringExtra("teacherName");
         binding.tvTeacherName.setText(teacherName);
         String teacherClass = intent.getStringExtra("teacherClass");
@@ -109,13 +114,13 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
 
     public void initActivityResultLauncher() {
 
-        updateTeacherProfileImageResultLauncher = registerForActivityResult(
+        updateTeacherProfileImageFromGalleryResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
 
                     if (result.getResultCode() == RESULT_CANCELED) {
 
-                        Toast.makeText(this, "Get Image cancelled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.get_image_cancelled, Toast.LENGTH_SHORT).show();
                     } else {
 
                         Uri selectedImageUri;
@@ -132,29 +137,24 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
     private void changeTeacherName() {
 
         ChangeNewsTitleDialog changeTeacherNameDialog = new ChangeNewsTitleDialog(binding.tvTeacherName.getText().toString());
-        changeTeacherNameDialog.show(getSupportFragmentManager(), "ChangeTeacherName");
-    }
-
-    @Override
-    public void applyNewTitle(String newTitle) {
-
-        binding.tvTeacherName.setText(newTitle);
+        changeTeacherNameDialog.show(
+                getSupportFragmentManager(),
+                TAG + ChangeNewsTitleDialog.class.getSimpleName()
+        );
     }
 
     private void changeProfileImage() {
 
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        updateTeacherProfileImageResultLauncher.launch(intent);
+        updateTeacherProfileImageFromGalleryResultLauncher.launch(intent);
     }
 
     private void changeDOB() {
 
         String teacherDOB = Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString();
-
         String[] dayMonthYear = teacherDOB.split("/");
 
-        Log.i(TAG, "year = " + dayMonthYear[2] + "month = " + dayMonthYear[1] + "day = " + dayMonthYear[0]);
         final Calendar myCalendar = Calendar.getInstance();
 
         DatePickerDialog.OnDateSetListener dataSetListener = (
@@ -168,7 +168,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
             myCalendar.set(Calendar.MONTH, month);
             myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-            String dateFormat = "dd/MM/yyyy";
+            String dateFormat = getString(R.string.date_format);
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
             Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setText(simpleDateFormat.format(myCalendar.getTime()));
         };
@@ -185,13 +185,15 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
     private void updateTeacher() {
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Updating");
-        progressDialog.setMessage("Please Wait..\nUpdating in progress");
+        progressDialog.setTitle(getString(R.string.updating));
+        progressDialog.setMessage(getString(R.string.update_in_progress));
         progressDialog.show();
 
         // Image to String
+        // If the profile image is not selected ( it is based image ),
+        // teacherImage has no value ("")
         String teacherImage;
-        if (binding.ivTeacherProfileImage.getDrawable().toString().contains("VectorDrawable")) {
+        if (binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
 
             teacherImage = "";
         } else {
@@ -201,37 +203,13 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
             teacherImage = bitmapToString(bitmap);
         }
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonObject = new JSONObject(response);
-                boolean success = jsonObject.getBoolean("success");
-                progressDialog.dismiss();
-
-                if(success) {
-
-                    Intent intent = new Intent(this, TeacherFragment.class);
-                    intent.putExtra("teacherID", teacherID);
-                    intent.putExtra("teacherName", binding.tvTeacherName.getText().toString());
-                    intent.putExtra("teacherClass", Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
-                    intent.putExtra("teacherIntroduce", Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString());
-                    intent.putExtra("teacherDOB", Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
-                    intent.putExtra("teacherImage", teacherImage);
-                    setResult(9004, intent);
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Teacher Update Failed", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = response -> updateTeacherRequest(
+                progressDialog,
+                teacherImage,
+                response
+        );
         UpdateTeacherRequest updateTeacherRequest = new UpdateTeacherRequest(
-                teacherID,
+                teacherNumber,
                 binding.tvTeacherName.getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString(),
@@ -243,6 +221,35 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         queue.add(updateTeacherRequest);
     }
 
+    private void updateTeacherRequest(ProgressDialog progressDialog, String teacherImage, String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean(getString(R.string.success));
+            progressDialog.dismiss();
+
+            if(success) {
+
+                Intent intent = new Intent(this, TeacherFragment.class);
+                intent.putExtra(getString(R.string.teacher_number), teacherNumber);
+                intent.putExtra(getString(R.string.teacher_name), binding.tvTeacherName.getText().toString());
+                intent.putExtra(getString(R.string.teacher_class), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
+                intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString());
+                intent.putExtra(getString(R.string.teacher_dob), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
+                intent.putExtra(getString(R.string.teacher_image), teacherImage);
+                setResult(9004, intent);
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.teacher_update_failed), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private String bitmapToString(Bitmap bitmap) {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -250,6 +257,12 @@ public class AdminTeacherDetailActivity extends AppCompatActivity implements Cha
         byte[] byteArrayVar = outputStream.toByteArray();
         return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
     }
+
+    @Override
+    public void applyNewTitle(String newTitle) {
+
+    binding.tvTeacherName.setText(newTitle);
+}
 
     @Override
     public void applyClassList(ArrayList<String> classList) {

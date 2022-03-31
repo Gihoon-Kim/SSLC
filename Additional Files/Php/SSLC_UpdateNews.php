@@ -6,7 +6,7 @@
  
      $conn = mysqli_connect($servername, $username, $password, $db_name);
 
-     $newsID = $_POST["newsID"];
+     $newsNumber = $_POST["newsNumber"];
      $newsTitle = $_POST["newsTitle"];
      $newsDescription = $_POST["newsDescription"];
      $newsCreatedAt = $_POST["newsCreatedAt"];
@@ -17,7 +17,7 @@
             SET newsTitle = '$newsTitle',
                 newsDescription = '$newsDescription',
                 createdAt = '$newsCreatedAt' 
-            WHERE newsNumber = '$newsID'"
+            WHERE newsNumber = '$newsNumber'"
     );
     mysqli_stmt_execute($statement);
 

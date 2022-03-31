@@ -23,8 +23,4 @@ public class Teacher extends People {
     public int getTeacherNumber() {
         return teacherNumber;
     }
-
-    public void setTeacherNumber(int teacherNumber) {
-        this.teacherNumber = teacherNumber;
-    }
 }

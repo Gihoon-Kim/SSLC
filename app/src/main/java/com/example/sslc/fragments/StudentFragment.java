@@ -72,7 +72,7 @@ public class StudentFragment extends Fragment {
         getStudents();
 
         // Initialize activityResult Launchers
-        activityResultLauncherInit();
+        initActivityResultLaunchers();
 
         studentFragmentAdapter = new StudentFragmentAdapter(
                 requireContext(),
@@ -93,7 +93,7 @@ public class StudentFragment extends Fragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void activityResultLauncherInit() {
+    private void initActivityResultLaunchers() {
 
         addStudentActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -102,11 +102,11 @@ public class StudentFragment extends Fragment {
                     if (result.getResultCode() == 9005) {
 
                         Intent intent = result.getData();
-                        int studentNumber = Objects.requireNonNull(intent).getIntExtra("studentNumber", 0);
-                        String studentName = intent.getStringExtra("studentName");
-                        String studentClass = intent.getStringExtra("studentClass");
-                        String studentDOB = intent.getStringExtra("studentDOB");
-                        String studentCountry = intent.getStringExtra("studentCountry");
+                        int studentNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.student_number), 0);
+                        String studentName = intent.getStringExtra(getString(R.string.student_name));
+                        String studentClass = intent.getStringExtra(getString(R.string.student_class));
+                        String studentDOB = intent.getStringExtra(getString(R.string.student_dob));
+                        String studentCountry = intent.getStringExtra(getString(R.string.student_country));
 
                         Student student = new Student(
                                 studentNumber,
@@ -131,8 +131,8 @@ public class StudentFragment extends Fragment {
                     if (result.getResultCode() == 9006) {
 
                         Intent intent = result.getData();
-                        int studentNumber = Objects.requireNonNull(intent).getIntExtra("studentNumber", 0);
-                        String studentClass = intent.getStringExtra("studentClass");
+                        int studentNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.student_number), 0);
+                        String studentClass = intent.getStringExtra(getString(R.string.student_class));
 
                         for (int i = 0; i < studentList.size(); i++) {
 
@@ -169,49 +169,51 @@ public class StudentFragment extends Fragment {
 
         studentList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, "response : " + response);
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("Student");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject studentItem = jsonArray.getJSONObject(i);
-                    boolean success = studentItem.getBoolean("success");
-
-                    if (success) {
-
-                        int studentNumber = studentItem.getInt("StudentNumber");
-                        String studentName = studentItem.getString("StudentName");
-                        String studentDOB = studentItem.getString("StudentDOB");
-                        String studentClass = studentItem.getString("StudentClass");
-                        String studentCountry = studentItem.getString("Country");
-                        String studentIntroduce = studentItem.getString("StudentIntroduce");
-
-                        Student student = new Student(
-                                studentNumber,
-                                studentName,
-                                studentDOB,
-                                studentClass,
-                                false,
-                                studentIntroduce,
-                                studentCountry
-                        );
-                        studentList.add(student);
-                        studentFragmentAdapter.notifyDataSetChanged();
-                    }
-                }
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::getStudentRequest;
         GetStudentRequest getStudentRequest = new GetStudentRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getStudentRequest);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void getStudentRequest(String response) {
+
+        try {
+
+            Log.i(TAG, "response : " + response);
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray(getString(R.string.student));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject studentItem = jsonArray.getJSONObject(i);
+                boolean success = studentItem.getBoolean(getString(R.string.success));
+
+                if (success) {
+
+                    int studentNumber = studentItem.getInt(getString(R.string.student_number));
+                    String studentName = studentItem.getString(getString(R.string.student_name));
+                    String studentDOB = studentItem.getString(getString(R.string.student_dob));
+                    String studentClass = studentItem.getString(getString(R.string.student_class));
+                    String studentCountry = studentItem.getString(getString(R.string.student_country));
+                    String studentIntroduce = studentItem.getString(getString(R.string.student_introduce));
+
+                    Student student = new Student(
+                            studentNumber,
+                            studentName,
+                            studentDOB,
+                            studentClass,
+                            false,
+                            studentIntroduce,
+                            studentCountry
+                    );
+                    studentList.add(student);
+                    studentFragmentAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 }

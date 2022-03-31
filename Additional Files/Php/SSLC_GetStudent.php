@@ -8,7 +8,7 @@
 
      $result = mysqli_query(
          $conn,
-         "SELECT StudentNumber, StudentName, StudentDOB, StudentClass, Country, StudentIntroduce
+         "SELECT studentNumber, studentName, studentDOB, studentClass, Country, StudentIntroduce
             FROM SSLC_Student"
      );
      $response = array();
@@ -18,12 +18,12 @@
             $response,
             array(
                 'success' => true,
-                'StudentNumber' => $row[0],
-                'StudentName' => $row[1],
-                'StudentDOB' => $row[2],
-                'StudentClass' => $row[3],
-                'Country' => $row[4],
-                'StudentIntroduce' => $row[5]
+                'studentNumber' => $row[0],
+                'studentName' => $row[1],
+                'studentDOB' => $row[2],
+                'studentClass' => $row[3],
+                'studentCountry' => $row[4],
+                'studentIntroduce' => $row[5]
             )
             );
      }

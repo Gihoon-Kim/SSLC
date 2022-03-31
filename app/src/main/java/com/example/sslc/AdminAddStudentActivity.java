@@ -31,9 +31,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * To admin add a student with student's Name, DOB, Class.
+ * Also provide ID and Password to login the application.
+ * Student's profile image and introduce will be uploaded by student themselves.
+ */
+
 public class AdminAddStudentActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddStudentActivity";
+    private static final String TAG = AdminAddStudentActivity.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_StudentName)
@@ -90,7 +96,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, month);
             myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
             Objects.requireNonNull(tv_StudentDOB).setText(simpleDateFormat.format(myCalendar.getTime()));
         };
 
@@ -108,17 +114,17 @@ public class AdminAddStudentActivity extends AppCompatActivity {
     public void onRegisterButtonClicked() {
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Adding Student");
-        progressDialog.setMessage("Please Wait...\nAdding Student in progress");
+        progressDialog.setTitle(getString(R.string.creating));
+        progressDialog.setMessage(getString(R.string.create_in_progress));
         progressDialog.show();
 
         if (et_StudentName.getText().toString().trim().equals("") ||
                 et_StudentID.getText().toString().trim().equals("") ||
                 et_StudentPassword.getText().toString().trim().equals("") ||
-                tv_StudentDOB.getText().toString().trim().equals("Click to set") ||
+                tv_StudentDOB.getText().toString().trim().equals(getString(R.string.click_to_set)) ||
                 et_StudentCountry.getText().toString().trim().equals("")) {
 
-            Toast.makeText(this, "Please fill all information correctly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.fields_not_filled), Toast.LENGTH_SHORT).show();
         } else {
 
             addStudentOnDatabase();
@@ -128,41 +134,7 @@ public class AdminAddStudentActivity extends AppCompatActivity {
 
     private void addStudentOnDatabase() {
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-                boolean validate = jsonResponse.getBoolean("validation");
-
-                if (!validate) {
-
-                    Toast.makeText(this, "Validation Failed", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    if (success) {
-
-                        Intent intent = new Intent(getApplicationContext(), StudentFragment.class);
-                        intent.putExtra("studentNumber", jsonResponse.getInt("rowCount") + 1);
-                        intent.putExtra("studentName", et_StudentName.getText().toString().trim());
-                        intent.putExtra("studentClass", spinner_StudentClass.getSelectedItem().toString().trim());
-                        intent.putExtra("studentDOB", tv_StudentDOB.getText().toString());
-                        intent.putExtra("studentCountry", et_StudentCountry.getText().toString().trim());
-                        setResult(9005, intent);
-
-                        Toast.makeText(this, "Student Created Successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-
-                        Toast.makeText(this, "Fail create student", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
+        Response.Listener<String> responseListener = this::addStudentRequest;
 
         AddStudentRequest addStudentRequest = new AddStudentRequest(
                 et_StudentName.getText().toString().trim(),
@@ -175,5 +147,41 @@ public class AdminAddStudentActivity extends AppCompatActivity {
         );
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(addStudentRequest);
+    }
+
+    private void addStudentRequest(String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+            boolean validate = jsonResponse.getBoolean(getString(R.string.validation));
+
+            if (!validate) {
+
+                Toast.makeText(this, getString(R.string.validation_failed), Toast.LENGTH_SHORT).show();
+            } else {
+
+                if (success) {
+
+                    Intent intent = new Intent(getApplicationContext(), StudentFragment.class);
+                    intent.putExtra(getString(R.string.student_number), jsonResponse.getInt("rowCount") + 1);
+                    intent.putExtra(getString(R.string.student_name), et_StudentName.getText().toString().trim());
+                    intent.putExtra(getString(R.string.student_class), spinner_StudentClass.getSelectedItem().toString().trim());
+                    intent.putExtra(getString(R.string.student_dob), tv_StudentDOB.getText().toString());
+                    intent.putExtra(getString(R.string.student_country), et_StudentCountry.getText().toString().trim());
+                    setResult(9005, intent);
+
+                    Toast.makeText(this, getString(R.string.create_complete), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+
+                    Toast.makeText(this, getString(R.string.create_failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

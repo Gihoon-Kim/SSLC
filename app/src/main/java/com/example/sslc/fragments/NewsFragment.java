@@ -37,7 +37,7 @@ import butterknife.OnClick;
 
 public class NewsFragment extends Fragment {
 
-    private static final String TAG = "NewsFragment";
+    private static final String TAG = NewsFragment.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_News)
@@ -54,11 +54,15 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_news,
+                container,
+                false
+        );
         ButterKnife.bind(this, view);
 
         // Get News from database
-        GetNews();
+        getNews();
 
         // Initialize activityResult Launchers
         activityResultLauncherInit();
@@ -66,7 +70,11 @@ public class NewsFragment extends Fragment {
         // Create RecyclerView
         rv_News.setHasFixedSize(true);
         rv_News.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        newsFragmentAdapter = new NewsFragmentAdapter(getContext(), newsDataList, updateNewsActivityResultLauncher);
+        newsFragmentAdapter = new NewsFragmentAdapter(
+                getContext(),
+                newsDataList,
+                updateNewsActivityResultLauncher
+        );
         rv_News.setAdapter(newsFragmentAdapter);
 
         return view;
@@ -82,93 +90,97 @@ public class NewsFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
 
-            if (result.getResultCode() == 9001) {
+                    if (result.getResultCode() == 9001) {
 
-                Intent intent = result.getData();
-                String newsDataTitle = Objects.requireNonNull(intent).getStringExtra("newsDataTitle");
-                String newsDataDesc = intent.getStringExtra("newsDataDesc");
-                NewsData newsData = new NewsData(newsDataTitle, newsDataDesc);
-                newsDataList.add(0, newsData);
-                newsFragmentAdapter.notifyDataSetChanged();
-            }
-        });
+                        Intent intent = result.getData();
+                        String newsDataTitle = Objects.requireNonNull(intent).getStringExtra(getString(R.string.news_title));
+                        String newsDataDesc = intent.getStringExtra(getString(R.string.news_description));
+                        NewsData newsData = new NewsData(
+                                newsDataTitle,
+                                newsDataDesc
+                        );
+                        newsDataList.add(0, newsData);
+                        newsFragmentAdapter.notifyDataSetChanged();
+                    }
+                });
 
         // updateActivityResultLauncher Initialize
         updateNewsActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
 
-            if (result.getResultCode() == 9002) {
+                    if (result.getResultCode() == 9002) {
 
-                Intent intent = result.getData();
-                int newsID = Objects.requireNonNull(intent).getIntExtra("newsID", 0);
-                String newTitle = Objects.requireNonNull(intent).getStringExtra("newTitle");
-                String newDesc = intent.getStringExtra("newDesc");
+                        Intent intent = result.getData();
+                        int newsNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.news_number), 0);
+                        String newTitle = Objects.requireNonNull(intent).getStringExtra(getString(R.string.news_title));
+                        String newDesc = intent.getStringExtra(getString(R.string.news_description));
 
-                Log.i(TAG, "News ID : " + newsID + "\nNew Title : " + newTitle + "\nNew Content" + newDesc);
+                        // find Index of newsDataList
+                        for (int i = 0; i < newsDataList.size(); i++) {
 
-                // find Index of newsDataList
-                for (int i = 0; i < newsDataList.size(); i++) {
+                            if (newsDataList.get(i).getNewsID() == newsNumber) {
 
-                    if (newsDataList.get(i).getNewsID() == newsID) {
+                                newsDataList.get(i).setTitle(newTitle);
+                                newsDataList.get(i).setDescription(newDesc);
 
-                        newsDataList.get(i).setTitle(newTitle);
-                        newsDataList.get(i).setDescription(newDesc);
-
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        Date date = new Date();
-                        newsDataList.get(i).setCreatedAt(dateFormat.format(date));
-                        newsFragmentAdapter.notifyDataSetChanged();
-                        break;
+                                @SuppressLint("SimpleDateFormat")
+                                SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.date_format));
+                                Date date = new Date();
+                                newsDataList.get(i).setCreatedAt(dateFormat.format(date));
+                                newsFragmentAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     // This method is to get news from database.
     // When Activity is resumed, it is executed.
-    private void GetNews() {
+    private void getNews() {
+
         // Get News
         newsDataList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, "response : " + response);
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("News");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject newsItem = jsonArray.getJSONObject(i);
-                    boolean success = newsItem.getBoolean("success");
-
-                    if (success) {
-
-                        int newsID = newsItem.getInt("newsNumber");
-                        String newsTitle = newsItem.getString("newsTitle");
-                        String newsDescription = newsItem.getString("newsDescription");
-                        String newsCreatedAt = newsItem.getString("newsCreatedAt");
-                        NewsData newsData = new NewsData(
-                                newsID,
-                                newsTitle,
-                                newsDescription,
-                                newsCreatedAt
-                        );
-                        newsDataList.add(newsData);
-                        newsFragmentAdapter.notifyDataSetChanged();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = this::getNewsRequest;
         GetNewsRequest getNewsRequest = new GetNewsRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getNewsRequest);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void getNewsRequest(String response) {
+        try {
+
+            Log.i(TAG, "response : " + response);
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray(getString(R.string.news));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject newsItem = jsonArray.getJSONObject(i);
+                boolean success = newsItem.getBoolean(getString(R.string.success));
+
+                if (success) {
+
+                    int newsNumber = newsItem.getInt(getString(R.string.news_number));
+                    String newsTitle = newsItem.getString(getString(R.string.news_title));
+                    String newsDescription = newsItem.getString(getString(R.string.news_description));
+                    String newsCreatedAt = newsItem.getString(getString(R.string.news_createdAt));
+                    NewsData newsData = new NewsData(
+                            newsNumber,
+                            newsTitle,
+                            newsDescription,
+                            newsCreatedAt
+                    );
+                    newsDataList.add(newsData);
+                    newsFragmentAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint({"NonConstantResourceId"})

@@ -27,9 +27,14 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/*
+ * When an admin clicks a Class recycler view item.
+ * Admin can check class's data (Name, Teacher, Time, introduce, and class room),
+ * and also update class's data.
+ */
 public class AdminClassDetailActivity extends AppCompatActivity implements ChangeNewsTitleDialogListener {
 
-    private static final String TAG = "ClassDetailActivity";
+    private static final String TAG = AdminClassDetailActivity.class.getSimpleName();
     private ActivityAdminClassDetailBinding binding;
 
     int classNumber;
@@ -51,19 +56,20 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
 
         // Get Data from Intent
         Intent intent = getIntent();
-        classNumber = intent.getIntExtra("classNumber", 0);
-        String classTitle = intent.getStringExtra("classTitle");
-        String classTeacher = intent.getStringExtra("classTeacher");
-        String classDescription = intent.getStringExtra("classDescription");
-        String classStartTime = intent.getStringExtra("classStartTime");
-        String classEndTime = intent.getStringExtra("classEndTime");
-        String classRoom = intent.getStringExtra("classRoom");
+        classNumber = intent.getIntExtra(getString(R.string.class_number), 0);
+        String classTitle = intent.getStringExtra(getString(R.string.class_title));
+        String classTeacher = intent.getStringExtra(getString(R.string.class_teacher));
+        String classDescription = intent.getStringExtra(getString(R.string.class_description));
+        String classStartTime = intent.getStringExtra(getString(R.string.class_start_time));
+        String classEndTime = intent.getStringExtra(getString(R.string.class_end_time));
+        String classRoom = intent.getStringExtra(getString(R.string.class_room));
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(classTitle);
         toolBarLayout.setOnClickListener(view -> changeTitle(toolBarLayout));
+
         setSpinner();
 
         for (int i = 0; i < ((AppData)getApplication()).getTeacherList().size(); i++) {
@@ -94,7 +100,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
         ChangeNewsTitleDialog changeNewsTitleDialog = new ChangeNewsTitleDialog(Objects.requireNonNull(toolBarLayout.getTitle()).toString());
         changeNewsTitleDialog.show(
                 getSupportFragmentManager(),
-                "ChangeTitleDialog"
+                TAG + ChangeNewsTitleDialog.class.getSimpleName()
         );
     }
 
@@ -127,43 +133,11 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
     private void updateClass() {
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Update Class");
-        progressDialog.setMessage("Please Wait...\nUpdating in progress");
+        progressDialog.setTitle(getString(R.string.updating));
+        progressDialog.setMessage(getString(R.string.update_in_progress));
         progressDialog.show();
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    Intent intent = new Intent(this, ClassFragment.class);
-                    intent.putExtra("classNumber", classNumber);
-                    intent.putExtra("classTitle", Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
-                    intent.putExtra("classTeacher", Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString());
-                    intent.putExtra("classDescription", Objects.requireNonNull(binding.include.etClassDescription).getText().toString());
-                    intent.putExtra("classStartTime", Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString());
-                    intent.putExtra("classEndTime", Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString());
-                    intent.putExtra("classRoom", Objects.requireNonNull(binding.include.etClassRoom).getText().toString());
-                    setResult(9009, intent);
-
-                    Toast.makeText(this, "Update Complete", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = response -> updateClassRequest(progressDialog, response);
         UpdateClassRequest updateClassRequest = new UpdateClassRequest(
                 classNumber,
                 Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString(),
@@ -176,6 +150,39 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
         );
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(updateClassRequest);
+    }
+
+    private void updateClassRequest(ProgressDialog progressDialog, String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Intent intent = new Intent(this, ClassFragment.class);
+                intent.putExtra(getString(R.string.class_number), classNumber);
+                intent.putExtra(getString(R.string.class_title), Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
+                intent.putExtra(getString(R.string.class_teacher), Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString());
+                intent.putExtra(getString(R.string.class_description), Objects.requireNonNull(binding.include.etClassDescription).getText().toString());
+                intent.putExtra(getString(R.string.class_start_time), Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString());
+                intent.putExtra(getString(R.string.class_end_time), Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString());
+                intent.putExtra(getString(R.string.class_room), Objects.requireNonNull(binding.include.etClassRoom).getText().toString());
+                setResult(9009, intent);
+
+                Toast.makeText(this, getString(R.string.update_complete), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.update_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
     @Override

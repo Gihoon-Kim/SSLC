@@ -105,32 +105,15 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
     private void deleteClassFromListAndDatabase(int position, int classNumber) {
 
         ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Delete Class");
-        progressDialog.setMessage("Please Wait.\nDeleting in progress");
+        progressDialog.setTitle(context.getString(R.string.deleting));
+        progressDialog.setMessage(context.getString(R.string.delete_in_progress));
         progressDialog.show();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    programDataList.remove(position);
-                    notifyDataSetChanged();
-                } else {
-
-                    Toast.makeText(context, "Delete Class Failed", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
+        Response.Listener<String> responseListener = response -> deleteClassRequest(
+                position,
+                progressDialog,
+                response
+        );
 
         DeleteClassRequest deleteClassRequest = new DeleteClassRequest(
                 classNumber,
@@ -138,6 +121,30 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
         );
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(deleteClassRequest);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void deleteClassRequest(int position, ProgressDialog progressDialog, String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(context.getString(R.string.success));
+
+            if (success) {
+
+                programDataList.remove(position);
+                notifyDataSetChanged();
+            } else {
+
+                Toast.makeText(context, context.getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
     @Override

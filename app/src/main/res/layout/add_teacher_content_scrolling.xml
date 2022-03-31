@@ -36,7 +36,7 @@
                     android:id="@+id/tv_TeacherDOB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="dd/mm/yyyy"
+                    android:text="dd/MM/yyyy"
                     android:textSize="16sp"/>
             </LinearLayout>
 

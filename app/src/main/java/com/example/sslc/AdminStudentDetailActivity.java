@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +29,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * When an admin clicks a student recycler view item.
+ * Admin can check teacher's information (Name, Class),
+ * and also update student's class.
+ * Other information of a student should be changed by student themselves.
+ */
 public class AdminStudentDetailActivity extends AppCompatActivity {
 
-    private static final String TAG = "StudentDetailActivity";
+    private static final String TAG = AdminStudentDetailActivity.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.tv_StudentName)
@@ -63,8 +68,8 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         studentNumber = intent.getIntExtra("studentNumber", 0);
-        tv_StudentName.setText(intent.getStringExtra("studentName"));
-        tv_CurrentClass.setText(intent.getStringExtra("studentClass"));
+        tv_StudentName.setText(intent.getStringExtra(getString(R.string.student_name)));
+        tv_CurrentClass.setText(intent.getStringExtra(getString(R.string.student_class)));
 
         initSpinner();
     }
@@ -88,35 +93,10 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     public void onBtnUpdateStudentClicked() {
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Updating");
-        progressDialog.setMessage("Please Wait..\nUpdating is in progress");
-        Response.Listener<String> responseListener = response -> {
+        progressDialog.setTitle(getString(R.string.updating));
+        progressDialog.setMessage(getString(R.string.update_in_progress));
 
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    Intent intent = new Intent(this, StudentFragment.class);
-                    intent.putExtra("studentNumber", studentNumber);
-                    intent.putExtra("studentClass", spinner_StudentClass.getSelectedItem().toString());
-                    setResult(9006, intent);
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
-                }
-
-                progressDialog.dismiss();
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::updateStudentClassRequest;
         UpdateStudentClassRequest updateStudentClassRequest = new UpdateStudentClassRequest(
                 studentNumber,
                 spinner_StudentClass.getSelectedItem().toString(),
@@ -124,6 +104,33 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
         );
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(updateStudentClassRequest);
+    }
+
+    private void updateStudentClassRequest(String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Intent intent = new Intent(this, StudentFragment.class);
+                intent.putExtra(getString(R.string.student_name), studentNumber);
+                intent.putExtra(getString(R.string.student_class), spinner_StudentClass.getSelectedItem().toString());
+                setResult(9006, intent);
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.update_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            progressDialog.dismiss();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -141,42 +148,43 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     private void deleteStudent() {
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Deleting");
-        progressDialog.setMessage("Please Wait..\nDeleting is in progress");
+        progressDialog.setTitle(getString(R.string.deleting));
+        progressDialog.setMessage(getString(R.string.delete_in_progress));
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                progressDialog.show();
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    Toast.makeText(this, "Delete Complete", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(this, StudentFragment.class);
-                    intent.putExtra("studentNumber", studentNumber);
-                    setResult(9007, intent);
-
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Delete Student failed", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::deleteStudentRequest;
         DeleteStudentRequest deleteStudentRequest = new DeleteStudentRequest(
                 studentNumber,
                 responseListener
         );
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(deleteStudentRequest);
+    }
+
+    private void deleteStudentRequest(String response) {
+
+        try {
+
+            progressDialog.show();
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Toast.makeText(this, getString(R.string.delete_complete), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(this, StudentFragment.class);
+                intent.putExtra(getString(R.string.student_number), studentNumber);
+                setResult(9007, intent);
+
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

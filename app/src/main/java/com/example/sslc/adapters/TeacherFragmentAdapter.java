@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,23 +81,23 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
         holder.itemView.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, AdminTeacherDetailActivity.class);
-            intent.putExtra("teacherID", teacherList.get(holder.getAdapterPosition()).getTeacherNumber());
-            intent.putExtra("teacherName", teacherList.get(holder.getAdapterPosition()).getName());
-            intent.putExtra("teacherClass", teacherList.get(holder.getAdapterPosition()).getMyClass());
-            intent.putExtra("teacherDOB", teacherList.get(holder.getAdapterPosition()).getDob());
-            intent.putExtra("teacherIntroduce", teacherList.get(holder.getAdapterPosition()).getAboutMe());
+            intent.putExtra(context.getString(R.string.teacher_number), teacherList.get(holder.getAdapterPosition()).getTeacherNumber());
+            intent.putExtra(context.getString(R.string.teacher_name), teacherList.get(holder.getAdapterPosition()).getName());
+            intent.putExtra(context.getString(R.string.teacher_class), teacherList.get(holder.getAdapterPosition()).getMyClass());
+            intent.putExtra(context.getString(R.string.teacher_dob), teacherList.get(holder.getAdapterPosition()).getDob());
+            intent.putExtra(context.getString(R.string.teacher_introduce), teacherList.get(holder.getAdapterPosition()).getAboutMe());
 
             if (teacherList.get(holder.getAdapterPosition()).getImage() == null) {
 
-                intent.putExtra("isThereImage", false);
-                intent.putExtra("teacherProfileImage", "null");
+                intent.putExtra(context.getString(R.string.is_there_image), false);
+                intent.putExtra(context.getString(R.string.teacher_image), "null");
             } else {
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 teacherList.get(holder.getAdapterPosition()).getImage().compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
-                intent.putExtra("isThereImage", true);
-                intent.putExtra("teacherProfileImage", byteArray);
+                intent.putExtra(context.getString(R.string.is_there_image), true);
+                intent.putExtra(context.getString(R.string.teacher_image), byteArray);
             }
             updateTeacherActivityResultLauncher.launch(intent);
         });
@@ -114,44 +113,50 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Do you really want to remove ".concat(teacherList.get(position).getName()))
                 .setTitle("Delete Teacher : " + teacherList.get(position).getName())
-                .setPositiveButton("Delete", (dialogInterface, i) -> {
+                .setPositiveButton(R.string.delete, (dialogInterface, i) -> {
 
                     ProgressDialog progressDialog = new ProgressDialog(context);
-                    progressDialog.setTitle("Delete Teacher");
-                    progressDialog.setMessage("Please Wait...\nDeleting in progress");
+                    progressDialog.setTitle(context.getString(R.string.deleting));
+                    progressDialog.setMessage(context.getString(R.string.delete_in_progress));
                     progressDialog.show();
 
-                    @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-                        try {
-
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-
-                            if (success) {
-
-                                teacherList.remove(position);
-                                notifyDataSetChanged();
-                            } else {
-
-                                Toast.makeText(context, "Delete Teacher Failed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            progressDialog.dismiss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    };
-
+                    Response.Listener<String> responseListener = response -> deleteTeacherRequest(
+                            position,
+                            progressDialog,
+                            response
+                    );
                     DeleteTeacherRequest deleteTeacherRequest = new DeleteTeacherRequest(
                             teacherList.get(position).getTeacherNumber(),
                             responseListener
                     );
                     RequestQueue queue = Volley.newRequestQueue(context);
                     queue.add(deleteTeacherRequest);
-                        })
-                .setNegativeButton("Cancel", null)
+                })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void deleteTeacherRequest(int position, ProgressDialog progressDialog, String response) {
+
+        try {
+
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(context.getString(R.string.success));
+
+            if (success) {
+
+                teacherList.remove(position);
+                notifyDataSetChanged();
+            } else {
+
+                Toast.makeText(context, context.getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -192,9 +197,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 String teacherIntroduce
         ) {
 
-            Log.i("TeacherFragmentAdapter", "image : " + teacherProfileImage);
-
-            if (teacherProfileImage == null || teacherProfileImage.equals("")) {
+            if (teacherProfileImage == null || String.valueOf(teacherProfileImage).equals("")) {
 
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
             } else {

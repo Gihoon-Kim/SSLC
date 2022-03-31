@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 
 /*
  * Main Activity for only admins.
- * Only admin can add teachers, students, and notifications.
+ * Only admin can add teachers, students, class and notifications.
  */
 public class AdminMainActivity extends AppCompatActivity {
 

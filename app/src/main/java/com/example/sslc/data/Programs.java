@@ -41,10 +41,6 @@ public class Programs {
         return programNumber;
     }
 
-    public void setProgramNumber(int programNumber) {
-        this.programNumber = programNumber;
-    }
-
     public String getProgramTitle() {
         return programTitle;
     }

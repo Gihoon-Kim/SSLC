@@ -38,11 +38,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
+/*
+ * To admin add a teacher with teacher's Name, DOB, Classes, Introduce, and profile Image.
+ * Also provide ID and Password to login the application.
+ */
 public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyClassListListener {
 
-    private static final String TAG = "AdminAddTeacher";
+    private static final String TAG = AdminAddTeacherActivity.class.getSimpleName();
 
-    ActivityResultLauncher<Intent> addTeacherActivityResultLauncher;
+    ActivityResultLauncher<Intent> addTeacherImageFromGalleryActivityResultLauncher;
     final Calendar myCalendar = Calendar.getInstance();
 
     private ActivityAdminAddTeacherBinding binding;
@@ -60,21 +64,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
 
         initActivityResultLauncher();
 
-        binding.ivTeacherProfileImage.setOnClickListener(view -> {
-
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-            addTeacherActivityResultLauncher.launch(intent);
-        });
-
-        Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).setOnClickListener(view -> {
-
-            TeacherClassesDialog teacherClassesDialog = new TeacherClassesDialog(
-                    this,
-                    ((AppData)getApplication()).getClassList()
-            );
-            teacherClassesDialog.callDialog();
-        });
+        binding.ivTeacherProfileImage.setOnClickListener(view -> getTeacherProfileImageFromGallery());
+        Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).setOnClickListener(view -> getTeacherClasses());
 
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
 
@@ -93,15 +84,31 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
         ).show());
     }
 
+    private void getTeacherClasses() {
+
+        TeacherClassesDialog teacherClassesDialog = new TeacherClassesDialog(
+                this,
+                ((AppData)getApplication()).getClassList()
+        );
+        teacherClassesDialog.callDialog();
+    }
+
+    private void getTeacherProfileImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        addTeacherImageFromGalleryActivityResultLauncher.launch(intent);
+    }
+
     private void updateLabel() {
-        String dateFormat = "dd/MM/yyyy";
+
+        String dateFormat = getString(R.string.date_format);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         Objects.requireNonNull(binding.teacherInclude.tvTeacherDOB).setText(simpleDateFormat.format(myCalendar.getTime()));
     }
 
     private void initActivityResultLauncher() {
 
-        addTeacherActivityResultLauncher = registerForActivityResult(
+        addTeacherImageFromGalleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_CANCELED) {
@@ -123,12 +130,12 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
     private void onFabAddTeacherClicked() {
 
         progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
-        progressDialog.setTitle("Upload the profile image");
-        progressDialog.setMessage("Uploading photo is in progress");
+        progressDialog.setTitle(getString(R.string.updating));
+        progressDialog.setMessage(getString(R.string.update_in_progress));
         progressDialog.show();
 
         if (!binding.etTeacherName.getText().toString().trim().equals("") &&
-                !Objects.requireNonNull(binding.teacherInclude.tvTeacherDOB).getText().toString().trim().equals("dd/mm/yyyy") &&
+                !Objects.requireNonNull(binding.teacherInclude.tvTeacherDOB).getText().toString().trim().equals(getString(R.string.date_format)) &&
                 !Objects.requireNonNull(binding.teacherInclude.etTeacherIntroduce).getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim().equals("")) {
@@ -141,13 +148,13 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
             String teacherID = Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim();
             String teacherPassword = Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim();
 
-            if (!binding.ivTeacherProfileImage.getDrawable().toString().contains("VectorDrawable")) {
+            if (!binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
 
                 BitmapDrawable drawable = (BitmapDrawable) binding.ivTeacherProfileImage.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
                 teacherImage = bitmapToString(bitmap);
 
-                Response.Listener<String> uploadImageListener = uploadTeacherImageListenerInit();
+                Response.Listener<String> uploadImageListener = this::uploadImageRequest;
                 UploadImageRequest uploadImageRequest = new UploadImageRequest(
                         teacherName,
                         true,
@@ -158,15 +165,25 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                 uploadImageQueue.add(uploadImageRequest);
             }
 
-            Response.Listener<String> responseListener = addTeacherListenerInit(
-                    teacherName,
-                    teacherDOB,
-                    teacherClass,
-                    teacherID,
-                    teacherPassword,
-                    teacherIntroduce,
-                    teacherImage
-            );
+            String finalTeacherImage = teacherImage;
+            Response.Listener<String> responseListener = response -> {
+
+                progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
+                progressDialog.setTitle(getString(R.string.creating));
+                progressDialog.setMessage(getString(R.string.create_in_progress));
+                progressDialog.show();
+
+                addTeacherRequest(
+                        teacherName,
+                        teacherDOB,
+                        teacherIntroduce,
+                        finalTeacherImage,
+                        teacherClass,
+                        teacherID,
+                        teacherPassword,
+                        response
+                );
+            };
 //            Add Teacher in database and return teacher data
             AddTeacherRequest addTeacherRequest = new AddTeacherRequest(
                     teacherName,
@@ -182,7 +199,59 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
             queue.add(addTeacherRequest);
         } else {
 
-            Toast.makeText(this, "Required Fields should be filled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.fields_not_filled), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addTeacherRequest(String teacherName, String teacherDOB, String teacherIntroduce, String teacherImage, String teacherClass, String teacherID, String teacherPassword, String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Intent intent = new Intent(getApplicationContext(), TeacherFragment.class);
+                intent.putExtra(getString(R.string.teacher_name), teacherName);
+                intent.putExtra(getString(R.string.teacher_dob), teacherDOB);
+                intent.putExtra(getString(R.string.teacher_class), teacherClass);
+                intent.putExtra(getString(R.string.teacher_id), teacherID);
+                intent.putExtra(getString(R.string.teacher_password), teacherPassword);
+                intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
+                intent.putExtra(getString(R.string.teacher_image), teacherImage);
+                setResult(9003, intent);
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.create_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void uploadImageRequest(String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Toast.makeText(this, getString(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
+            } else {
+
+                Toast.makeText(this, getString(R.string.image_upload_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -194,81 +263,9 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
         return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
     }
 
-    @NonNull
-    private Response.Listener<String> uploadTeacherImageListenerInit() {
-        return response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-    }
-
-    @NonNull
-    private Response.Listener<String> addTeacherListenerInit(
-            String teacherName,
-            String teacherDOB,
-            String teacherClass,
-            String teacherID,
-            String teacherPassword,
-            String teacherIntroduce,
-            String teacherImage
-    ) {
-        return response -> {
-
-            progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
-            progressDialog.setTitle("Adding Teacher");
-            progressDialog.setMessage("Adding Teacher is in progress");
-            progressDialog.show();
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-
-                if (success) {
-
-                    Intent intent = new Intent(getApplicationContext(), TeacherFragment.class);
-                    intent.putExtra("teacherName", teacherName);
-                    intent.putExtra("teacherDOB", teacherDOB);
-                    intent.putExtra("teacherClass", teacherClass);
-                    intent.putExtra("teacherID", teacherID);
-                    intent.putExtra("teacherPassword", teacherPassword);
-                    intent.putExtra("teacherIntroduce", teacherIntroduce);
-                    intent.putExtra("teacherImage", teacherImage);
-                    setResult(9003, intent);
-                    finish();
-                } else {
-
-                    Toast.makeText(this, "Adding Teacher failed", Toast.LENGTH_SHORT).show();
-                }
-
-                progressDialog.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-    }
-
     @Override
-    public void applyClassList(ArrayList<String> classList) {
+    public void applyClassList(@NonNull ArrayList<String> classList) {
 
-        Log.i(TAG, "apply Class List");
         Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).setText(classList.toString());
     }
 }

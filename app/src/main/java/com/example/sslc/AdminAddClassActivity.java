@@ -23,9 +23,13 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/*
+ * To admin add a class with class name, teacher, description, start time and end time.
+ * end time should be later than start time.
+ */
 public class AdminAddClassActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddClassActivity";
+    private static final String TAG = AdminAddClassActivity.class.getSimpleName();
 
     private ActivityAdminAddClassBinding binding;
 
@@ -79,52 +83,27 @@ public class AdminAddClassActivity extends AppCompatActivity {
 
         if (classTitle.equals("") || classTeacher.equals("") || classDescription.equals("")) {
 
-            Toast.makeText(this, "All fields must be filled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.fields_not_filled), Toast.LENGTH_SHORT).show();
         } else if (binding.include.spinnerEndTime.getSelectedItemPosition() <= binding.include.spinnerStartTime.getSelectedItemPosition()) {
 
-            Toast.makeText(this, "End time must after than start time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.end_time_start_time, Toast.LENGTH_SHORT).show();
         } else {
 
             ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Create Class");
-            progressDialog.setMessage("Please wait..\nCreate class in progress");
+            progressDialog.setTitle(getString(R.string.creating));
+            progressDialog.setMessage(getString(R.string.create_in_progress));
             progressDialog.show();
 
-            Response.Listener<String> responseListener = response -> {
-
-                try {
-
-                    Log.i(TAG, response);
-                    JSONObject jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
-
-                    if (success) {
-
-                        Intent intent = new Intent(this, ClassFragment.class);
-                        intent.putExtra("classNumber", jsonResponse.getInt("rowCount") + 1);
-                        intent.putExtra("classTitle", classTitle);
-                        intent.putExtra("classTeacher", classTeacher);
-                        intent.putExtra("classDescription", classDescription);
-                        intent.putExtra("classStartTime", classStartTime);
-                        intent.putExtra("classEndTime", classEndTime);
-                        intent.putExtra("classRoom", classRoom);
-                        setResult(9008, intent);
-
-                        ((AppData)getApplication()).getClassList().add(classTitle);
-
-                        Toast.makeText(this, "New class created", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-
-                        Toast.makeText(this, "Create new class failed", Toast.LENGTH_SHORT).show();
-                    }
-                    progressDialog.dismiss();
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-            };
-
+            Response.Listener<String> responseListener = response -> addClassRequest(
+                    classTitle,
+                    classTeacher,
+                    classStartTime,
+                    classEndTime,
+                    classDescription,
+                    classRoom,
+                    progressDialog,
+                    response
+            );
             AddClassRequest addClassRequest = new AddClassRequest(
                     classTitle,
                     classTeacher,
@@ -136,6 +115,50 @@ public class AdminAddClassActivity extends AppCompatActivity {
             );
             RequestQueue queue = Volley.newRequestQueue(this);
             queue.add(addClassRequest);
+        }
+    }
+
+    private void addClassRequest(
+            String classTitle,
+            String classTeacher,
+            String classStartTime,
+            String classEndTime,
+            String classDescription,
+            String classRoom,
+            ProgressDialog progressDialog,
+            String response
+    ) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Intent intent = new Intent(this, ClassFragment.class);
+                intent.putExtra(getString(R.string.class_number), jsonResponse.getInt("rowCount") + 1);
+                intent.putExtra(getString(R.string.class_title), classTitle);
+                intent.putExtra(getString(R.string.class_teacher), classTeacher);
+                intent.putExtra(getString(R.string.class_description), classDescription);
+                intent.putExtra(getString(R.string.class_start_time), classStartTime);
+                intent.putExtra(getString(R.string.class_end_time), classEndTime);
+                intent.putExtra(getString(R.string.class_room), classRoom);
+                setResult(9008, intent);
+
+                ((AppData)getApplication()).getClassList().add(classTitle);
+
+                Toast.makeText(this, getString(R.string.create_complete), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+
+                Toast.makeText(this, getString(R.string.create_failed), Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 }

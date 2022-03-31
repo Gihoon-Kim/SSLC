@@ -75,9 +75,9 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
         holder.cv_Item.setOnClickListener(view -> {
 
             Intent intent = new Intent(context, AdminNewsDetailActivity.class);
-            intent.putExtra("NewsID", newsDataList.get(position).getNewsID());
-            intent.putExtra("NewsTitle", newsDataList.get(position).getTitle());
-            intent.putExtra("NewsDescription", newsDataList.get(position).getDescription());
+            intent.putExtra("newsNumber", newsDataList.get(position).getNewsID());
+            intent.putExtra("newsTitle", newsDataList.get(position).getTitle());
+            intent.putExtra("newsDescription", newsDataList.get(position).getDescription());
             updateNewsActivityResultLauncher.launch(intent);
         });
 

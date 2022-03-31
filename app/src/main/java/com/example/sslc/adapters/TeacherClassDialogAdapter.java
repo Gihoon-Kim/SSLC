@@ -55,23 +55,25 @@ public class TeacherClassDialogAdapter extends RecyclerView.Adapter<TeacherClass
 
         holder.tv_ClassTitle.setOnClickListener(view -> holder.checkBox.setChecked(!holder.checkBox.isChecked()));
 
-        holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+        holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> checkedChangeListener(holder, b));
+    }
 
-            if (b) {
+    private void checkedChangeListener(@NonNull TeacherClassDialogViewHolder holder, boolean b) {
 
-                addedClassList.add(classTitleList.get(holder.getAdapterPosition()));
-            } else {
+        if (b) {
 
-                for (int i = 0; i < addedClassList.size(); i++) {
+            addedClassList.add(classTitleList.get(holder.getAdapterPosition()));
+        } else {
 
-                    if (addedClassList.get(i).equals(classTitleList.get(holder.getAdapterPosition()))) {
+            for (int i = 0; i < addedClassList.size(); i++) {
 
-                        addedClassList.remove(i);
-                        break;
-                    }
+                if (addedClassList.get(i).equals(classTitleList.get(holder.getAdapterPosition()))) {
+
+                    addedClassList.remove(i);
+                    break;
                 }
             }
-        });
+        }
     }
 
     public ArrayList<String> getAddedClassList() {

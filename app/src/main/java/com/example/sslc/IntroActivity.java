@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -26,6 +27,7 @@ import butterknife.ButterKnife;
 
 /*
  * Splash Screen
+ * While splashed animation is working, processing that getting all class titles and teacher names are being worked.
  */
 public class IntroActivity extends AppCompatActivity {
 
@@ -47,10 +49,20 @@ public class IntroActivity extends AppCompatActivity {
 
         // Set animation
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.side_slide); // Create the animation.
-        anim.setAnimationListener(new Animation.AnimationListener() {
+        anim.setAnimationListener(animationListener());
+
+        iv_IntroLogo.startAnimation(anim);
+    }
+
+    @NonNull
+    private Animation.AnimationListener animationListener() {
+
+        return new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
+                // When app started, All class title and all teacher names are listed into
+                // classList, teacherList ( static variable )
                 getAllClass();
                 getAllTeachers();
             }
@@ -65,70 +77,69 @@ public class IntroActivity extends AppCompatActivity {
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
-        });
-
-        iv_IntroLogo.startAnimation(anim);
+        };
     }
 
     public void getAllClass() {
 
         ((AppData) getApplication()).getClassList().clear();
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("allClass");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject classItem = jsonArray.getJSONObject(i);
-                    boolean success = classItem.getBoolean("success");
-
-                    if (success) {
-
-                        ((AppData) getApplication()).getClassList().add(classItem.getString("classTitle"));
-                    }
-                }
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::getAllClassRequest;
         GetAllClassRequest getAllClassRequest = new GetAllClassRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(getAllClassRequest);
     }
 
+    private void getAllClassRequest(String response) {
+        try {
+
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray("allClass");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject classItem = jsonArray.getJSONObject(i);
+                boolean success = classItem.getBoolean("success");
+
+                if (success) {
+
+                    ((AppData) getApplication()).getClassList().add(classItem.getString("classTitle"));
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
     public void getAllTeachers() {
 
         ((AppData) getApplication()).getTeacherList().clear();
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("allTeacher");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject teacherItem = jsonArray.getJSONObject(i);
-                    boolean success = teacherItem.getBoolean("success");
-
-                    if (success) {
-
-                        ((AppData) getApplication()).getTeacherList().add(teacherItem.getString("teacherName"));
-                    }
-                }
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::getAllTeachersRequest;
         GetAllTeacherRequest getAllTeacherRequest = new GetAllTeacherRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(getAllTeacherRequest);
+    }
+
+    private void getAllTeachersRequest(String response) {
+
+        try {
+
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray("allTeacher");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject teacherItem = jsonArray.getJSONObject(i);
+                boolean success = teacherItem.getBoolean("success");
+
+                if (success) {
+
+                    ((AppData) getApplication()).getTeacherList().add(teacherItem.getString("teacherName"));
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 }

@@ -13,15 +13,7 @@ public class AppData extends Application {
         return classList;
     }
 
-    public void setClassList(ArrayList<String> classList) {
-        this.classList = classList;
-    }
-
     public ArrayList<String> getTeacherList() {
         return teacherList;
-    }
-
-    public void setTeacherList(ArrayList<String> teacherList) {
-        this.teacherList = teacherList;
     }
 }

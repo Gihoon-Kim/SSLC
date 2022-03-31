@@ -38,15 +38,7 @@ public class Student extends People {
         return studentNumber;
     }
 
-    public void setStudentNumber(int studentNumber) {
-        this.studentNumber = studentNumber;
-    }
-
     public String getStudentCountry() {
         return studentCountry;
-    }
-
-    public void setStudentCountry(String studentCountry) {
-        this.studentCountry = studentCountry;
     }
 }

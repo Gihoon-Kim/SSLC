@@ -19,7 +19,7 @@ import butterknife.OnClick;
 
 public class TeacherClassesDialog {
 
-    private static final String TAG = "TeacherClassDialog";
+    private static final String TAG = TeacherClassesDialog.class.getSimpleName();
 
     private final Context context;
     private TeacherClassDialogAdapter adapter;

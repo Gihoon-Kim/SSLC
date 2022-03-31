@@ -37,7 +37,7 @@ import butterknife.OnClick;
 
 public class ClassFragment extends Fragment {
 
-    private static final String TAG = "ClassFragment";
+    private static final String TAG = ClassFragment.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Class)
@@ -82,53 +82,56 @@ public class ClassFragment extends Fragment {
 
         programDataList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, response);
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("Class");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject classItem = jsonArray.getJSONObject(i);
-                    boolean success = classItem.getBoolean("success");
-
-                    if (success) {
-
-                        int classNumber = classItem.getInt("classNumber");
-                        String classTitle = classItem.getString("classTitle");
-                        String classTeacher = classItem.getString("classTeacher");
-                        String classDescription = classItem.getString("classDescription");
-                        String classStartTime = classItem.getString("classStartTime");
-                        String classEndTime = classItem.getString("classEndTime");
-                        String classRoom = classItem.getString("classRoom");
-
-                        Programs programs = new Programs(
-                                classNumber,
-                                classTitle,
-                                classTeacher,
-                                classDescription,
-                                classStartTime,
-                                classEndTime,
-                                classRoom
-                        );
-                        programDataList.add(programs);
-                        classFragmentAdapter.notifyDataSetChanged();
-                    } else {
-
-                        Toast.makeText(requireContext(), "Get Data Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
+        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = this::getClassRequest;
 
         GetClassRequest getClassRequest = new GetClassRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getClassRequest);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void getClassRequest(String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray(getString(R.string.program));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject classItem = jsonArray.getJSONObject(i);
+                boolean success = classItem.getBoolean(getString(R.string.success));
+
+                if (success) {
+
+                    int classNumber = classItem.getInt(getString(R.string.class_number));
+                    String classTitle = classItem.getString(getString(R.string.class_title));
+                    String classTeacher = classItem.getString(getString(R.string.class_teacher));
+                    String classDescription = classItem.getString(getString(R.string.class_description));
+                    String classStartTime = classItem.getString(getString(R.string.class_start_time));
+                    String classEndTime = classItem.getString(getString(R.string.class_end_time));
+                    String classRoom = classItem.getString(getString(R.string.class_room));
+
+                    Programs programs = new Programs(
+                            classNumber,
+                            classTitle,
+                            classTeacher,
+                            classDescription,
+                            classStartTime,
+                            classEndTime,
+                            classRoom
+                    );
+                    programDataList.add(programs);
+                    classFragmentAdapter.notifyDataSetChanged();
+                } else {
+
+                    Toast.makeText(requireContext(), getString(R.string.get_data_fail), Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -141,13 +144,13 @@ public class ClassFragment extends Fragment {
                     if (result.getResultCode() == 9008) {
 
                         Intent intent = result.getData();
-                        int classNumber = Objects.requireNonNull(intent).getIntExtra("classNumber", 0);
-                        String classTitle = intent.getStringExtra("classTitle");
-                        String classTeacher = intent.getStringExtra("classTeacher");
-                        String classDescription = intent.getStringExtra("classDescription");
-                        String classStartTime = intent.getStringExtra("classStartTime");
-                        String classEndTime = intent.getStringExtra("classEndTime");
-                        String classRoom = intent.getStringExtra("classRoom");
+                        int classNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.class_number), 0);
+                        String classTitle = intent.getStringExtra(getString(R.string.class_title));
+                        String classTeacher = intent.getStringExtra(getString(R.string.class_teacher));
+                        String classDescription = intent.getStringExtra(getString(R.string.class_description));
+                        String classStartTime = intent.getStringExtra(getString(R.string.class_start_time));
+                        String classEndTime = intent.getStringExtra(getString(R.string.class_end_time));
+                        String classRoom = intent.getStringExtra(getString(R.string.class_room));
 
                         Programs programs = new Programs(
                                 classNumber,
@@ -171,13 +174,13 @@ public class ClassFragment extends Fragment {
                     if (result.getResultCode() == 9009) {
 
                         Intent intent = result.getData();
-                        int classNumber = Objects.requireNonNull(intent).getIntExtra("classNumber", 0);
-                        String classTitle = intent.getStringExtra("classTitle");
-                        String classTeacher = intent.getStringExtra("classTeacher");
-                        String classDescription = intent.getStringExtra("classDescription");
-                        String classStartTime = intent.getStringExtra("classStartTime");
-                        String classEndTime = intent.getStringExtra("classEndTime");
-                        String classRoom = intent.getStringExtra("classRoom");
+                        int classNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.class_number), 0);
+                        String classTitle = intent.getStringExtra(getString(R.string.class_title));
+                        String classTeacher = intent.getStringExtra(getString(R.string.class_teacher));
+                        String classDescription = intent.getStringExtra(getString(R.string.class_description));
+                        String classStartTime = intent.getStringExtra(getString(R.string.class_start_time));
+                        String classEndTime = intent.getStringExtra(getString(R.string.class_end_time));
+                        String classRoom = intent.getStringExtra(getString(R.string.class_room));
 
                         for (int i = 0; i < programDataList.size(); i++) {
 

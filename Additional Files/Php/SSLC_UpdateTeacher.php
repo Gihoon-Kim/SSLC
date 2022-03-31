@@ -6,7 +6,7 @@
 
     $conn = mysqli_connect($servername, $hostname, $password, $db_name);
 
-    $teacherID = $_POST["teacherID"];
+    $teacherID = $_POST["teacherNumber"];
     $teacherName = $_POST["teacherName"];
     $teacherClass = $_POST["teacherClass"];
     $teacherIntroduce = $_POST["teacherIntroduce"];

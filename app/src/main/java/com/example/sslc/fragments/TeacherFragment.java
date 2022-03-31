@@ -39,7 +39,7 @@ import butterknife.OnClick;
 
 public class TeacherFragment extends Fragment {
 
-    private static final String TAG = "TeacherFragment";
+    private static final String TAG = TeacherFragment.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Teacher)
@@ -67,15 +67,20 @@ public class TeacherFragment extends Fragment {
         rv_Teacher.setLayoutManager(new LinearLayoutManager(this.getContext()));
         rv_Teacher.addItemDecoration(new DividerItemDecoration(
                 requireContext(),
-                DividerItemDecoration.VERTICAL));
+                DividerItemDecoration.VERTICAL)
+        );
 
         // Get Teachers from database
         getTeachers();
 
         // Initialize activityResult Launchers
-        activityResultLauncherInit();
+        initActivityResultLaunchers();
 
-        teacherFragmentAdapter = new TeacherFragmentAdapter(requireContext(), teacherList, updateTeacherActivityResultLauncher);
+        teacherFragmentAdapter = new TeacherFragmentAdapter(
+                requireContext(),
+                teacherList,
+                updateTeacherActivityResultLauncher
+        );
         rv_Teacher.setAdapter(teacherFragmentAdapter);
 
         return view;
@@ -85,56 +90,58 @@ public class TeacherFragment extends Fragment {
 
         teacherList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                Log.i(TAG, "response : " + response);
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray jsonArray = jsonResponse.getJSONArray("Teacher");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject teacherItem = jsonArray.getJSONObject(i);
-                    boolean success = teacherItem.getBoolean("success");
-
-                    if (success) {
-
-                        int teacherNumber = teacherItem.getInt("teacherNumber");
-                        String teacherName = teacherItem.getString("teacherName");
-                        String teacherDOB = teacherItem.getString("teacherDOB");
-                        String teacherClass = teacherItem.getString("teacherClass");
-                        String teacherIntroduce = teacherItem.getString("teacherIntroduce");
-                        String teacherImage = teacherItem.getString("teacherImage");
-
-                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
-                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-
-                        Teacher teacher = new Teacher(
-                                teacherNumber,
-                                teacherName,
-                                teacherDOB,
-                                teacherClass,
-                                profileBitmap,
-                                teacherIntroduce,
-                                true
-                        );
-                        teacherList.add(teacher);
-                        teacherFragmentAdapter.notifyDataSetChanged();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::getTeacherRequest;
         GetTeacherRequest getTeacherRequest = new GetTeacherRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getTeacherRequest);
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void activityResultLauncherInit() {
+    private void getTeacherRequest(String response) {
+
+        try {
+
+            Log.i(TAG, response);
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray jsonArray = jsonResponse.getJSONArray(getString(R.string.teacher));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject teacherItem = jsonArray.getJSONObject(i);
+                boolean success = teacherItem.getBoolean(getString(R.string.success));
+
+                if (success) {
+
+                    int teacherNumber = teacherItem.getInt(getString(R.string.teacher_number));
+                    String teacherName = teacherItem.getString(getString(R.string.teacher_name));
+                    String teacherDOB = teacherItem.getString(getString(R.string.teacher_dob));
+                    String teacherClass = teacherItem.getString(getString(R.string.teacher_class));
+                    String teacherIntroduce = teacherItem.getString(getString(R.string.teacher_introduce));
+                    String teacherImage = teacherItem.getString(getString(R.string.teacher_image));
+
+                    byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
+                    Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
+                    Teacher teacher = new Teacher(
+                            teacherNumber,
+                            teacherName,
+                            teacherDOB,
+                            teacherClass,
+                            profileBitmap,
+                            teacherIntroduce,
+                            true
+                    );
+                    teacherList.add(teacher);
+                    teacherFragmentAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void initActivityResultLaunchers() {
 
         addTeacherActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -143,12 +150,12 @@ public class TeacherFragment extends Fragment {
                     if (result.getResultCode() == 9003) {
 
                         Intent intent = result.getData();
-                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra("teacherNumber", 0);
-                        String teacherName = Objects.requireNonNull(intent).getStringExtra("teacherName");
-                        String teacherClass = intent.getStringExtra("teacherClass");
-                        String teacherImage = intent.getStringExtra("teacherImage");
-                        String teacherDOB = intent.getStringExtra("teacherDOB");
-                        String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
+                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.teacher_number), 0);
+                        String teacherName = Objects.requireNonNull(intent).getStringExtra(getString(R.string.teacher_name));
+                        String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
+                        String teacherImage = intent.getStringExtra(getString(R.string.teacher_image));
+                        String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
+                        String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
 
                         byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
@@ -174,15 +181,14 @@ public class TeacherFragment extends Fragment {
                     if (result.getResultCode() == 9004) {
 
                         Intent intent = result.getData();
-                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra("teacherID", 0);
-                        String teacherName = intent.getStringExtra("teacherName");
-                        String teacherClass = intent.getStringExtra("teacherClass");
-                        String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
-                        String teacherImageBLOB = intent.getStringExtra("teacherImage");
-                        String teacherDOB = intent.getStringExtra("teacherDOB");
+                        int teacherNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.teacher_number), 0);
+                        String teacherName = Objects.requireNonNull(intent).getStringExtra(getString(R.string.teacher_name));
+                        String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
+                        String teacherImage = intent.getStringExtra(getString(R.string.teacher_image));
+                        String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
+                        String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
 
-                        Log.i(TAG, "teacherID = " + teacherNumber + "teacherName = " + teacherName);
-                        byte[] encodeByte = Base64.decode(teacherImageBLOB, Base64.DEFAULT);
+                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
                         Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         for (int i = 0; i < teacherList.size(); i++) {

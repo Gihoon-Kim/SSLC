@@ -62,33 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Please Wait.\nValidation in Progress.");
         progressDialog.show();
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean("success");
-                progressDialog.dismiss();
-
-                if (success) {
-
-                    startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
-                } else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    dialog = builder.setMessage("Check your ID and password")
-                            .setPositiveButton("OK", (dialogInterface, i) -> {
-                                et_LoginID.setText("");
-                                et_LoginPassword.setText("");
-                            })
-                            .create();
-                    dialog.show();
-                }
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-        };
+        Response.Listener<String> responseListener = this::loginRequest;
 
         LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener);
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -103,6 +77,34 @@ public class LoginActivity extends AppCompatActivity {
 
             dialog.dismiss();
             dialog = null;
+        }
+    }
+
+    private void loginRequest(String response) {
+
+        try {
+
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean("success");
+            progressDialog.dismiss();
+
+            if (success) {
+
+                startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+            } else {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                dialog = builder.setMessage("Check your ID and password")
+                        .setPositiveButton("OK", (dialogInterface, i) -> {
+                            et_LoginID.setText("");
+                            et_LoginPassword.setText("");
+                        })
+                        .create();
+                dialog.show();
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 }

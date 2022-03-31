@@ -34,11 +34,6 @@ public class NewsData implements Serializable {
         return newsID;
     }
 
-    public void setNewsID(int newsID) {
-        this.newsID = newsID;
-    }
-
-
     public String getTitle() {
         return title;
     }
