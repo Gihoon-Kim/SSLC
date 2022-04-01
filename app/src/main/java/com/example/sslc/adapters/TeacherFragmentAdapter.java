@@ -21,7 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.sslc.AdminTeacherDetailActivity;
+import com.example.sslc.admin_side_activities.AdminTeacherDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Teacher;
 import com.example.sslc.requests.DeleteTeacherRequest;

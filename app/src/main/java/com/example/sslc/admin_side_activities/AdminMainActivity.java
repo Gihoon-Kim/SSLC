@@ -1,4 +1,4 @@
-package com.example.sslc;
+package com.example.sslc.admin_side_activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.sslc.R;
 import com.example.sslc.adapters.TabAdapter;
 import com.google.android.material.tabs.TabLayout;
 

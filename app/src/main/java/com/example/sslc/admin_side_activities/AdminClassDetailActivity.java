@@ -1,4 +1,4 @@
-package com.example.sslc;
+package com.example.sslc.admin_side_activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.R;
 import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminClassDetailBinding;
 import com.example.sslc.dialog.ChangeNewsTitleDialog;

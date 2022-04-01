@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.sslc.AdminAddTeacherActivity;
+import com.example.sslc.admin_side_activities.AdminAddTeacherActivity;
 import com.example.sslc.R;
 import com.example.sslc.adapters.TeacherFragmentAdapter;
 import com.example.sslc.data.Teacher;

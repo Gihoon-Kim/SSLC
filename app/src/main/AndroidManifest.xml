@@ -14,45 +14,45 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
-            android:name=".AdminClassDetailActivity"
+            android:name=".admin_side_activities.AdminClassDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_class_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminAddClassActivity"
+            android:name=".admin_side_activities.AdminAddClassActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_class"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminStudentDetailActivity"
+            android:name=".admin_side_activities.AdminStudentDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminAddStudentActivity"
+            android:name=".admin_side_activities.AdminAddStudentActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_student"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminTeacherDetailActivity"
+            android:name=".admin_side_activities.AdminTeacherDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_teacher_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminAddTeacherActivity"
+            android:name=".admin_side_activities.AdminAddTeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_teacher"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminNewsDetailActivity"
+            android:name=".admin_side_activities.AdminNewsDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_news_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminAddNewsActivity"
+            android:name=".admin_side_activities.AdminAddNewsActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_news"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name=".AdminMainActivity"
+            android:name=".admin_side_activities.AdminMainActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

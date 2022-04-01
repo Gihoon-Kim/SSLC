@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.sslc.AdminAddNewsActivity;
+import com.example.sslc.admin_side_activities.AdminAddNewsActivity;
 import com.example.sslc.R;
 import com.example.sslc.adapters.NewsFragmentAdapter;
 import com.example.sslc.data.NewsData;

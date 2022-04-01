@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.sslc.AdminAddClassActivity;
+import com.example.sslc.admin_side_activities.AdminAddClassActivity;
 import com.example.sslc.R;
 import com.example.sslc.adapters.ClassFragmentAdapter;
 import com.example.sslc.data.Programs;

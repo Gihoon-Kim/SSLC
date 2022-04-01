@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sslc.AdminStudentDetailActivity;
+import com.example.sslc.admin_side_activities.AdminStudentDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Student;
 import com.facebook.shimmer.Shimmer;

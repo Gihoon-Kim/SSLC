@@ -1,4 +1,4 @@
-package com.example.sslc;
+package com.example.sslc.admin_side_activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.sslc.R;
 import com.example.sslc.data.AppData;
 import com.example.sslc.fragments.StudentFragment;
 import com.example.sslc.requests.DeleteStudentRequest;

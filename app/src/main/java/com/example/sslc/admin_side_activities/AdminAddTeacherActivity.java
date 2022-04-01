@@ -1,12 +1,15 @@
-package com.example.sslc;
+package com.example.sslc.admin_side_activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -16,11 +19,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.sslc.R;
 import com.example.sslc.data.AppData;
 import com.example.sslc.databinding.ActivityAdminAddTeacherBinding;
 import com.example.sslc.dialog.TeacherClassesDialog;
@@ -94,9 +99,40 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
     }
 
     private void getTeacherProfileImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        addTeacherImageFromGalleryActivityResultLauncher.launch(intent);
+
+        // Get permission to access gallery
+        if (isPermissionGranted()) {
+
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            addTeacherImageFromGalleryActivityResultLauncher.launch(intent);
+        }
+    }
+
+    private boolean isPermissionGranted() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                Log.d(TAG, "Authorization setting complete");
+                return true;
+            } else {
+
+                Log.d(TAG, "Authorization setting Request");
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        1
+                );
+                return false;
+            }
+        }
+        return true;
     }
 
     private void updateLabel() {
