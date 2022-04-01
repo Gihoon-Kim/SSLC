@@ -90,18 +90,18 @@ public class AdminTeacherDetailActivity
         String teacherClass = intent.getStringExtra("teacherClass");
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).setText(teacherClass);
         String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
-        Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).setText(teacherIntroduce);
+        Objects.requireNonNull(binding.etTeacherIntroduce).setText(teacherIntroduce);
         String teacherDOB = intent.getStringExtra("teacherDOB");
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setText(teacherDOB);
 
         if (intent.getBooleanExtra("isThereImage", true)) {
 
-            byte[] teacherProfileImage = intent.getByteArrayExtra("teacherProfileImage");
+            byte[] teacherProfileImage = intent.getByteArrayExtra(getString(R.string.teacher_image));
 
             Glide.with(getApplicationContext())
                     .load(
                             BitmapFactory.decodeByteArray(
-                                    intent.getByteArrayExtra("teacherProfileImage"),
+                                    intent.getByteArrayExtra(getString(R.string.teacher_image)),
                                     0,
                                     teacherProfileImage.length
                             )
@@ -212,7 +212,7 @@ public class AdminTeacherDetailActivity
                 teacherNumber,
                 binding.tvTeacherName.getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString(),
-                Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString(),
+                Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString(),
                 Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString(),
                 teacherImage,
                 responseListener
@@ -236,7 +236,7 @@ public class AdminTeacherDetailActivity
                 intent.putExtra(getString(R.string.teacher_number), teacherNumber);
                 intent.putExtra(getString(R.string.teacher_name), binding.tvTeacherName.getText().toString());
                 intent.putExtra(getString(R.string.teacher_class), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
-                intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.teacherDetailContents.etTeacherIntroduce).getText().toString());
+                intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString());
                 intent.putExtra(getString(R.string.teacher_dob), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
                 intent.putExtra(getString(R.string.teacher_image), teacherImage);
                 setResult(9004, intent);

@@ -9,7 +9,6 @@
     tools:showIn="@layout/activity_admin_class_detail">
 
     <LinearLayout
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -35,7 +34,7 @@
                 android:layout_margin="10dp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_ClassTeacher"
                 app:layout_constraintStart_toEndOf="@id/tv_ClassTeacher"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/tv_ClassTeacher" />
 
             <TextView
                 android:id="@+id/tv_ClassStartTime"
@@ -58,10 +57,12 @@
                 android:id="@+id/tv_ClassEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="End Time :"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toRightOf="@id/spinner_StartTime"
-                app:layout_constraintTop_toTopOf="@id/tv_ClassStartTime" />
+                app:layout_constraintTop_toTopOf="@id/tv_ClassStartTime"
+                android:layout_marginStart="10dp" />
 
             <Spinner
                 android:id="@+id/spinner_EndTime"
@@ -71,11 +72,12 @@
                 app:layout_constraintTop_toTopOf="@id/tv_ClassStartTime" />
 
             <TextView
+                android:id="@+id/tv_ClassRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Class Room :"
                 android:textSize="18sp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="@id/tv_ClassTeacher"
                 app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime" />
 
@@ -83,34 +85,15 @@
                 android:id="@+id/et_ClassRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ems="10"
                 android:hint="Class Room"
+                android:background="@drawable/edittext_box"
+                android:padding="10dp"
+                app:layout_constraintTop_toTopOf="@id/tv_ClassRoom"
+                app:layout_constraintBottom_toBottomOf="@id/tv_ClassRoom"
                 app:layout_constraintStart_toStartOf="@id/spinner_ClassTeacher"
-                app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime"
-                android:ems="10" />
+                app:layout_constraintTop_toBottomOf="@id/tv_ClassStartTime" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/et_ClassDescription"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_gravity="fill"
-                android:background="@drawable/edittext_box"
-                android:drawablePadding="10dp"
-                android:foregroundGravity="fill"
-                android:gravity="top"
-                android:hint="Class Description"
-                android:padding="10dp" />
-        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

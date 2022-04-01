@@ -80,7 +80,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
                 break;
             }
         }
-        Objects.requireNonNull(binding.include.etClassDescription).setText(classDescription);
+        Objects.requireNonNull(binding.etClassDescription).setText(classDescription);
         Objects.requireNonNull(binding.include.etClassRoom).setText(classRoom);
 
         for (int i = 0; i < Objects.requireNonNull(binding.include.spinnerStartTime).getCount(); i++) {
@@ -142,7 +142,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
                 classNumber,
                 Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString(),
                 Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString(),
-                Objects.requireNonNull(binding.include.etClassDescription).getText().toString(),
+                Objects.requireNonNull(binding.etClassDescription).getText().toString(),
                 Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString(),
                 Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString(),
                 Objects.requireNonNull(binding.include.etClassRoom).getText().toString(),
@@ -166,7 +166,7 @@ public class AdminClassDetailActivity extends AppCompatActivity implements Chang
                 intent.putExtra(getString(R.string.class_number), classNumber);
                 intent.putExtra(getString(R.string.class_title), Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
                 intent.putExtra(getString(R.string.class_teacher), Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString());
-                intent.putExtra(getString(R.string.class_description), Objects.requireNonNull(binding.include.etClassDescription).getText().toString());
+                intent.putExtra(getString(R.string.class_description), Objects.requireNonNull(binding.etClassDescription).getText().toString());
                 intent.putExtra(getString(R.string.class_start_time), Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString());
                 intent.putExtra(getString(R.string.class_end_time), Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString());
                 intent.putExtra(getString(R.string.class_room), Objects.requireNonNull(binding.include.etClassRoom).getText().toString());

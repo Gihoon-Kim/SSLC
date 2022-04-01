@@ -117,7 +117,7 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
             if (success) {
 
                 Intent intent = new Intent(this, StudentFragment.class);
-                intent.putExtra(getString(R.string.student_name), studentNumber);
+                intent.putExtra(getString(R.string.student_number), studentNumber);
                 intent.putExtra(getString(R.string.student_class), spinner_StudentClass.getSelectedItem().toString());
                 setResult(9006, intent);
                 finish();

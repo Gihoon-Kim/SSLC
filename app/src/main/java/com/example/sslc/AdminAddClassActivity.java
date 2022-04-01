@@ -78,7 +78,7 @@ public class AdminAddClassActivity extends AppCompatActivity {
         String classTeacher = Objects.requireNonNull(binding.include.spinnerClassTeacher).getSelectedItem().toString();
         String classStartTime = Objects.requireNonNull(binding.include.spinnerStartTime).getSelectedItem().toString();
         String classEndTime = Objects.requireNonNull(binding.include.spinnerEndTime).getSelectedItem().toString();
-        String classDescription = Objects.requireNonNull(binding.include.etClassDescription).getText().toString().trim();
+        String classDescription = Objects.requireNonNull(binding.etClassDescription).getText().toString().trim();
         String classRoom = Objects.requireNonNull(binding.include.etClassRoom).getText().toString().trim();
 
         if (classTitle.equals("") || classTeacher.equals("") || classDescription.equals("")) {

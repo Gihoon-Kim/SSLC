@@ -67,7 +67,7 @@ public class AdminNewsDetailActivity
         FloatingActionButton fab = binding.fabUpdate;
         fab.setOnClickListener(view -> updateNews());
 
-        et_NewsContent = binding.includeView.getRoot().findViewById(R.id.et_NewsContent);
+        et_NewsContent = binding.etNewsDescription;
         et_NewsContent.setText(newsDescription);
     }
 

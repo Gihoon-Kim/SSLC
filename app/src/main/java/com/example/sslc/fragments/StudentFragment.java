@@ -132,6 +132,7 @@ public class StudentFragment extends Fragment {
 
                         Intent intent = result.getData();
                         int studentNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.student_number), 0);
+
                         String studentClass = intent.getStringExtra(getString(R.string.student_class));
 
                         for (int i = 0; i < studentList.size(); i++) {

@@ -136,13 +136,13 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
 
         if (!binding.etTeacherName.getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.tvTeacherDOB).getText().toString().trim().equals(getString(R.string.date_format)) &&
-                !Objects.requireNonNull(binding.teacherInclude.etTeacherIntroduce).getText().toString().trim().equals("") &&
+                !Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim().equals("") &&
                 !Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim().equals("")) {
 
             String teacherName = binding.etTeacherName.getText().toString().trim();
             String teacherDOB = String.valueOf(binding.teacherInclude.tvTeacherDOB.getText());
-            String teacherIntroduce = binding.teacherInclude.etTeacherIntroduce.getText().toString();
+            String teacherIntroduce = binding.etTeacherIntroduce.getText().toString();
             String teacherImage = "";
             String teacherClass = Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).getText().toString();
             String teacherID = Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim();
