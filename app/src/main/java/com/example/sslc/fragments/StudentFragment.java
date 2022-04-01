@@ -25,6 +25,7 @@ import com.example.sslc.R;
 import com.example.sslc.adapters.StudentFragmentAdapter;
 import com.example.sslc.data.Student;
 import com.example.sslc.requests.GetStudentRequest;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +42,8 @@ public class StudentFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Student)
     RecyclerView rv_Student;
+    @BindView(R.id.shimmer_Layout)
+    ShimmerFrameLayout shimmerFrameLayout;
     StudentFragmentAdapter studentFragmentAdapter;
 
     ArrayList<Student> studentList = new ArrayList<>();
@@ -67,6 +70,8 @@ public class StudentFragment extends Fragment {
                         DividerItemDecoration.VERTICAL
                 )
         );
+
+        shimmerFrameLayout.startShimmer();
 
         // Get Students from database
         getStudents();
@@ -210,6 +215,8 @@ public class StudentFragment extends Fragment {
                     );
                     studentList.add(student);
                     studentFragmentAdapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 }
             }
         } catch (Exception e) {

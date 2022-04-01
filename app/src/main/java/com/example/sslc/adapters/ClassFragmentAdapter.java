@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.example.sslc.AdminClassDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Programs;
 import com.example.sslc.requests.DeleteClassRequest;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 
 import org.json.JSONObject;
 
@@ -66,6 +69,17 @@ public class ClassFragmentAdapter extends RecyclerView.Adapter<ClassFragmentAdap
 
     @Override
     public void onBindViewHolder(@NonNull ClassFragmentViewHolder holder, int position) {
+
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(Color.parseColor("#f3f3f3"))
+                .setBaseAlpha(1)
+                .setHighlightColor(Color.parseColor("#E7E7E7"))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .build();
+
+        ShimmerDrawable shimmerDrawable = new ShimmerDrawable();
+        shimmerDrawable.setShimmer(shimmer);
 
         holder.onBind(
                 programDataList.get(position).getProgramTitle(),

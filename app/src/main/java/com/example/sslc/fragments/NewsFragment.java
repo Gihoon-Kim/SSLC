@@ -22,6 +22,7 @@ import com.example.sslc.R;
 import com.example.sslc.adapters.NewsFragmentAdapter;
 import com.example.sslc.data.NewsData;
 import com.example.sslc.requests.GetNewsRequest;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +43,8 @@ public class NewsFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_News)
     RecyclerView rv_News;
+    @BindView(R.id.shimmer_Layout)
+    ShimmerFrameLayout shimmerFrameLayout;
 
     NewsFragmentAdapter newsFragmentAdapter;
     ArrayList<NewsData> newsDataList = new ArrayList<>();
@@ -63,6 +66,8 @@ public class NewsFragment extends Fragment {
 
         // Get News from database
         getNews();
+
+        shimmerFrameLayout.startShimmer();
 
         // Initialize activityResult Launchers
         activityResultLauncherInit();
@@ -176,6 +181,9 @@ public class NewsFragment extends Fragment {
                     );
                     newsDataList.add(newsData);
                     newsFragmentAdapter.notifyDataSetChanged();
+
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 }
             }
         } catch (Exception e) {

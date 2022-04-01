@@ -26,6 +26,7 @@ import com.example.sslc.R;
 import com.example.sslc.adapters.TeacherFragmentAdapter;
 import com.example.sslc.data.Teacher;
 import com.example.sslc.requests.GetTeacherRequest;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +45,8 @@ public class TeacherFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Teacher)
     RecyclerView rv_Teacher;
+    @BindView(R.id.shimmer_Layout)
+    ShimmerFrameLayout shimmerFrameLayout;
 
     TeacherFragmentAdapter teacherFragmentAdapter;
     ArrayList<Teacher> teacherList = new ArrayList<>();
@@ -62,6 +65,8 @@ public class TeacherFragment extends Fragment {
                 false
         );
         ButterKnife.bind(this, view);
+
+        shimmerFrameLayout.startShimmer();
 
         rv_Teacher.setHasFixedSize(true);
         rv_Teacher.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -133,6 +138,8 @@ public class TeacherFragment extends Fragment {
                     );
                     teacherList.add(teacher);
                     teacherFragmentAdapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 }
             }
         } catch (Exception e) {

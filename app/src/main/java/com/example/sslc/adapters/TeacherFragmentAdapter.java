@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import com.example.sslc.AdminTeacherDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Teacher;
 import com.example.sslc.requests.DeleteTeacherRequest;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 
 import org.json.JSONObject;
 
@@ -68,6 +71,17 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
     @Override
     public void onBindViewHolder(@NonNull TeacherFragmentViewHolder holder, int position) {
+
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(Color.parseColor("#f3f3f3"))
+                .setBaseAlpha(1)
+                .setHighlightColor(Color.parseColor("#E7E7E7"))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .build();
+
+        ShimmerDrawable shimmerDrawable = new ShimmerDrawable();
+        shimmerDrawable.setShimmer(shimmer);
 
         holder.onBind(
                 context,

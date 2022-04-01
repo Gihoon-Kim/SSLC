@@ -3,6 +3,7 @@ package com.example.sslc.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sslc.AdminStudentDetailActivity;
 import com.example.sslc.R;
 import com.example.sslc.data.Student;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 
 import java.util.ArrayList;
 
@@ -56,6 +59,17 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
 
     @Override
     public void onBindViewHolder(@NonNull StudentFragmentViewHolder holder, int position) {
+
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(Color.parseColor("#f3f3f3"))
+                .setBaseAlpha(1)
+                .setHighlightColor(Color.parseColor("#E7E7E7"))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .build();
+
+        ShimmerDrawable shimmerDrawable = new ShimmerDrawable();
+        shimmerDrawable.setShimmer(shimmer);
 
         holder.onBind(
                 studentList.get(position).getName(),

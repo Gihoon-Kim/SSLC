@@ -24,6 +24,7 @@ import com.example.sslc.R;
 import com.example.sslc.adapters.ClassFragmentAdapter;
 import com.example.sslc.data.Programs;
 import com.example.sslc.requests.GetClassRequest;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +40,8 @@ public class ClassFragment extends Fragment {
 
     private static final String TAG = ClassFragment.class.getSimpleName();
 
+    @BindView(R.id.shimmer_Layout)
+    ShimmerFrameLayout shimmerFrameLayout;
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Class)
     RecyclerView rv_Class;
@@ -59,6 +62,8 @@ public class ClassFragment extends Fragment {
                 false
         );
         ButterKnife.bind(this, view);
+
+        shimmerFrameLayout.startShimmer();
 
         // Get Classes from database
         getPrograms();
@@ -124,6 +129,8 @@ public class ClassFragment extends Fragment {
                     );
                     programDataList.add(programs);
                     classFragmentAdapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 } else {
 
                     Toast.makeText(requireContext(), getString(R.string.get_data_fail), Toast.LENGTH_SHORT).show();
