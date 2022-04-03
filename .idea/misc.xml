@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/edittext_box.xml" value="0.1925" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.145" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/drawable/linear_layout_design.xml" value="0.138" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/add_news_content_scrolling.xml" value="0.132421875" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/add_teacher_content_scrolling.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.1" />
@@ -23,12 +24,16 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_news_detail.xml" value="0.1" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/activity_teacher_main.xml" value="0.16" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/add_class_content_scrolling.xml" value="0.264" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/add_news_content_scrolling.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/add_teacher_content_scrolling.xml" value="0.264" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/admin_class_detail_activity_content_scrolling.xml" value="0.16" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/app_bar_teacher_main.xml" value="0.11666666666666667" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/arc_navigation_bar.xml" value="0.12760416666666666" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/content_admin_teacher_detail.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/content_scrolling.xml" value="0.1875" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/content_teacher_main.xml" value="0.12760416666666666" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/dialog_change_news_title.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class.xml" value="0.1" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_first.xml" value="0.25416666666666665" />
@@ -36,6 +41,7 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_notification.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_student.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_teacher.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/grid_layout_item.xml" value="0.12760416666666666" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_class.xml" value="0.2" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_news.xml" value="0.128" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_shimmer_class.xml" value="0.25416666666666665" />
@@ -44,9 +50,12 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_shimmer_teacher.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_student.xml" value="0.4" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_teacher.xml" value="0.264" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/nav_header_teacher_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/teacher_class_dialog.xml" value="0.16" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/teacher_class_dialog_item.xml" value="0.2" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/teacher_detail_content_scrolling.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/menu/menu_admin_class_detail.xml" value="0.12760416666666666" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/menu/teacher_menu.xml" value="0.12760416666666666" />
       </map>
     </option>
   </component>

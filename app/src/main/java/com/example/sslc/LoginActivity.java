@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.sslc.admin_side_activities.AdminMainActivity;
 import com.example.sslc.requests.LoginRequest;
+import com.example.sslc.teacher_side_activities.TeacherMainActivity;
 
 import org.json.JSONObject;
 
@@ -30,6 +33,8 @@ import butterknife.OnClick;
  * with provided info.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_LoginID)
@@ -59,15 +64,21 @@ public class LoginActivity extends AppCompatActivity {
         String userPassword = et_LoginPassword.getText().toString().trim();
 
         progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setTitle("Login");
-        progressDialog.setMessage("Please Wait.\nValidation in Progress.");
+        progressDialog.setTitle(getString(R.string.login));
+        progressDialog.setMessage(getString(R.string.validate_in_progress));
         progressDialog.show();
 
-        Response.Listener<String> responseListener = this::loginRequest;
+        if (userID.equals(getString(R.string.admin_id)) && userPassword.equals(getString(R.string.admin_pwd))) {
 
-        LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        queue.add(loginRequest);
+            startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+            progressDialog.dismiss();
+        } else {
+
+            Response.Listener<String> responseListener = this::loginRequest;
+            LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+            queue.add(loginRequest);
+        }
     }
 
     @Override
@@ -86,12 +97,19 @@ public class LoginActivity extends AppCompatActivity {
         try {
 
             JSONObject jsonResponse = new JSONObject(response);
-            boolean success = jsonResponse.getBoolean("success");
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
             progressDialog.dismiss();
 
             if (success) {
 
-                startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                Log.i(TAG, response);
+                int isTeacher = jsonResponse.getInt("isTeacher");
+
+                if (isTeacher != 0) {
+                    startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+                } else {
+                    Toast.makeText(this, "Student Main Activity", Toast.LENGTH_SHORT).show();
+                }
             } else {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);

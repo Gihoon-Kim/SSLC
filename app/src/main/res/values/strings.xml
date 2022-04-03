@@ -75,5 +75,19 @@
     <string name="is_there_image">isThereImage</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="validate_in_progress">Please Wait.\nValidation in Progress.</string>
+    <string name="admin_id">admin</string>
+    <string name="admin_pwd">1q2w3e4r</string>
+    <string name="title_activity_teacher_main">Teacher_Main_Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 
 </resources>
