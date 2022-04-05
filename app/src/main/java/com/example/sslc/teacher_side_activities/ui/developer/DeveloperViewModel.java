@@ -1,16 +1,15 @@
-package com.example.sslc.teacher_side_activities.ui.slideshow;
+package com.example.sslc.teacher_side_activities.ui.developer;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
+public class DeveloperViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
+    public DeveloperViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
     }
 
     public LiveData<String> getText() {

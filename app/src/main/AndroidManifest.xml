@@ -13,17 +13,17 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
+
+        <activity android:name=".ImageViewerActivity"
+            android:exported="false"
+            android:label="ImageViewerActivity"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+
         <activity
             android:name=".teacher_side_activities.TeacherMainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_teacher_main"
-            android:theme="@style/Theme.SSLC.NoActionBar" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:theme="@style/Theme.SSLC.NoActionBar">
         </activity>
         <activity
             android:name=".admin_side_activities.AdminClassDetailActivity"
@@ -72,6 +72,12 @@
         <activity
             android:name=".IntroActivity"
             android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

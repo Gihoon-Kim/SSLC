@@ -63,4 +63,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.rom4ek/arcnavigationview
     implementation 'com.rom4ek:arcnavigationview:2.0.0'
+
+    implementation 'com.github.florent37:diagonallayout:1.0.9'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+
 }

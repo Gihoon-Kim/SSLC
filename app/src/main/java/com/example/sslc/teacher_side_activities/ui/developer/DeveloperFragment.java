@@ -1,4 +1,4 @@
-package com.example.sslc.teacher_side_activities.ui.gallery;
+package com.example.sslc.teacher_side_activities.ui.developer;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,25 +7,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.sslc.databinding.FragmentGalleryBinding;
+import com.example.sslc.R;
+import com.example.sslc.databinding.FragmentDeveloperBinding;
 
-public class GalleryFragment extends Fragment {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private FragmentGalleryBinding binding;
+public class DeveloperFragment extends Fragment {
+
+    private FragmentDeveloperBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        DeveloperViewModel developerViewModel =
+                new ViewModelProvider(this).get(DeveloperViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentDeveloperBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

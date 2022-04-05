@@ -13,17 +13,17 @@
 
      $statement = mysqli_prepare(
          $conn,
-         "SELECT t.teacherName, t.teacherID, t.isTeacher
+         "SELECT t.teacherName, t.teacherDOB, t.teacherClass, t.teacherIntroduce, t.teacherImage, t.isTeacher
                 FROM SSLC_Teacher t
                 WHERE t.teacherID = '$userID' AND t.teacherPassword = '$userPassword'
             UNION
-            SELECT s.studentName, s.studentID, s.isTeacher
+            SELECT s.studentName, s.studentDOB, s.studentClass, s.studentIntroduce, s.studentProfileImage, s.isTeacher
                 FROM SSLC_Student s
                 WHERE s.studentID = '$userID' AND s.studentPassword = '$userPassword';"
      );
      mysqli_stmt_execute($statement);
      mysqli_stmt_store_result($statement);
-     mysqli_stmt_bind_result($statement, $userName, $userID, $isTeacher);
+     mysqli_stmt_bind_result($statement, $userName, $userDOB, $userClass, $userIntroduce, $userImage, $isTeacher);
 
      $response = array();
      $response["success"] = false;
@@ -32,7 +32,10 @@
 
         $response["success"] = true;
         $response["userName"] = $userName;
-        $response["userID"] = $userID;
+        $response["userDOB"] = $userDOB;
+        $response["userClass"] = $userClass;
+        $response["userIntroduce"] = $userIntroduce;
+        $response["userImage"] = $userImage;
         $response["isTeacher"] = $isTeacher;
      }
 

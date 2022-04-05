@@ -106,7 +106,14 @@ public class LoginActivity extends AppCompatActivity {
                 int isTeacher = jsonResponse.getInt("isTeacher");
 
                 if (isTeacher != 0) {
-                    startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+
+                    Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
+                    intent.putExtra("teacherName", jsonResponse.getString("userName"));
+                    intent.putExtra("teacherDOB", jsonResponse.getString("userDOB"));
+                    intent.putExtra("teacherClass", jsonResponse.getString("userClass"));
+                    intent.putExtra("teacherIntroduce", jsonResponse.getString("userIntroduce"));
+                    intent.putExtra("teacherProfileImage", jsonResponse.getString("userImage"));
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Student Main Activity", Toast.LENGTH_SHORT).show();
                 }

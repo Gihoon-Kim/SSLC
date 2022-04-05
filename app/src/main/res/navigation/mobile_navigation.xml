@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.sslc.teacher_side_activities.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_account"
+        android:name="com.example.sslc.teacher_side_activities.ui.account.AccountFragment"
+        android:label="My Account"
+        tools:layout="@layout/fragment_account" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.sslc.teacher_side_activities.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_devInfo"
+        android:name="com.example.sslc.teacher_side_activities.ui.developer.DeveloperFragment"
+        android:label="Developer Info"
+        tools:layout="@layout/fragment_developer" />
 </navigation>

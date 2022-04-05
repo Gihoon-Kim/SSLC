@@ -1,33 +1,37 @@
 package com.example.sslc.teacher_side_activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.example.sslc.ImageViewerActivity;
 import com.example.sslc.R;
 import com.example.sslc.databinding.ActivityTeacherMainBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Objects;
 
 public class TeacherMainActivity extends AppCompatActivity {
 
+    private static final String TAG = TeacherMainActivity.class.getSimpleName();
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityTeacherMainBinding binding;
-
-    DrawerLayout drawer;
-    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +41,64 @@ public class TeacherMainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarTeacherMain.toolbar);
-        drawer = binding.drawerLayout;
-        navigationView = binding.navView;
+        Intent intent = getIntent();
 
-        // Set home button to call navigation view.
-        // The home button is android.R.id.home
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
+        Log.i(TAG, "Teacher Name " + intent.getStringExtra("teacherName") +
+                "\nTeacher DOB " + intent.getStringExtra("teacherDOB") +
+                "\nTeacher Class " + intent.getStringExtra("teacherClass") +
+                "\nTeacher Introduce " + intent.getStringExtra("teacherIntroduce") +
+                "\nTeacher Image " + intent.getStringExtra("teacherProfileImage"));
+
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_account, R.id.nav_devInfo)
                 .setOpenableLayout(drawer)
                 .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_teacher_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-        // How to get views in Navigation View
-        View view = navigationView.getHeaderView(0);
-        TextView textView = (TextView) view.findViewById(R.id.logout);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(TeacherMainActivity.this, "Clicked" + textView.getText(), Toast.LENGTH_SHORT).show();
-            }
+        // HeaderView UI
+        setNavHeaderView(intent);
+    }
+
+    private void setNavHeaderView(Intent intent) {
+
+        TextView tv_TeacherName = binding.navView.getHeaderView(0).findViewById(R.id.tv_TeacherName);
+        tv_TeacherName.setText(intent.getStringExtra("teacherName"));
+        TextView tv_Logout = binding.navView.getHeaderView(0).findViewById(R.id.tv_LogOut);
+        tv_Logout.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+
+        tv_Logout.setOnClickListener(view -> {
+
+            // TODO : after build keep login functionality.
+            tv_Logout.setTextColor(getResources().getColor(R.color.red));
         });
+
+        if (!intent.getStringExtra("teacherProfileImage").equals("")) {
+
+            // Teacher profile image decode and set profile image up
+            byte[] encodeByte = Base64.decode(intent.getStringExtra("teacherProfileImage"), Base64.DEFAULT);
+            Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            ImageView iv_TeacherProfileImage = binding.navView.getHeaderView(0).findViewById(R.id.iv_TeacherProfileImage);
+
+            Glide.with(this)
+                    .load(profileBitmap)
+                    .into(iv_TeacherProfileImage);
+
+            iv_TeacherProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent imageIntent = new Intent(TeacherMainActivity.this, ImageViewerActivity.class);
+                    imageIntent.putExtra("profileImage", intent.getStringExtra("teacherProfileImage"));
+                    startActivity(imageIntent);
+                }
+            });
+        }
     }
 
     @Override
@@ -70,18 +109,9 @@ public class TeacherMainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-
-            case android.R.id.home:
-
-                drawer.openDrawer(navigationView);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_teacher_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 }
