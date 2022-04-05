@@ -1,19 +1,25 @@
 package com.example.sslc.teacher_side_activities.ui.account;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.example.sslc.R;
 import com.example.sslc.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
 
+    private static final String TAG = AccountFragment.class.getSimpleName();
     private FragmentAccountBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -22,11 +28,35 @@ public class AccountFragment extends Fragment {
                 new ViewModelProvider(this).get(AccountViewModel.class);
 
         binding = FragmentAccountBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        Log.i(TAG, requireActivity().getIntent().getStringExtra("teacherPassword"));
 
-        final TextView textView = binding.textGallery;
-        accountViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+        final TextView tv_Error = binding.tvError;
+        accountViewModel.getText().observe(getViewLifecycleOwner(), tv_Error::setText);
+
+        final Button btn_Processing = binding.btnProcess;
+        btn_Processing.setOnClickListener(view -> {
+
+            String password = binding.etPassword.getText().toString();
+
+            if (password.trim().equals("")) {
+
+                accountViewModel.setText("Please enter your password");
+            } else if (!password.trim().equals(requireActivity().getIntent().getStringExtra("teacherPassword"))) {
+
+                accountViewModel.setText("Password you entered is not correct");
+            } else {
+
+                Navigation.findNavController(requireView()).navigate(R.id.action_nav_account_to_nav_modify_info);
+            }
+        });
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override

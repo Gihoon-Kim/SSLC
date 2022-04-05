@@ -112,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("teacherDOB", jsonResponse.getString("userDOB"));
                     intent.putExtra("teacherClass", jsonResponse.getString("userClass"));
                     intent.putExtra("teacherIntroduce", jsonResponse.getString("userIntroduce"));
+                    intent.putExtra("teacherPassword", jsonResponse.getString("userPassword"));
                     intent.putExtra("teacherProfileImage", jsonResponse.getString("userImage"));
                     startActivity(intent);
                 } else {

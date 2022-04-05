@@ -15,11 +15,25 @@
         android:id="@+id/nav_account"
         android:name="com.example.sslc.teacher_side_activities.ui.account.AccountFragment"
         android:label="My Account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_nav_account_to_nav_modify_info"
+            app:destination="@id/nav_modify_info" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_devInfo"
         android:name="com.example.sslc.teacher_side_activities.ui.developer.DeveloperFragment"
         android:label="Developer Info"
         tools:layout="@layout/fragment_developer" />
+
+    <fragment
+        android:id="@+id/nav_modify_info"
+        android:name="com.example.sslc.teacher_side_activities.ui.account.ModifyInformationFragment"
+        android:label="Modify Account"
+        tools:layout="@layout/fragment_modify_information" >
+        <action
+            android:id="@+id/action_nav_modify_info_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

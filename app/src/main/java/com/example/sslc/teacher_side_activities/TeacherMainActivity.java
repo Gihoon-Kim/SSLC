@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +23,6 @@ import com.example.sslc.ImageViewerActivity;
 import com.example.sslc.R;
 import com.example.sslc.databinding.ActivityTeacherMainBinding;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 
 public class TeacherMainActivity extends AppCompatActivity {
@@ -32,6 +30,7 @@ public class TeacherMainActivity extends AppCompatActivity {
     private static final String TAG = TeacherMainActivity.class.getSimpleName();
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityTeacherMainBinding binding;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +40,13 @@ public class TeacherMainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarTeacherMain.toolbar);
-        Intent intent = getIntent();
+        intent = getIntent();
 
         Log.i(TAG, "Teacher Name " + intent.getStringExtra("teacherName") +
                 "\nTeacher DOB " + intent.getStringExtra("teacherDOB") +
                 "\nTeacher Class " + intent.getStringExtra("teacherClass") +
                 "\nTeacher Introduce " + intent.getStringExtra("teacherIntroduce") +
+                "\nTeacher Password " + intent.getStringExtra("teacherPassword") +
                 "\nTeacher Image " + intent.getStringExtra("teacherProfileImage"));
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -62,10 +62,10 @@ public class TeacherMainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         // HeaderView UI
-        setNavHeaderView(intent);
+        setNavHeaderView();
     }
 
-    private void setNavHeaderView(Intent intent) {
+    private void setNavHeaderView() {
 
         TextView tv_TeacherName = binding.navView.getHeaderView(0).findViewById(R.id.tv_TeacherName);
         tv_TeacherName.setText(intent.getStringExtra("teacherName"));
@@ -89,14 +89,11 @@ public class TeacherMainActivity extends AppCompatActivity {
                     .load(profileBitmap)
                     .into(iv_TeacherProfileImage);
 
-            iv_TeacherProfileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            iv_TeacherProfileImage.setOnClickListener(view -> {
 
-                    Intent imageIntent = new Intent(TeacherMainActivity.this, ImageViewerActivity.class);
-                    imageIntent.putExtra("profileImage", intent.getStringExtra("teacherProfileImage"));
-                    startActivity(imageIntent);
-                }
+                Intent imageIntent = new Intent(TeacherMainActivity.this, ImageViewerActivity.class);
+                imageIntent.putExtra("profileImage", intent.getStringExtra("teacherProfileImage"));
+                startActivity(imageIntent);
             });
         }
     }

@@ -39,8 +39,8 @@
             android:elevation="15dp">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:contentDescription="my class image"
                 android:src="@drawable/ic_baseline_menu_book_24" />
 
@@ -65,8 +65,8 @@
             android:elevation="15dp">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:contentDescription="my class image"
                 android:src="@drawable/ic_baseline_event_24" />
 
@@ -91,8 +91,8 @@
             android:elevation="15dp">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:contentDescription="my class image"
                 android:src="@drawable/ic_baseline_support_24" />
 
@@ -117,8 +117,8 @@
             android:elevation="15dp">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:contentDescription="my class image"
                 android:src="@drawable/ic_baseline_help_outline_24" />
 
