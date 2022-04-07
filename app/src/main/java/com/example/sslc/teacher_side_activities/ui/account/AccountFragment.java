@@ -1,5 +1,6 @@
 package com.example.sslc.teacher_side_activities.ui.account;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,13 @@ public class AccountFragment extends Fragment {
 
         final TextView tv_Error = binding.tvError;
         accountViewModel.getText().observe(getViewLifecycleOwner(), tv_Error::setText);
+
+        final TextView tv_ChangePassword = binding.tvChangePassword;
+        tv_ChangePassword.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        tv_ChangePassword.setOnClickListener(view -> Navigation
+                .findNavController(requireView())
+                .navigate(R.id.action_nav_account_to_nav_changePassword)
+        );
 
         final Button btn_Processing = binding.btnProcess;
         btn_Processing.setOnClickListener(view -> {

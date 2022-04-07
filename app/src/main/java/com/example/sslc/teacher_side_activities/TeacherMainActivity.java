@@ -91,6 +91,12 @@ public class TeacherMainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this, new TeacherMainViewModelFactory())
                 .get(TeacherMainViewModel.class);
 
+        // Initialize ViewModel
+        mainViewModel.setId(getIntent().getStringExtra("teacherID"));
+        mainViewModel.setDob(getIntent().getStringExtra("teacherDOB"));
+        mainViewModel.setIntroduce(getIntent().getStringExtra("teacherIntroduce"));
+        mainViewModel.setPassword(getIntent().getStringExtra("teacherPassword"));
+
         // Define Observer - Handlers to handle when data changes events occur.
         Observer<Bitmap> imageObserver = iv_TeacherProfileImage::setImageBitmap;
 

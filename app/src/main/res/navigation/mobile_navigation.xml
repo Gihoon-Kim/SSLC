@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_account_to_nav_modify_info"
             app:destination="@id/nav_modify_info" />
+        <action
+            android:id="@+id/action_nav_account_to_nav_changePassword"
+            app:destination="@id/nav_changePassword" />
     </fragment>
 
     <fragment
@@ -26,6 +29,16 @@
         android:name="com.example.sslc.teacher_side_activities.ui.developer.DeveloperFragment"
         android:label="Developer Info"
         tools:layout="@layout/fragment_developer" />
+
+    <fragment
+        android:id="@+id/nav_changePassword"
+        android:name="com.example.sslc.teacher_side_activities.ui.account.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_nav_changePassword_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_modify_info"
