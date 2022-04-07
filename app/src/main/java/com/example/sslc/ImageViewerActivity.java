@@ -1,11 +1,9 @@
 package com.example.sslc;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -18,7 +16,6 @@ import butterknife.ButterKnife;
 
 public class ImageViewerActivity extends AppCompatActivity {
 
-    private static final String TAG = ImageViewerActivity.class.getSimpleName();
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.iv_ProfileImage)
     ImageView iv_ProfileImage;
@@ -30,13 +27,11 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
-
-        byte[] encodeByte = Base64.decode(intent.getStringExtra("profileImage"), Base64.DEFAULT);
-        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        byte[] byteArray = getIntent().getByteArrayExtra("profileImage");
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         Glide.with(this)
-                .load(profileBitmap)
+                .load(bmp)
                 .into(iv_ProfileImage);
     }
 }
