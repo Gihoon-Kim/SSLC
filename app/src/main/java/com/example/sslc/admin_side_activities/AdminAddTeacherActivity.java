@@ -166,8 +166,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
     private void onFabAddTeacherClicked() {
 
         progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
-        progressDialog.setTitle(getString(R.string.updating));
-        progressDialog.setMessage(getString(R.string.update_in_progress));
+        progressDialog.setTitle(getString(R.string.creating));
+        progressDialog.setMessage(getString(R.string.create_in_progress));
         progressDialog.show();
 
         if (!binding.etTeacherName.getText().toString().trim().equals("") &&
@@ -204,11 +204,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
             String finalTeacherImage = teacherImage;
             Response.Listener<String> responseListener = response -> {
 
-                progressDialog = new ProgressDialog(AdminAddTeacherActivity.this);
-                progressDialog.setTitle(getString(R.string.creating));
-                progressDialog.setMessage(getString(R.string.create_in_progress));
-                progressDialog.show();
-
                 addTeacherRequest(
                         teacherName,
                         teacherDOB,
@@ -219,6 +214,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                         teacherPassword,
                         response
                 );
+
+                progressDialog.dismiss();
             };
 //            Add Teacher in database and return teacher data
             AddTeacherRequest addTeacherRequest = new AddTeacherRequest(
@@ -246,25 +243,30 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
             Log.i(TAG, response);
             JSONObject jsonResponse = new JSONObject(response);
             boolean success = jsonResponse.getBoolean(getString(R.string.success));
+            boolean validate = jsonResponse.getBoolean(getString(R.string.validation));
 
-            if (success) {
+            if (!validate) {
 
-                Intent intent = new Intent(getApplicationContext(), TeacherFragment.class);
-                intent.putExtra(getString(R.string.teacher_name), teacherName);
-                intent.putExtra(getString(R.string.teacher_dob), teacherDOB);
-                intent.putExtra(getString(R.string.teacher_class), teacherClass);
-                intent.putExtra(getString(R.string.teacher_id), teacherID);
-                intent.putExtra(getString(R.string.teacher_password), teacherPassword);
-                intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
-                intent.putExtra(getString(R.string.teacher_image), teacherImage);
-                setResult(9003, intent);
-                finish();
+                Toast.makeText(this, getString(R.string.validation_failed), Toast.LENGTH_SHORT).show();
             } else {
+                if (success) {
 
-                Toast.makeText(this, getString(R.string.create_failed), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), TeacherFragment.class);
+                    intent.putExtra(getString(R.string.teacher_name), teacherName);
+                    intent.putExtra(getString(R.string.teacher_dob), teacherDOB);
+                    intent.putExtra(getString(R.string.teacher_class), teacherClass);
+                    intent.putExtra(getString(R.string.teacher_id), teacherID);
+                    intent.putExtra(getString(R.string.teacher_password), teacherPassword);
+                    intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
+                    intent.putExtra(getString(R.string.teacher_image), teacherImage);
+                    intent.putExtra(getString(R.string.teacher_number), jsonResponse.getInt("rowCount") + 1);
+                    setResult(9003, intent);
+                    finish();
+                } else {
+
+                    Toast.makeText(this, getString(R.string.create_failed), Toast.LENGTH_SHORT).show();
+                }
             }
-
-            progressDialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }
