@@ -11,11 +11,10 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sslc.admin_side_activities.AdminStudentDetailActivity;
 import com.example.sslc.R;
+import com.example.sslc.admin_side_activities.AdminStudentDetailActivity;
 import com.example.sslc.data.Student;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
@@ -111,8 +110,6 @@ public class StudentFragmentAdapter extends RecyclerView.Adapter<StudentFragment
         @BindView(R.id.tv_StudentCountry)
         TextView tv_StudentCountry;
         @SuppressLint("NonConstantResourceId")
-        @BindView(R.id.cv_Item)
-        CardView cv_Item;
 
         public StudentFragmentViewHolder(@NonNull View itemView) {
             super(itemView);

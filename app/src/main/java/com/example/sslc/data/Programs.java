@@ -29,6 +29,15 @@ public class Programs {
         this.programClassRoom = classRoom;
     }
 
+    public Programs(String classTitle, String classDescription, String classStartTime, String classEndTime, String classRoom) {
+
+        this.programTitle = classTitle;
+        this.programDescription = classDescription;
+        this.programStartTime = classStartTime;
+        this.programEndTime = classEndTime;
+        this.programClassRoom = classRoom;
+    }
+
     public String getProgramClassRoom() {
         return programClassRoom;
     }
