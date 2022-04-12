@@ -40,6 +40,7 @@ public class ClassFragment extends Fragment {
 
     private static final String TAG = ClassFragment.class.getSimpleName();
 
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.shimmer_Layout)
     ShimmerFrameLayout shimmerFrameLayout;
     @SuppressLint("NonConstantResourceId")

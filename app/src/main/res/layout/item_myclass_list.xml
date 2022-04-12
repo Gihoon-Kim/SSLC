@@ -12,13 +12,13 @@
         android:id="@+id/cell_content_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_green_dark"
         android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:background="@drawable/linear_layout_design">
 
             <TextView
                 android:id="@+id/tv_Detail_ClassTitle"
@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:textSize="30sp"
+                android:background="@drawable/gradient_background"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +45,7 @@
                 android:layout_margin="10dp"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_ClassDescription" />
+                app:layout_constraintTop_toTopOf="@id/tv_Detail_ClassTitle" />
 
             <TextView
                 android:id="@+id/tv_ClassRoom"
@@ -53,6 +54,16 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/tv_ClassDescription"
                 app:layout_constraintTop_toBottomOf="@id/tv_ClassDescription" />
+
+            <TextView
+                android:id="@+id/tv_ViewDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Detail"
+                android:textColor="@color/blue"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
@@ -64,18 +75,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:background="@drawable/linear_layout_design">
 
             <TextView
                 android:id="@+id/tv_Simple_ClassTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/holo_blue_dark"
+                android:background="@drawable/gradient_background"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
-
 </com.ramotion.foldingcell.FoldingCell>
