@@ -11,6 +11,13 @@ public class ClassNews {
         this.createdAt = createdAt;
     }
 
+    public ClassNews(String newsTitle, String newsDescription, String createdAt) {
+
+        this.newsTitle = newsTitle;
+        this.description = newsDescription;
+        this.createdAt = createdAt;
+    }
+
     public String getNewsTitle() {
         return newsTitle;
     }

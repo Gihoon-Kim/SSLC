@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,13 +42,17 @@ public class AddClassNewsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mainViewModel =
                 new ViewModelProvider(requireActivity()).get(TeacherMyClassDetailViewModel.class);
 
-        View view = inflater.inflate(R.layout.fragment_add_class_news, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_add_class_news,
+                container,
+                false
+        );
         ButterKnife.bind(this, view);
         return view;
     }
@@ -56,8 +61,18 @@ public class AddClassNewsFragment extends Fragment {
     @OnClick(R.id.btn_Cancel)
     public void onBtnCancelClicked() {
 
+        backToClassNewsFragment();
+    }
+
+    private void backToClassNewsFragment() {
+
         ClassNewsFragment classNewsFragment = new ClassNewsFragment();
-        getParentFragmentManager().beginTransaction().replace(R.id.constraintLayout, classNewsFragment).commit();
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(
+                        R.id.constraintLayout,
+                        classNewsFragment
+                ).commit();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -76,25 +91,7 @@ public class AddClassNewsFragment extends Fragment {
 
     private void addClassNews() {
 
-        Response.Listener<String> responseListener = response -> {
-
-            try {
-
-                JSONObject jsonResponse = new JSONObject(response);
-                boolean success = jsonResponse.getBoolean(getString(R.string.success));
-
-                if (success) {
-
-                    Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(requireContext(), response + "Failed", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
+        Response.Listener<String> responseListener = this::addClassNews;
         AddClassNewsRequest addClassNewsRequest = new AddClassNewsRequest(
                 et_ClassNewsTitle.getText().toString().trim(),
                 et_ClassNewsDescription.getText().toString().trim(),
@@ -103,5 +100,25 @@ public class AddClassNewsFragment extends Fragment {
         );
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(addClassNewsRequest);
+    }
+
+    private void addClassNews(String response) {
+        try {
+
+            JSONObject jsonResponse = new JSONObject(response);
+            boolean success = jsonResponse.getBoolean(getString(R.string.success));
+
+            if (success) {
+
+                Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
+                // Get back to ClassNewsFragment.
+                backToClassNewsFragment();
+            } else {
+
+                Toast.makeText(requireContext(), response + "Failed", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
