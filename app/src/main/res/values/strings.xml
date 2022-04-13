@@ -96,5 +96,7 @@
     <string name="tab_class_students">Class Students</string>
     <string name="tab_class_homework">Class HomeWork</string>
     <string name="title_activity_teacher_my_class_detail">TeacherMyClassDetail</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

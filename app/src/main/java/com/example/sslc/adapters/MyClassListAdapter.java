@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sslc.R;
 import com.example.sslc.data.Programs;
-import com.example.sslc.teacher_side_activities.TeacherMyClassDetail;
+import com.example.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetail;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;

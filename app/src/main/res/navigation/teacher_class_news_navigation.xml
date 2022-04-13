@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_class_news_navigation">
+
+    <fragment
+        android:id="@+id/nav_class_news_main"
+        android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsFragment"
+        tools:layout="@layout/fragment_teacher_my_class_news">
+        <action
+            android:id="@+id/action_nav_class_news_main_to_nav_class_news_add"
+            app:destination="@id/nav_class_news_add" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_class_news_add"
+        android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsFragment"
+        tools:layout="@layout/fragment_teacher_my_class_news_add" />
+</navigation>

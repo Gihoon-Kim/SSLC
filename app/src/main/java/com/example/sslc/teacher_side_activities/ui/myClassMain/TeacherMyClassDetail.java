@@ -1,4 +1,4 @@
-package com.example.sslc.teacher_side_activities;
+package com.example.sslc.teacher_side_activities.ui.myClassMain;
 
 import android.os.Bundle;
 
@@ -7,9 +7,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.sslc.R;
 import com.example.sslc.databinding.ActivityTeacherMyClassDetailBinding;
-import com.example.sslc.teacher_side_activities.ui.myClassMain.SectionsPagerAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 public class TeacherMyClassDetail extends AppCompatActivity {
@@ -26,13 +23,9 @@ public class TeacherMyClassDetail extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
+
         TabLayout tabs = binding.tabs;
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = binding.fab;
-
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
-
         initViews();
     }
 
