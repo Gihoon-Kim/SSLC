@@ -11,15 +11,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.sslc.R;
-import com.example.sslc.databinding.ClassHomeWorkFragmentBinding;
 
 public class ClassHomeWorkFragment extends Fragment {
 
     private ClassHomeWorkViewModel homeWorkViewModel;
-    private ClassHomeWorkFragmentBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,25 +28,11 @@ public class ClassHomeWorkFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = ClassHomeWorkFragmentBinding.inflate(
-                inflater,
-                container,
-                false
-        );
-
-        final TextView textView = binding.tvClassHomeWorkTextView;
-        homeWorkViewModel.getText().observe(
-                getViewLifecycleOwner(),
-                textView::setText
-        );
-        homeWorkViewModel.setText("This is Third Fragment");
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_class_homework, container, false);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        binding = null;
     }
 }

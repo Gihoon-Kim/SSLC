@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,6 +35,12 @@ public class AddClassNewsFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.et_ClassNewsDescription)
     EditText et_ClassNewsDescription;
+    @SuppressLint("NonConstantResourceId")
+    @BindView(R.id.btn_Cancel)
+    Button btn_Cancel;
+    @SuppressLint("NonConstantResourceId")
+    @BindView(R.id.btn_AddNews)
+    Button btn_AddNews;
 
     TeacherMyClassDetailViewModel mainViewModel;
 
@@ -49,7 +57,7 @@ public class AddClassNewsFragment extends Fragment {
                 new ViewModelProvider(requireActivity()).get(TeacherMyClassDetailViewModel.class);
 
         View view = inflater.inflate(
-                R.layout.fragment_add_class_news,
+                R.layout.fragment_class_news_add,
                 container,
                 false
         );
@@ -61,18 +69,9 @@ public class AddClassNewsFragment extends Fragment {
     @OnClick(R.id.btn_Cancel)
     public void onBtnCancelClicked() {
 
-        backToClassNewsFragment();
-    }
-
-    private void backToClassNewsFragment() {
-
-        ClassNewsFragment classNewsFragment = new ClassNewsFragment();
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(
-                        R.id.constraintLayout,
-                        classNewsFragment
-                ).commit();
+        Navigation
+                .findNavController(btn_Cancel)
+                .navigate(R.id.action_addClassNewsFragment_to_fragment_class_news_list);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -112,7 +111,9 @@ public class AddClassNewsFragment extends Fragment {
 
                 Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
                 // Get back to ClassNewsFragment.
-                backToClassNewsFragment();
+                Navigation
+                        .findNavController(btn_AddNews)
+                        .navigate(R.id.action_addClassNewsFragment_to_fragment_class_news_list);
             } else {
 
                 Toast.makeText(requireContext(), response + "Failed", Toast.LENGTH_SHORT).show();

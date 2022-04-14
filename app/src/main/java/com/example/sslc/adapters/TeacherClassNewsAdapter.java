@@ -70,6 +70,13 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
                 classNewsArrayList.get(position).getDescription(),
                 classNewsArrayList.get(position).getCreatedAt()
         );
+
+        holder.cv_Item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

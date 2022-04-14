@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.sslc.R;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsFragment;
+import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsListFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
