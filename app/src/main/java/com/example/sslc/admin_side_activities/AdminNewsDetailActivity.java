@@ -63,7 +63,7 @@ public class AdminNewsDetailActivity
         toolBarLayout.setTitle(newsTitle);
 
         // If toolbarLayout is clicked, new dialog shows up to change title of the news
-        toolBarLayout.setOnClickListener(view -> changeNewsTitle(toolBarLayout));
+        toolBarLayout.setOnClickListener(view -> changeNewsTitle());
 
         FloatingActionButton fab = binding.fabUpdate;
         fab.setOnClickListener(view -> updateNews());
@@ -72,10 +72,10 @@ public class AdminNewsDetailActivity
         et_NewsContent.setText(newsDescription);
     }
 
-    private void changeNewsTitle(@NonNull CollapsingToolbarLayout toolBarLayout) {
+    private void changeNewsTitle() {
 
         // New Dialog to let admin change news title
-        ChangeNewsTitleDialog changeNewsTitleDialog = new ChangeNewsTitleDialog(Objects.requireNonNull(toolBarLayout.getTitle()).toString());
+        ChangeNewsTitleDialog changeNewsTitleDialog = new ChangeNewsTitleDialog(Objects.requireNonNull(binding.toolbarLayout.getTitle()).toString());
         changeNewsTitleDialog.show(
                 getSupportFragmentManager(),
                 TAG + ChangeNewsTitleDialog.class.getSimpleName()

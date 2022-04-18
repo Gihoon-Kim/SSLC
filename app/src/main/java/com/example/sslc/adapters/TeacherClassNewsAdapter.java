@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sslc.R;
 import com.example.sslc.data.ClassNews;
+import com.example.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 
@@ -26,14 +28,17 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
 
     ArrayList<ClassNews> classNewsArrayList;
     Context context;
+    TeacherMyClassDetailViewModel mainViewModel;
 
     public TeacherClassNewsAdapter(
             Context context,
-            ArrayList<ClassNews> classNewsArrayList
+            ArrayList<ClassNews> classNewsArrayList,
+            TeacherMyClassDetailViewModel mainViewModel
     ) {
 
         this.context = context;
         this.classNewsArrayList = classNewsArrayList;
+        this.mainViewModel = mainViewModel;
     }
 
     @NonNull
@@ -71,11 +76,14 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
                 classNewsArrayList.get(position).getCreatedAt()
         );
 
-        holder.cv_Item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.cv_Item.setOnClickListener(view -> {
 
-            }
+            mainViewModel.setClassNewsLiveData(
+                    classNewsArrayList.get(position)
+            );
+            Navigation
+                    .findNavController(view)
+                    .navigate(R.id.action_fragment_class_news_list_to_detailClassNewsFragment);
         });
     }
 

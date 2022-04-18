@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_fragment_class_news_list_to_addClassNewsFragment"
             app:destination="@id/addClassNewsFragment" />
+        <action
+            android:id="@+id/action_fragment_class_news_list_to_detailClassNewsFragment"
+            app:destination="@id/detailClassNewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addClassNewsFragment"
@@ -21,6 +24,16 @@
         tools:layout="@layout/fragment_class_news_add" >
         <action
             android:id="@+id/action_addClassNewsFragment_to_fragment_class_news_list"
+            app:destination="@id/fragment_class_news_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailClassNewsFragment"
+        android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.DetailClassNewsFragment"
+        android:label="fragment_class_news_detail"
+        tools:layout="@layout/fragment_class_news_detail" >
+        <action
+            android:id="@+id/action_detailClassNewsFragment_to_fragment_class_news_list"
             app:destination="@id/fragment_class_news_list" />
     </fragment>
 </navigation>

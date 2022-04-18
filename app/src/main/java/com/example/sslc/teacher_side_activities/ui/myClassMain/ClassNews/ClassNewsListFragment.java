@@ -66,7 +66,8 @@ public class ClassNewsListFragment extends Fragment {
 
         adapter = new TeacherClassNewsAdapter(
                 requireContext(),
-                classNewsList
+                classNewsList,
+                mainViewModel
         );
 
         RecyclerView rv_ClassNewsList = binding.rvClassNewsList;
