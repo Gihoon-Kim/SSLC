@@ -37,7 +37,16 @@
                     android:layout_height="30dp"
                     android:scaleX="2"
                     android:layout_margin="10dp"
-                    android:src="@drawable/ic_baseline_arrow_back_24" />
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:contentDescription="Back to main screen" />
+
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_baseline_delete_24" />
 
                 <EditText
                     android:id="@+id/et_NewsTitle"

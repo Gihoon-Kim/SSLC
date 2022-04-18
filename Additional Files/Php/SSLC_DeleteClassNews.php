@@ -5,18 +5,15 @@
      $servername = "localhost";
  
      $conn = mysqli_connect($servername, $username, $password, $db_name);
-
-     $newsOldTitle = $_POST["newsOldTitle"];
-     $newsNewTitle = $_POST["newsNewTitle"];
-     $newsDescription = $_POST["newsDescription"];
+     
+     $newsTitle = $_POST["newsTitle"];
      $className = $_POST["className"];
 
      $statement = mysqli_prepare(
         $conn,
-        "UPDATE SSLC_ClassNews
-            SET newsTitle = '$newsNewTitle',
-                newsDescription = '$newsDescription'
-            WHERE newsTitle = '$newsOldTitle' and className = '$className'"
+        "DELETE 
+            FROM `SSLC_ClassNews` 
+            WHERE newsTitle = '$newsTitle' and className = '$className'"
     );
     mysqli_stmt_execute($statement);
 
@@ -24,4 +21,5 @@
     $response["success"] = true;
 
     echo json_encode($response);
+    mysqli_close($conn);
 ?>
