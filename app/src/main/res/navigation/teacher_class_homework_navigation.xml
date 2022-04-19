@@ -18,5 +18,9 @@
         android:id="@+id/addClassHomeworkFragment"
         android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.AddClassHomeworkFragment"
         android:label="fragment_class_homework_add"
-        tools:layout="@layout/fragment_class_homework_add" />
+        tools:layout="@layout/fragment_class_homework_add" >
+        <action
+            android:id="@+id/action_addClassHomeworkFragment_to_classHomeWorkListFragment"
+            app:destination="@id/classHomeWorkListFragment" />
+    </fragment>
 </navigation>

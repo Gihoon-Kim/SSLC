@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_AddTeacher"
+            android:id="@+id/fab_AddHomework"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
