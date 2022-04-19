@@ -2,6 +2,7 @@ package com.example.sslc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sslc.R;
 import com.example.sslc.data.ClassHomework;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 
 import java.util.ArrayList;
 
@@ -54,6 +57,22 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
     @Override
     public void onBindViewHolder(@NonNull TeacherClassHomeworkViewHolder holder, int position) {
 
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(Color.parseColor("#f3f3f3"))
+                .setBaseAlpha(1)
+                .setHighlightColor(Color.parseColor("#E7E7E7"))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .build();
+
+        ShimmerDrawable shimmerDrawable = new ShimmerDrawable();
+        shimmerDrawable.setShimmer(shimmer);
+
+        holder.onBind(
+                classHomeworkList.get(position).getTitle(),
+                classHomeworkList.get(position).getScript(),
+                classHomeworkList.get(position).getDeadline()
+        );
     }
 
     @Override
@@ -77,6 +96,18 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+
+        @SuppressLint("SetTextI18n")
+        void onBind(String title, String script, String deadline) {
+
+            tv_homeworkTitle.setText(title);
+            if (script.length() > 30) {
+                tv_homeworkScript.setText(script.substring(0, 30) + "...");
+            } else {
+                tv_homeworkScript.setText(script);
+            }
+            tv_homeworkDeadline.setText(deadline);
         }
     }
 }
