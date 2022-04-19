@@ -42,6 +42,19 @@ public class People {
         this.isTeacher = isTeacher;
     }
 
+    public People(
+            String name,
+            String dob,
+            String aboutMe,
+            Bitmap image
+    ) {
+
+        this.name = name;
+        this.dob = dob;
+        this.aboutMe = aboutMe;
+        this.image = image;
+    }
+
     public String getName() {
         return name;
     }

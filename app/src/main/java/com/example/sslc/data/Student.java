@@ -1,5 +1,7 @@
 package com.example.sslc.data;
 
+import android.graphics.Bitmap;
+
 public class Student extends People {
 
     int studentNumber;
@@ -30,6 +32,18 @@ public class Student extends People {
         super(studentName, studentDOB, studentClass, isTeacher, studentIntroduce);
 
         this.studentNumber = studentNumber;
+        this.studentCountry = studentCountry;
+    }
+
+    public Student(
+            String studentName,
+            String studentDOB,
+            String studentIntroduce,
+            String studentCountry,
+            Bitmap profileBitmap
+    ) {
+        super(studentName, studentDOB, studentIntroduce,profileBitmap);
+
         this.studentCountry = studentCountry;
     }
 

@@ -12,6 +12,7 @@
      $studentCountry = $_POST["studentCountry"];
      $studentID = $_POST["studentID"];
      $studentPassword = $_POST["studentPassword"];
+     $studentIntroduce = $_POST["studentIntroduce"];
 
      $response = array();
      // validation
@@ -36,13 +37,14 @@
                             StudentClass,
                             Country,
                             StudentID,
-                            StudentPassword) 
-                VALUES (?, ?, ?, ?, ?, ?)"
+                            StudentPassword,
+                            studentIntroduce) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)"
          );
          mysqli_stmt_bind_param(
             $statement, 
-            "ssssss", 
-            $studentName, $studentDOB, $studentClass, $studentCountry, $studentID, $studentPassword
+            "sssssss", 
+            $studentName, $studentDOB, $studentClass, $studentCountry, $studentID, $studentPassword, $studentIntroduce
          );
          mysqli_stmt_execute($statement);
     

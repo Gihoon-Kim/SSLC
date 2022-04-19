@@ -50,6 +50,13 @@ public class ClassNewsListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        classNewsList.clear();
+    }
+
+    @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             ViewGroup container,

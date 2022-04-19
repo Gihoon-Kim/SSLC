@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.sslc.R;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsFragment;
-import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsListFragment;
+import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassStudent.ClassStudentFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -36,7 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
 
             case 1:
-                return new ClassStudentListFragment();
+                return new ClassStudentFragment();
             case 2:
                 return new ClassHomeWorkFragment();
             default:

@@ -53,6 +53,8 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class_news_detail.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class_news_list.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class_news_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class_student.xml" value="0.13645833333333332" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_class_student_list.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_detail_class_news.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_developer.xml" value="0.2" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_first.xml" value="0.25416666666666665" />
@@ -72,6 +74,7 @@
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/fragment_teacher_my_class_news_add.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/grid_layout_item.xml" value="0.12760416666666666" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_class.xml" value="0.2" />
+        <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_class_student.xml" value="0.13645833333333332" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_myclass_list.xml" value="0.264" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_news.xml" value="0.128" />
         <entry key="..\:/Users/User/source/repos/Project/Android_Project/SSLC/app/src/main/res/layout/item_shimmer_class.xml" value="0.25416666666666665" />

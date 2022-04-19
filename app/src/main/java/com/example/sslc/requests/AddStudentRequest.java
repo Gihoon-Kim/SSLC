@@ -31,6 +31,7 @@ public class AddStudentRequest extends StringRequest {
         map.put("studentCountry", studentCountry);
         map.put("studentID", studentID);
         map.put("studentPassword", studentPassword);
+        map.put("studentIntroduce", "Hi, my name is " + studentName);
     }
 
     @Nullable
