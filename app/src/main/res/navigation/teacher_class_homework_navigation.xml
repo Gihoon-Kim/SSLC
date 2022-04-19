@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_class_homework_navigation">
+
+    <fragment
+        android:id="@+id/fragment_class_homework_list"
+        android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.ClassHomeWorkListFragment"
+        android:label="ClassHomeWorkListFragment"
+        tools:layout="@layout/fragment_class_homework_list" />
+</navigation>

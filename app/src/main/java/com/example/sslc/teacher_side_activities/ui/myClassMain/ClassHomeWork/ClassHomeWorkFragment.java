@@ -1,4 +1,4 @@
-package com.example.sslc.teacher_side_activities.ui.myClassMain;
+package com.example.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,12 +16,10 @@ import com.example.sslc.R;
 
 public class ClassHomeWorkFragment extends Fragment {
 
-    private ClassHomeWorkViewModel homeWorkViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homeWorkViewModel = new ViewModelProvider(this).get(ClassHomeWorkViewModel.class);
     }
 
     @Override

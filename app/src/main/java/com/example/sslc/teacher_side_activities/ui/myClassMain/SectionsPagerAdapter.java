@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.sslc.R;
+import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.ClassHomeWorkFragment;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassNews.ClassNewsFragment;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.ClassStudent.ClassStudentFragment;
 
