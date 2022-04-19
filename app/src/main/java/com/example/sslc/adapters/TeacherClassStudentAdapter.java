@@ -1,5 +1,6 @@
 package com.example.sslc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -77,6 +79,16 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
                 classStudentArrayList.get(position).getStudentCountry(),
                 classStudentArrayList.get(position).getImage()
         );
+
+        holder.itemView.setOnClickListener(view -> {
+
+            mainViewModel.setClassStudentLiveData(
+                    classStudentArrayList.get(holder.getAdapterPosition())
+            );
+            Navigation
+                    .findNavController(view)
+                    .navigate(R.id.action_classStudentListFragment_to_classStudentDetailFragment);
+        });
     }
 
     @Override
@@ -86,14 +98,19 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
 
     public static class TeacherClassStudentViewHolder extends RecyclerView.ViewHolder {
 
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.iv_ProfileImage)
         CircleImageView iv_profileImage;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_name)
         TextView tv_name;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_DOB)
         TextView tv_DOB;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_introduce)
         TextView tv_introduce;
+        @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_country)
         TextView tv_country;
 
