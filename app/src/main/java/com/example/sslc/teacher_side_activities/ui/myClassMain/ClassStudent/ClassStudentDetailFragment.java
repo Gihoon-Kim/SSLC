@@ -1,9 +1,12 @@
 package com.example.sslc.teacher_side_activities.ui.myClassMain.ClassStudent;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,10 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.example.sslc.ImageViewerActivity;
 import com.example.sslc.R;
 import com.example.sslc.databinding.FragmentClassStudentDetailBinding;
 import com.example.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class ClassStudentDetailFragment extends Fragment {
@@ -59,7 +64,29 @@ public class ClassStudentDetailFragment extends Fragment {
                     .into(binding.ivDeveloper);
         }
 
+        binding.ivDeveloper.setOnClickListener(view -> seeProfileImage());
+
         binding.btnBack.setOnClickListener(this::backToMain);
+    }
+
+    private void seeProfileImage() {
+
+        if (Objects.requireNonNull(mainViewModel.getClassStudentLiveData().getValue()).getImage() != null) {
+
+            Bitmap bmp = mainViewModel.getClassStudentLiveData().getValue().getImage();
+
+            //Convert to byte array
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            Objects.requireNonNull(bmp).compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            Intent imageIntent = new Intent(requireContext(), ImageViewerActivity.class);
+            imageIntent.putExtra("profileImage", byteArray);
+            startActivity(imageIntent);
+        } else {
+
+            Toast.makeText(requireContext(), "No Profile Image", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void backToMain(View view) {
