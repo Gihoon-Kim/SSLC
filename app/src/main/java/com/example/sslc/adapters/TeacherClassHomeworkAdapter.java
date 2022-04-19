@@ -103,11 +103,11 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
 
             tv_homeworkTitle.setText(title);
             if (script.length() > 30) {
-                tv_homeworkScript.setText(script.substring(0, 30) + "...");
+                tv_homeworkScript.setText(script.substring(0, 30).concat("..."));
             } else {
                 tv_homeworkScript.setText(script);
             }
-            tv_homeworkDeadline.setText(deadline);
+            tv_homeworkDeadline.setText("Deadline : ".concat(deadline));
         }
     }
 }

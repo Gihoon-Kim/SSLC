@@ -85,7 +85,8 @@ public class ClassStudentListFragment extends Fragment {
 
     private void getClassStudents() {
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = response -> {
+        @SuppressLint("NotifyDataSetChanged")
+        Response.Listener<String> responseListener = response -> {
 
             try {
 
