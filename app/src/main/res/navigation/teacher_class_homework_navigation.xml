@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_classHomeWorkListFragment_to_addClassHomeworkFragment"
             app:destination="@id/addClassHomeworkFragment" />
+        <action
+            android:id="@+id/action_classHomeWorkListFragment_to_detailClassHomeworkFragment"
+            app:destination="@id/detailClassHomeworkFragment" />
     </fragment>
     <fragment
         android:id="@+id/addClassHomeworkFragment"
@@ -21,6 +24,15 @@
         tools:layout="@layout/fragment_class_homework_add" >
         <action
             android:id="@+id/action_addClassHomeworkFragment_to_classHomeWorkListFragment"
+            app:destination="@id/classHomeWorkListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailClassHomeworkFragment"
+        android:name="com.example.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.DetailClassHomeworkFragment"
+        android:label="fragment_class_homework_detail"
+        tools:layout="@layout/fragment_class_homework_detail" >
+        <action
+            android:id="@+id/action_detailClassHomeworkFragment_to_classHomeWorkListFragment"
             app:destination="@id/classHomeWorkListFragment" />
     </fragment>
 </navigation>

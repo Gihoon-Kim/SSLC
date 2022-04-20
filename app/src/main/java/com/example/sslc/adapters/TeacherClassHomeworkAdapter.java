@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sslc.R;
@@ -73,6 +75,14 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
                 classHomeworkList.get(position).getScript(),
                 classHomeworkList.get(position).getDeadline()
         );
+
+        holder.cv_Item.setOnClickListener(view -> {
+                    Navigation
+                            .findNavController(view)
+                            .navigate(R.id.action_classHomeWorkListFragment_to_detailClassHomeworkFragment);
+                    mainViewModel.setClassHomeworkLiveData(classHomeworkList.get(position));
+                }
+        );
     }
 
     @Override
@@ -91,6 +101,9 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
         @SuppressLint("NonConstantResourceId")
         @BindView(R.id.tv_homeworkDeadline)
         TextView tv_homeworkDeadline;
+        @SuppressLint("NonConstantResourceId")
+        @BindView(R.id.cv_Item)
+        CardView cv_Item;
 
         public TeacherClassHomeworkViewHolder(@NonNull View itemView) {
             super(itemView);
