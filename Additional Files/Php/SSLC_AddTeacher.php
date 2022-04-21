@@ -12,7 +12,7 @@
      $teacherID = $_POST["teacherID"];
      $teacherPassword = $_POST["teacherPassword"];
      $teacherIntroduce = $_POST["teacherIntroduce"];
-     $teacherImage = $_POST["teacherImage"];
+     $hasProfileImage = $_POST["hasProfileImage"];
 
      $response = array();
      // validation
@@ -39,13 +39,13 @@
                             teacherID,
                             teacherPassword,
                             teacherIntroduce,
-                            teacherImage) 
+                            hasProfileImage) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
         mysqli_stmt_bind_param(
             $statement, 
             "sssssss", 
-            $teacherName, $teacherDOB, $teacherClass, $teacherID, $teacherPassword, $teacherIntroduce, $teacherImage
+            $teacherName, $teacherDOB, $teacherClass, $teacherID, $teacherPassword, $teacherIntroduce, $hasProfileImage
         );
         mysqli_stmt_execute($statement);
 

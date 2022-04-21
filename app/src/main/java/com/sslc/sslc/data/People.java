@@ -1,14 +1,12 @@
 package com.sslc.sslc.data;
 
-import android.graphics.Bitmap;
-
 public class People {
 
     String name;
-    Bitmap image;
     String dob;
     String myClass;
     String aboutMe;
+    boolean hasProfileImage;
     boolean isTeacher;
 
     public People(
@@ -29,16 +27,16 @@ public class People {
             String name,
             String dob,
             String myClass,
-            Bitmap image,
             String aboutMe,
+            boolean hasProfileImage,
             boolean isTeacher
     ) {
 
         this.name = name;
-        this.image = image;
         this.dob = dob;
         this.myClass = myClass;
         this.aboutMe = aboutMe;
+        this.hasProfileImage = hasProfileImage;
         this.isTeacher = isTeacher;
     }
 
@@ -46,13 +44,13 @@ public class People {
             String name,
             String dob,
             String aboutMe,
-            Bitmap image
+            boolean hasProfileImage
     ) {
 
         this.name = name;
         this.dob = dob;
         this.aboutMe = aboutMe;
-        this.image = image;
+        this.hasProfileImage = hasProfileImage;
     }
 
     public String getName() {
@@ -63,12 +61,8 @@ public class People {
         this.name = name;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public boolean hasProfileImage() {
+        return hasProfileImage;
     }
 
     public String getDob() {
@@ -102,4 +96,9 @@ public class People {
     public void setTeacher(boolean teacher) {
         isTeacher = teacher;
     }
+
+    public void setHasProfileImage(boolean hasProfileImage) {
+        this.hasProfileImage = hasProfileImage;
+    }
+
 }

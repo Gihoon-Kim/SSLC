@@ -101,16 +101,13 @@ public class ClassStudentListFragment extends Fragment {
                     if (success) {
 
                         Log.i(TAG, classStudentItem.toString());
-                        String profileImage = classStudentItem.getString(getString(R.string.student_profileImage));
-                        byte[] encodeByte = Base64.decode(profileImage, Base64.DEFAULT);
-                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         Student student = new Student(
                                 classStudentItem.getString(getString(R.string.student_name)),
                                 classStudentItem.getString(getString(R.string.student_dob)),
                                 classStudentItem.getString(getString(R.string.student_introduce)),
                                 classStudentItem.getString(getString(R.string.student_country)),
-                                profileBitmap
+                                classStudentItem.getBoolean("hasProfileImage")
                         );
                         classStudentList.add(student);
                         adapter.notifyDataSetChanged();

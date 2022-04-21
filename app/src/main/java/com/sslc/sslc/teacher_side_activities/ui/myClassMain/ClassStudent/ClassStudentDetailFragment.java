@@ -57,11 +57,14 @@ public class ClassStudentDetailFragment extends Fragment {
         binding.tvDOB.setText(mainViewModel.getClassStudentLiveData().getValue().getDob());
         binding.tvIntroduce.setText(mainViewModel.getClassStudentLiveData().getValue().getAboutMe());
 
-        if (mainViewModel.getClassStudentLiveData().getValue().getImage() != null) {
+        if (mainViewModel.getClassStudentLiveData().getValue().hasProfileImage()) {
 
+            // TODO : GET PROFILE IMAGE FROM FIREBASE
+            /*
             Glide.with(requireContext())
                     .load(mainViewModel.getClassStudentLiveData().getValue().getImage())
                     .into(binding.ivDeveloper);
+             */
         }
 
         binding.ivDeveloper.setOnClickListener(view -> seeProfileImage());
@@ -71,18 +74,14 @@ public class ClassStudentDetailFragment extends Fragment {
 
     private void seeProfileImage() {
 
-        if (Objects.requireNonNull(mainViewModel.getClassStudentLiveData().getValue()).getImage() != null) {
+        if (Objects.requireNonNull(mainViewModel.getClassStudentLiveData().getValue()).hasProfileImage()) {
 
-            Bitmap bmp = mainViewModel.getClassStudentLiveData().getValue().getImage();
-
-            //Convert to byte array
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            Objects.requireNonNull(bmp).compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
+            // TODO : GET PROFILE IMAGE FROM FIREBASE
+            /*
             Intent imageIntent = new Intent(requireContext(), ImageViewerActivity.class);
             imageIntent.putExtra("profileImage", byteArray);
             startActivity(imageIntent);
+             */
         } else {
 
             Toast.makeText(requireContext(), "No Profile Image", Toast.LENGTH_SHORT).show();

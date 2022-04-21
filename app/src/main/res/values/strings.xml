@@ -193,5 +193,6 @@
     <string name="homework_deadline">homeworkDeadline</string>
     <string name="title_activity_teacher_notification_detail">TeacherNotificationDetailActivity
     </string>
+    <string name="has_profile_image">hasProfileImage</string>
 
 </resources>

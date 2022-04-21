@@ -77,7 +77,7 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
                 classStudentArrayList.get(position).getDob(),
                 classStudentArrayList.get(position).getAboutMe(),
                 classStudentArrayList.get(position).getStudentCountry(),
-                classStudentArrayList.get(position).getImage()
+                classStudentArrayList.get(position).hasProfileImage()
         );
 
         holder.itemView.setOnClickListener(view -> {
@@ -120,18 +120,21 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
             ButterKnife.bind(this, itemView);
         }
 
-        void onBind(Context context, String name, String DOB, String introduce, String country, Bitmap profileImage) {
+        void onBind(Context context, String name, String DOB, String introduce, String country, boolean hasProfileImage) {
 
             tv_name.setText(name);
             tv_DOB.setText(DOB);
             tv_introduce.setText(introduce);
             tv_country.setText(country);
 
-            if (profileImage != null) {
+            if (hasProfileImage) {
 
+                // TODO : GET PROFILE IMAGE
+                /*
                 Glide.with(context)
                         .load(profileImage)
                         .into(iv_profileImage);
+                 */
             } else {
 
                 Glide.with(context)

@@ -6,12 +6,9 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +22,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.AppData;
 import com.sslc.sslc.databinding.ActivityAdminAddTeacherBinding;
@@ -32,12 +33,9 @@ import com.sslc.sslc.dialog.TeacherClassesDialog;
 import com.sslc.sslc.fragments.TeacherFragment;
 import com.sslc.sslc.interfaces.ApplyClassListListener;
 import com.sslc.sslc.requests.AddTeacherRequest;
-import com.sslc.sslc.requests.UploadImageRequest;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,6 +54,9 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
 
     private ActivityAdminAddTeacherBinding binding;
     ProgressDialog progressDialog;
+
+    // Uri for image
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +153,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                         Toast.makeText(this, "Get image cancelled", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        Uri selectedImageUri;
                         selectedImageUri = Objects.requireNonNull(result.getData()).getData();
                         Glide.with(getApplicationContext())
                                 .load(selectedImageUri)
@@ -179,39 +179,43 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
             String teacherName = binding.etTeacherName.getText().toString().trim();
             String teacherDOB = String.valueOf(binding.teacherInclude.tvTeacherDOB.getText());
             String teacherIntroduce = binding.etTeacherIntroduce.getText().toString();
-            String teacherImage = "";
             String teacherClass = Objects.requireNonNull(binding.teacherInclude.tvTeacherClass).getText().toString();
             String teacherID = Objects.requireNonNull(binding.teacherInclude.etTeacherID).getText().toString().trim();
             String teacherPassword = Objects.requireNonNull(binding.teacherInclude.etTeacherPassword).getText().toString().trim();
+            int hasProfileImage = 0;
 
             if (!binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
 
-                BitmapDrawable drawable = (BitmapDrawable) binding.ivTeacherProfileImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                teacherImage = bitmapToString(bitmap);
+                // TODO : UPLOAD PROFILE IMAGE TO FIREBASE
+                hasProfileImage = 1;
 
-                Response.Listener<String> uploadImageListener = this::uploadImageRequest;
-                UploadImageRequest uploadImageRequest = new UploadImageRequest(
-                        teacherName,
-                        true,
-                        teacherImage,
-                        uploadImageListener
-                );
-                RequestQueue uploadImageQueue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
-                uploadImageQueue.add(uploadImageRequest);
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference();
+
+                String fileName = "profile_teacher_".concat(teacherName).concat(".jpg");
+                Log.d(TAG, "Uri = ".concat(String.valueOf(selectedImageUri)));
+                StorageReference riversRef = storageReference.child("profile_img/" + fileName);
+                UploadTask uploadTask = riversRef.putFile(selectedImageUri);
+
+                // Save New Profile Image
+                uploadTask.addOnFailureListener(
+                        e -> Toast.makeText(AdminAddTeacherActivity.this, "Profile Image Upload Failed", Toast.LENGTH_SHORT).show())
+                        .addOnSuccessListener(
+                                taskSnapshot -> Toast.makeText(AdminAddTeacherActivity.this, "Profile Image Uploaded", Toast.LENGTH_SHORT).show()
+                        );
             }
 
-            String finalTeacherImage = teacherImage;
+            int finalHasProfileImage = hasProfileImage;
             Response.Listener<String> responseListener = response -> {
 
                 addTeacherRequest(
                         teacherName,
                         teacherDOB,
                         teacherIntroduce,
-                        finalTeacherImage,
                         teacherClass,
                         teacherID,
                         teacherPassword,
+                        finalHasProfileImage,
                         response
                 );
 
@@ -224,8 +228,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                     teacherClass,
                     teacherID,
                     teacherPassword,
-                    teacherImage,
                     teacherIntroduce,
+                    hasProfileImage,
                     responseListener
             );
             RequestQueue queue = Volley.newRequestQueue(AdminAddTeacherActivity.this);
@@ -236,7 +240,7 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
         }
     }
 
-    private void addTeacherRequest(String teacherName, String teacherDOB, String teacherIntroduce, String teacherImage, String teacherClass, String teacherID, String teacherPassword, String response) {
+    private void addTeacherRequest(String teacherName, String teacherDOB, String teacherIntroduce, String teacherClass, String teacherID, String teacherPassword, int hasProfileImage, String response) {
 
         try {
 
@@ -258,8 +262,8 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                     intent.putExtra(getString(R.string.teacher_id), teacherID);
                     intent.putExtra(getString(R.string.teacher_password), teacherPassword);
                     intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
-                    intent.putExtra(getString(R.string.teacher_image), teacherImage);
                     intent.putExtra(getString(R.string.teacher_number), jsonResponse.getInt("rowCount") + 1);
+                    intent.putExtra("hasProfileImage", hasProfileImage);
                     setResult(9003, intent);
                     finish();
                 } else {
@@ -270,35 +274,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void uploadImageRequest(String response) {
-
-        try {
-
-            Log.i(TAG, response);
-            JSONObject jsonResponse = new JSONObject(response);
-            boolean success = jsonResponse.getBoolean(getString(R.string.success));
-
-            if (success) {
-
-                Toast.makeText(this, getString(R.string.image_uploaded), Toast.LENGTH_SHORT).show();
-            } else {
-
-                Toast.makeText(this, getString(R.string.image_upload_failed), Toast.LENGTH_SHORT).show();
-            }
-            progressDialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String bitmapToString(@NonNull Bitmap bitmap) {
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
-        byte[] byteArrayVar = outputStream.toByteArray();
-        return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
     }
 
     @Override

@@ -105,7 +105,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         mainViewModel.getImage().observe(this, imageObserver);
 
         // Set Profile Image
-        if (!intent.getStringExtra("teacherProfileImage").equals("")) {
+        if (intent.getIntExtra("hasProfileImage", 0) == 1) {
 
             // Teacher profile image decode and set profile image up
             byte[] encodeByte = Base64.decode(intent.getStringExtra("teacherProfileImage"), Base64.DEFAULT);

@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("teacherClass", jsonResponse.getString("userClass"));
                     intent.putExtra("teacherIntroduce", jsonResponse.getString("userIntroduce"));
                     intent.putExtra("teacherPassword", jsonResponse.getString("userPassword"));
-                    intent.putExtra("hasProfileImage", jsonResponse.getBoolean("hasProfileImage"));
+                    intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));
                     startActivity(intent);
                 } else {
                     Toast.makeText(this, "Student Main Activity", Toast.LENGTH_SHORT).show();

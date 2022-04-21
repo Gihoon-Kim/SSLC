@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -94,11 +93,12 @@ public class AdminTeacherDetailActivity
         Objects.requireNonNull(binding.etTeacherIntroduce).setText(teacherIntroduce);
         String teacherDOB = intent.getStringExtra("teacherDOB");
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setText(teacherDOB);
+        boolean hasProfileImage = intent.getBooleanExtra("hasProfileImage", false);
 
-        if (intent.getBooleanExtra("isThereImage", true)) {
+        if (hasProfileImage) {
 
-            byte[] teacherProfileImage = intent.getByteArrayExtra(getString(R.string.teacher_image));
-
+            // TODO : GET PROFILE IMAGE FROM FIREBASE
+            /*
             Glide.with(getApplicationContext())
                     .load(
                             BitmapFactory.decodeByteArray(
@@ -108,6 +108,7 @@ public class AdminTeacherDetailActivity
                             )
                     )
                     .into(binding.ivTeacherProfileImage);
+             */
         }
 
         initActivityResultLauncher();

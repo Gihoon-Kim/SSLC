@@ -13,17 +13,17 @@
 
      $statement = mysqli_prepare(
          $conn,
-         "SELECT t.teacherName, t.teacherID, t.teacherDOB, t.teacherClass, t.teacherIntroduce, t.teacherPassword, t.teacherImage, t.isTeacher
+         "SELECT t.teacherName, t.teacherID, t.teacherDOB, t.teacherClass, t.teacherIntroduce, t.teacherPassword, t.isTeacher, t.hasProfileImage
                 FROM SSLC_Teacher t
                 WHERE t.teacherID = '$userID' AND t.teacherPassword = '$userPassword'
             UNION
-            SELECT s.studentName, s.studentID, s.studentDOB, s.studentClass, s.studentIntroduce, s.studentPassword, s.studentProfileImage, s.isTeacher
+            SELECT s.studentName, s.studentID, s.studentDOB, s.studentClass, s.studentIntroduce, s.studentPassword, s.isTeacher, s.hasProfileImage
                 FROM SSLC_Student s
                 WHERE s.studentID = '$userID' AND s.studentPassword = '$userPassword';"
      );
      mysqli_stmt_execute($statement);
      mysqli_stmt_store_result($statement);
-     mysqli_stmt_bind_result($statement, $userName, $userID, $userDOB, $userClass, $userIntroduce, $userPassword, $userImage, $isTeacher);
+     mysqli_stmt_bind_result($statement, $userName, $userID, $userDOB, $userClass, $userIntroduce, $userPassword, $isTeacher, $hasProfileImage);
 
      $response = array();
      $response["success"] = false;
@@ -37,8 +37,8 @@
         $response["userClass"] = $userClass;
         $response["userIntroduce"] = $userIntroduce;
         $response["userPassword"]=  $userPassword;
-        $response["userImage"] = $userImage;
         $response["isTeacher"] = $isTeacher;
+        $response["hasProfileImage"] = $hasProfileImage;
      }
 
      echo json_encode($response);

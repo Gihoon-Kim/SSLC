@@ -85,11 +85,11 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
         holder.onBind(
                 context,
-                teacherList.get(position).getImage(),
                 teacherList.get(position).getName(),
                 teacherList.get(position).getDob(),
                 teacherList.get(position).getMyClass(),
-                teacherList.get(position).getAboutMe()
+                teacherList.get(position).getAboutMe(),
+                teacherList.get(position).hasProfileImage()
         );
 
         holder.itemView.setOnClickListener(view -> {
@@ -101,18 +101,6 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
             intent.putExtra(context.getString(R.string.teacher_dob), teacherList.get(holder.getAdapterPosition()).getDob());
             intent.putExtra(context.getString(R.string.teacher_introduce), teacherList.get(holder.getAdapterPosition()).getAboutMe());
 
-            if (teacherList.get(holder.getAdapterPosition()).getImage() == null) {
-
-                intent.putExtra(context.getString(R.string.is_there_image), false);
-                intent.putExtra(context.getString(R.string.teacher_image), "null");
-            } else {
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                teacherList.get(holder.getAdapterPosition()).getImage().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                intent.putExtra(context.getString(R.string.is_there_image), true);
-                intent.putExtra(context.getString(R.string.teacher_image), byteArray);
-            }
             updateTeacherActivityResultLauncher.launch(intent);
         });
 
@@ -204,21 +192,24 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
         void onBind(
                 Context context,
-                Bitmap teacherProfileImage,
                 String teacherName,
                 String teacherDOB,
                 String teacherClass,
-                String teacherIntroduce
+                String teacherIntroduce,
+                boolean hasProfileImage
         ) {
 
-            if (teacherProfileImage == null || String.valueOf(teacherProfileImage).equals("")) {
+            if (!hasProfileImage) {
 
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
             } else {
 
+                // TODO : GET PROFILE IMAGE FROM FIREBASE
+                /*
                 Glide.with(context)
                         .load(teacherProfileImage)
                         .into(iv_TeacherProfileImage);
+                 */
             }
 
             tv_TeacherName.setText(teacherName);

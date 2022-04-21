@@ -2,10 +2,7 @@ package com.sslc.sslc.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.sslc.sslc.admin_side_activities.AdminAddTeacherActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.TeacherFragmentAdapter;
+import com.sslc.sslc.admin_side_activities.AdminAddTeacherActivity;
 import com.sslc.sslc.data.Teacher;
 import com.sslc.sslc.requests.GetTeacherRequest;
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +42,7 @@ public class TeacherFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Teacher)
     RecyclerView rv_Teacher;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.shimmer_Layout)
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -122,20 +120,23 @@ public class TeacherFragment extends Fragment {
                     String teacherDOB = teacherItem.getString(getString(R.string.teacher_dob));
                     String teacherClass = teacherItem.getString(getString(R.string.teacher_class));
                     String teacherIntroduce = teacherItem.getString(getString(R.string.teacher_introduce));
-                    String teacherImage = teacherItem.getString(getString(R.string.teacher_image));
+                    boolean hasProfileImage = teacherItem.getInt(getString(R.string.has_profile_image)) == 1;
 
-                    byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
-                    Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                    if (hasProfileImage) {
 
+                        // TODO : GET IMAGE FROM FIREBASE
+                    }
+                    
                     Teacher teacher = new Teacher(
                             teacherNumber,
                             teacherName,
                             teacherDOB,
                             teacherClass,
-                            profileBitmap,
                             teacherIntroduce,
+                            hasProfileImage,
                             true
                     );
+
                     teacherList.add(teacher);
                     teacherFragmentAdapter.notifyDataSetChanged();
                     shimmerFrameLayout.stopShimmer();
@@ -160,20 +161,17 @@ public class TeacherFragment extends Fragment {
                         int teacherNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.teacher_number), 0);
                         String teacherName = Objects.requireNonNull(intent).getStringExtra(getString(R.string.teacher_name));
                         String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
-                        String teacherImage = intent.getStringExtra(getString(R.string.teacher_image));
                         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
                         String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
-
-                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
-                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                        boolean hasProfileImage = intent.getIntExtra("hasProfileImage", 0) == 1;
 
                         Teacher teacher = new Teacher(
                                 teacherNumber,
                                 teacherName,
                                 teacherDOB,
                                 teacherClass,
-                                profileBitmap,
                                 teacherIntroduce,
+                                hasProfileImage,
                                 true
                         );
                         teacherList.add(teacher);
@@ -191,12 +189,8 @@ public class TeacherFragment extends Fragment {
                         int teacherNumber = Objects.requireNonNull(intent).getIntExtra(getString(R.string.teacher_number), 0);
                         String teacherName = Objects.requireNonNull(intent).getStringExtra(getString(R.string.teacher_name));
                         String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
-                        String teacherImage = intent.getStringExtra(getString(R.string.teacher_image));
                         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
                         String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
-
-                        byte[] encodeByte = Base64.decode(teacherImage, Base64.DEFAULT);
-                        Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
                         for (int i = 0; i < teacherList.size(); i++) {
 
@@ -206,7 +200,6 @@ public class TeacherFragment extends Fragment {
                                 teacherList.get(i).setDob(teacherDOB);
                                 teacherList.get(i).setMyClass(teacherClass);
                                 teacherList.get(i).setAboutMe(teacherIntroduce);
-                                teacherList.get(i).setImage(profileBitmap);
                                 teacherFragmentAdapter.notifyItemChanged(i);
                                 break;
                             }

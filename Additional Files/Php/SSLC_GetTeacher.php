@@ -8,7 +8,7 @@
 
      $result = mysqli_query(
          $conn,
-         "SELECT teacherNumber, teacherName, teacherDOB, teacherClass, teacherIntroduce, teacherImage
+         "SELECT teacherNumber, teacherName, teacherDOB, teacherClass, teacherIntroduce, hasProfileImage
             FROM SSLC_Teacher"
      );
      $response = array();
@@ -23,7 +23,7 @@
                 'teacherDOB' => $row[2],
                 'teacherClass' => $row[3],
                 'teacherIntroduce' => $row[4],
-                'teacherImage' => $row[5]
+                'hasProfileImage' => $row[5]
             )
             );
      }

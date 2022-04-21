@@ -19,8 +19,8 @@ public class AddTeacherRequest extends StringRequest {
             String teacherClass,
             String teacherID,
             String teacherPassword,
-            String teacherImage,
             String teacherIntroduce,
+            int hasProfileImage,
             Response.Listener<String> listener
     ) {
         super(Method.POST, URL, listener, null);
@@ -31,8 +31,8 @@ public class AddTeacherRequest extends StringRequest {
         map.put("teacherClass", teacherClass);
         map.put("teacherID", teacherID);
         map.put("teacherPassword", teacherPassword);
-        map.put("teacherImage", teacherImage);
         map.put("teacherIntroduce", teacherIntroduce);
+        map.put("hasProfileImage", String.valueOf(hasProfileImage));
     }
 
     @Nullable
