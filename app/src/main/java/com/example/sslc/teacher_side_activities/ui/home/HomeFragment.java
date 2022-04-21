@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.sslc.databinding.FragmentHomeBinding;
 import com.example.sslc.teacher_side_activities.TeacherMyClassActivity;
 import com.example.sslc.teacher_side_activities.TeacherNotificationActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class HomeFragment extends Fragment {
 
@@ -35,6 +36,13 @@ public class HomeFragment extends Fragment {
         ll_notification.setOnClickListener(view ->
                 startActivity(new Intent(getActivity(), TeacherNotificationActivity.class))
         );
+
+        LinearLayout ll_event = binding.llEvent;
+        ll_event.setOnClickListener(view -> Snackbar.make(view, "Not in service", Snackbar.LENGTH_SHORT).show());
+
+        LinearLayout ll_help = binding.llHelp;
+        ll_help.setOnClickListener(view -> Snackbar.make(view, "Not in service", Snackbar.LENGTH_SHORT).show());
+
         return binding.getRoot();
     }
 
