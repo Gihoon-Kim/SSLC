@@ -14,6 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
+            android:name=".teacher_side_activities.TeacherNotificationDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_teacher_notification_detail"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
+            android:name=".teacher_side_activities.TeacherNotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".teacher_side_activities.ui.myClassMain.TeacherMyClassDetail"
             android:exported="false"
             android:label="@string/title_activity_teacher_my_class_detail"

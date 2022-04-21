@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sslc.databinding.FragmentHomeBinding;
 import com.example.sslc.teacher_side_activities.TeacherMyClassActivity;
+import com.example.sslc.teacher_side_activities.TeacherNotificationActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -29,6 +30,11 @@ public class HomeFragment extends Fragment {
             intent.putExtra("teacherID", requireActivity().getIntent().getStringExtra("teacherID"));
             startActivity(intent);
         });
+
+        LinearLayout ll_notification = binding.llNotification;
+        ll_notification.setOnClickListener(view ->
+                startActivity(new Intent(getActivity(), TeacherNotificationActivity.class))
+        );
         return binding.getRoot();
     }
 

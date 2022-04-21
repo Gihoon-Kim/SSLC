@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".teacher_side_activities.TeacherNotificationDetailActivity"
+    tools:showIn="@layout/activity_teacher_notification_detail">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <LinearLayout
+            android:id="@+id/ll_newsDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent" >
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post Date : "
+                android:textSize="14sp"
+                android:layout_margin="10dp"
+                android:textColor="@color/black" />
+            
+            <TextView
+                android:id="@+id/tv_newsDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_margin="10dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_newsDescription"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Description"
+            android:textSize="16sp"
+            android:background="@drawable/edittext_box"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/ll_newsDate" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

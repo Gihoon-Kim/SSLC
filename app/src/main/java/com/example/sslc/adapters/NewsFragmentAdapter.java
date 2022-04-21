@@ -21,10 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.sslc.admin_side_activities.AdminNewsDetailActivity;
 import com.example.sslc.R;
+import com.example.sslc.admin_side_activities.AdminNewsDetailActivity;
 import com.example.sslc.data.NewsData;
 import com.example.sslc.requests.DeleteNewsRequest;
+import com.example.sslc.teacher_side_activities.TeacherNotificationDetailActivity;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 
@@ -44,12 +45,29 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
     ActivityResultLauncher<Intent> updateNewsActivityResultLauncher;
     ProgressDialog progressDialog;
 
-    public NewsFragmentAdapter(Context context, ArrayList<NewsData> newsDataList, ActivityResultLauncher<Intent> updateNewsActivityResultLauncher) {
+    public NewsFragmentAdapter(
+            Context context,
+            ArrayList<NewsData> newsDataList
+    ) {
+
+        this.context = context;
+        this.newsDataList = newsDataList;
+        this.updateNewsActivityResultLauncher = null;
+        Log.i(TAG, context.getPackageCodePath());
+    }
+
+    public NewsFragmentAdapter(
+            Context context,
+            ArrayList<NewsData> newsDataList,
+            ActivityResultLauncher<Intent> updateNewsActivityResultLauncher
+    ) {
 
         this.newsDataList = newsDataList;
         this.context = context;
         this.updateNewsActivityResultLauncher = updateNewsActivityResultLauncher;
+        Log.i(TAG, context.getPackageCodePath());
     }
+
 
     @NonNull
     @Override
@@ -86,27 +104,39 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
                 newsDataList.get(position).getCreatedAt()
         );
 
-        holder.cv_Item.setOnClickListener(view -> {
+        if (updateNewsActivityResultLauncher != null) {
+            holder.cv_Item.setOnClickListener(view -> {
 
-            Intent intent = new Intent(context, AdminNewsDetailActivity.class);
-            intent.putExtra("newsNumber", newsDataList.get(position).getNewsID());
-            intent.putExtra("newsTitle", newsDataList.get(position).getTitle());
-            intent.putExtra("newsDescription", newsDataList.get(position).getDescription());
-            updateNewsActivityResultLauncher.launch(intent);
-        });
+                Intent intent = new Intent(context, AdminNewsDetailActivity.class);
+                intent.putExtra("newsNumber", newsDataList.get(position).getNewsID());
+                intent.putExtra("newsTitle", newsDataList.get(position).getTitle());
+                intent.putExtra("newsDescription", newsDataList.get(position).getDescription());
+                updateNewsActivityResultLauncher.launch(intent);
+            });
 
-        holder.cv_Item.setOnLongClickListener(view -> {
+            holder.cv_Item.setOnLongClickListener(view -> {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage("Do you really want to remove this News?")
-                    .setTitle("Delete News : " + newsDataList.get(position).getTitle())
-                    .setPositiveButton("Delete", (dialogInterface, i) ->
-                            deleteNewsFromListAndDatabase(position, newsDataList.get(position).getNewsID()))
-                    .setNegativeButton("Cancel", null)
-                    .show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Do you really want to remove this News?")
+                        .setTitle("Delete News : " + newsDataList.get(position).getTitle())
+                        .setPositiveButton("Delete", (dialogInterface, i) ->
+                                deleteNewsFromListAndDatabase(position, newsDataList.get(position).getNewsID()))
+                        .setNegativeButton("Cancel", null)
+                        .show();
 
-            return true;
-        });
+                return true;
+            });
+        } else {
+
+            holder.cv_Item.setOnClickListener(view -> {
+
+                Intent intent = new Intent(context, TeacherNotificationDetailActivity.class);
+                intent.putExtra(context.getString(R.string.news_title), newsDataList.get(position).getTitle());
+                intent.putExtra(context.getString(R.string.news_description), newsDataList.get(position).getDescription());
+                intent.putExtra(context.getString(R.string.news_createdAt), newsDataList.get(position).getCreatedAt());
+                context.startActivity(intent);
+            });
+        }
     }
 
     private void deleteNewsFromListAndDatabase(int position, int newsID) {

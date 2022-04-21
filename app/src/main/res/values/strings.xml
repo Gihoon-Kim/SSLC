@@ -191,5 +191,7 @@
     <string name="homework_title">homeworkTitle</string>
     <string name="homework_script">homeworkScript</string>
     <string name="homework_deadline">homeworkDeadline</string>
+    <string name="title_activity_teacher_notification_detail">TeacherNotificationDetailActivity
+    </string>
 
 </resources>

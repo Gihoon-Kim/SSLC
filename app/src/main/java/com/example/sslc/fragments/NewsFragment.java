@@ -43,6 +43,7 @@ public class NewsFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_News)
     RecyclerView rv_News;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.shimmer_Layout)
     ShimmerFrameLayout shimmerFrameLayout;
 
