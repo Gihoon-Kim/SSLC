@@ -5,8 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +21,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.sslc.sslc.admin_side_activities.AdminTeacherDetailActivity;
-import com.sslc.sslc.R;
-import com.sslc.sslc.data.Teacher;
-import com.sslc.sslc.requests.DeleteTeacherRequest;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.sslc.sslc.R;
+import com.sslc.sslc.admin_side_activities.AdminTeacherDetailActivity;
+import com.sslc.sslc.data.Teacher;
+import com.sslc.sslc.requests.DeleteTeacherRequest;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -100,6 +102,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
             intent.putExtra(context.getString(R.string.teacher_class), teacherList.get(holder.getAdapterPosition()).getMyClass());
             intent.putExtra(context.getString(R.string.teacher_dob), teacherList.get(holder.getAdapterPosition()).getDob());
             intent.putExtra(context.getString(R.string.teacher_introduce), teacherList.get(holder.getAdapterPosition()).getAboutMe());
+            intent.putExtra(context.getString(R.string.has_profile_image), teacherList.get(holder.getAdapterPosition()).hasProfileImage());
 
             updateTeacherActivityResultLauncher.launch(intent);
         });
@@ -204,12 +207,14 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
             } else {
 
-                // TODO : GET PROFILE IMAGE FROM FIREBASE
-                /*
-                Glide.with(context)
-                        .load(teacherProfileImage)
-                        .into(iv_TeacherProfileImage);
-                 */
+                File file = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img");
+
+                if (!file.isDirectory()) {
+
+                    file.mkdir();
+                }
+
+                downloadImg(context, teacherName);
             }
 
             tv_TeacherName.setText(teacherName);
@@ -222,6 +227,19 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
                 tv_TeacherIntroduce.setText(teacherIntroduce);
             }
+        }
+
+        private void downloadImg(Context context, String teacherName) {
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference();
+            storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri ->
+                            Glide.with(context)
+                                    .load(uri)
+                                    .into(iv_TeacherProfileImage))
+                    .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
         }
     }
 }

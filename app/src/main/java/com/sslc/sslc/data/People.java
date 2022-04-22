@@ -1,12 +1,14 @@
 package com.sslc.sslc.data;
 
+import android.net.Uri;
+
 public class People {
 
     String name;
     String dob;
     String myClass;
     String aboutMe;
-    boolean hasProfileImage;
+    boolean hasProfileImage = false;
     boolean isTeacher;
 
     public People(
@@ -96,9 +98,4 @@ public class People {
     public void setTeacher(boolean teacher) {
         isTeacher = teacher;
     }
-
-    public void setHasProfileImage(boolean hasProfileImage) {
-        this.hasProfileImage = hasProfileImage;
-    }
-
 }

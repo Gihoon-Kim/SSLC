@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.AppData;
 import com.sslc.sslc.databinding.ActivityAdminTeacherDetailBinding;
@@ -34,6 +37,7 @@ import com.sslc.sslc.requests.UpdateTeacherRequest;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,34 +88,45 @@ public class AdminTeacherDetailActivity
 
         // Get Data and set basic UI
         Intent intent = getIntent();
-        teacherNumber = intent.getIntExtra("teacherNumber", 0);
-        String teacherName = intent.getStringExtra("teacherName");
+        teacherNumber = intent.getIntExtra(getString(R.string.teacher_number), 0);
+        String teacherName = intent.getStringExtra(getString(R.string.teacher_name));
         binding.tvTeacherName.setText(teacherName);
-        String teacherClass = intent.getStringExtra("teacherClass");
+        String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).setText(teacherClass);
-        String teacherIntroduce = intent.getStringExtra("teacherIntroduce");
+        String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
         Objects.requireNonNull(binding.etTeacherIntroduce).setText(teacherIntroduce);
-        String teacherDOB = intent.getStringExtra("teacherDOB");
+        String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setText(teacherDOB);
-        boolean hasProfileImage = intent.getBooleanExtra("hasProfileImage", false);
+        boolean hasProfileImage = intent.getBooleanExtra(getString(R.string.has_profile_image), false);
 
         if (hasProfileImage) {
 
             // TODO : GET PROFILE IMAGE FROM FIREBASE
-            /*
-            Glide.with(getApplicationContext())
-                    .load(
-                            BitmapFactory.decodeByteArray(
-                                    intent.getByteArrayExtra(getString(R.string.teacher_image)),
-                                    0,
-                                    teacherProfileImage.length
-                            )
-                    )
-                    .into(binding.ivTeacherProfileImage);
-             */
+
+            File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img");
+
+            if (!file.isDirectory()) {
+
+                file.mkdir();
+            }
+
+            downloadImg(teacherName);
         }
 
         initActivityResultLauncher();
+    }
+
+    private void downloadImg(String teacherName) {
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
+                .getDownloadUrl()
+                .addOnSuccessListener(uri ->
+                        Glide.with(this)
+                                .load(uri)
+                                .into(binding.ivTeacherProfileImage))
+                .addOnFailureListener(e -> Toast.makeText(this, "Download Image Failed", Toast.LENGTH_SHORT).show());
     }
 
     public void initActivityResultLauncher() {

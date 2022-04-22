@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.sslc.sslc.R;
-import com.sslc.sslc.adapters.TabAdapter;
 import com.google.android.material.tabs.TabLayout;
+import com.sslc.sslc.R;
 
 import java.util.Objects;
 
@@ -44,11 +42,8 @@ public class AdminMainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Class"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final TabAdapter tabAdapter = new TabAdapter(
-                getSupportFragmentManager(),
-                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-        );
-        viewPager.setAdapter(tabAdapter);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

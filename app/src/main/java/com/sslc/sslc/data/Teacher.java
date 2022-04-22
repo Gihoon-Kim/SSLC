@@ -1,5 +1,7 @@
 package com.sslc.sslc.data;
 
+import android.net.Uri;
+
 public class Teacher extends People {
 
     int teacherNumber;
@@ -13,7 +15,7 @@ public class Teacher extends People {
             boolean hasProfileImage,
             boolean isTeacher
     ) {
-        super(name, dob, myClass, aboutMe, isTeacher, hasProfileImage);
+        super(name, dob, myClass, aboutMe, hasProfileImage, isTeacher);
 
         this.teacherNumber = teacherNumber;
     }

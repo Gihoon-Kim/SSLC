@@ -115,18 +115,15 @@ public class TeacherFragment extends Fragment {
 
                 if (success) {
 
+                    Log.i(TAG, teacherItem.toString());
                     int teacherNumber = teacherItem.getInt(getString(R.string.teacher_number));
                     String teacherName = teacherItem.getString(getString(R.string.teacher_name));
                     String teacherDOB = teacherItem.getString(getString(R.string.teacher_dob));
                     String teacherClass = teacherItem.getString(getString(R.string.teacher_class));
                     String teacherIntroduce = teacherItem.getString(getString(R.string.teacher_introduce));
-                    boolean hasProfileImage = teacherItem.getInt(getString(R.string.has_profile_image)) == 1;
+                    boolean hasProfileImage = teacherItem.getString(getString(R.string.has_profile_image)).equals("1");
+                    Log.i(TAG, String.valueOf(hasProfileImage));
 
-                    if (hasProfileImage) {
-
-                        // TODO : GET IMAGE FROM FIREBASE
-                    }
-                    
                     Teacher teacher = new Teacher(
                             teacherNumber,
                             teacherName,
