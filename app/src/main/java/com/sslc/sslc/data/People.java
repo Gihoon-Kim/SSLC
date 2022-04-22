@@ -67,6 +67,11 @@ public class People {
         return hasProfileImage;
     }
 
+    public void setHasProfileImage(boolean hasProfileImage) {
+
+        this.hasProfileImage = hasProfileImage;
+    }
+
     public String getDob() {
         return dob;
     }

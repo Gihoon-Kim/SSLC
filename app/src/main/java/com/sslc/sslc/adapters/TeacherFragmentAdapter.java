@@ -151,6 +151,17 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
 
             if (success) {
 
+                // Delete image from Firebase
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference reference = storage.getReference();
+                StorageReference deleteReference = reference.child("profile_img/".concat("profile_teacher_").concat(teacherList.get(position).getName()).concat(".jpg"));
+                deleteReference.delete()
+                        .addOnSuccessListener(unused -> {
+                        })
+                        .addOnFailureListener(e -> {
+                        });
+
+                // Delete from list
                 teacherList.remove(position);
                 notifyDataSetChanged();
             } else {
@@ -202,6 +213,18 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 boolean hasProfileImage
         ) {
 
+            tv_TeacherName.setText(teacherName);
+            tv_TeacherDOB.setText(teacherDOB);
+            tv_TeacherClass.setText(teacherClass);
+
+            if (teacherIntroduce.length() > 15) {
+
+                tv_TeacherIntroduce.setText(teacherIntroduce.substring(0, 15).concat(".."));
+            } else {
+
+                tv_TeacherIntroduce.setText(teacherIntroduce);
+            }
+
             if (!hasProfileImage) {
 
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
@@ -214,32 +237,16 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                     file.mkdir();
                 }
 
-                downloadImg(context, teacherName);
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference();
+                storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
+                        .getDownloadUrl()
+                        .addOnSuccessListener(uri ->
+                                Glide.with(context)
+                                        .load(uri)
+                                        .into(iv_TeacherProfileImage))
+                        .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
             }
-
-            tv_TeacherName.setText(teacherName);
-            tv_TeacherDOB.setText(teacherDOB);
-            tv_TeacherClass.setText(teacherClass);
-            if (teacherIntroduce.length() > 15) {
-
-                tv_TeacherIntroduce.setText(teacherIntroduce.substring(0, 15).concat(".."));
-            } else {
-
-                tv_TeacherIntroduce.setText(teacherIntroduce);
-            }
-        }
-
-        private void downloadImg(Context context, String teacherName) {
-
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageReference = storage.getReference();
-            storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
-                    .getDownloadUrl()
-                    .addOnSuccessListener(uri ->
-                            Glide.with(context)
-                                    .load(uri)
-                                    .into(iv_TeacherProfileImage))
-                    .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
         }
     }
 }

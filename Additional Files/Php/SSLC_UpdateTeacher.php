@@ -6,12 +6,12 @@
 
     $conn = mysqli_connect($servername, $hostname, $password, $db_name);
 
-    $teacherID = $_POST["teacherNumber"];
+    $teacherID = $_POST["teacherID"];
     $teacherName = $_POST["teacherName"];
     $teacherClass = $_POST["teacherClass"];
     $teacherIntroduce = $_POST["teacherIntroduce"];
     $teacherDOB = $_POST["teacherDOB"];
-    $teacherImage = $_POST["teacherImage"];
+    $hasProfileImage = $_POST["hasProfileImage"];
     
     $statement = mysqli_prepare(
         $conn,
@@ -20,7 +20,7 @@
                 teacherDOB = '$teacherDOB',
                 teacherClass = '$teacherClass',
                 teacherIntroduce = '$teacherIntroduce',
-                teacherImage = '$teacherImage'
+                hasProfileImage = '$hasProfileImage'
             WHERE teacherNumber = '$teacherID'"
     );
     mysqli_stmt_execute($statement);

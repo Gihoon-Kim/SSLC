@@ -1,5 +1,7 @@
 package com.sslc.sslc.requests;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
@@ -19,7 +21,7 @@ public class UpdateTeacherRequest extends StringRequest {
             String teacherClass,
             String teacherIntroduce,
             String teacherDOB,
-            String teacherImage,
+            int hasProfileImage,
             Response.Listener<String> listener
     ) {
         super(Method.POST, URL, listener, null);
@@ -30,7 +32,8 @@ public class UpdateTeacherRequest extends StringRequest {
         map.put("teacherDOB", teacherDOB);
         map.put("teacherClass", teacherClass);
         map.put("teacherIntroduce", teacherIntroduce);
-        map.put("teacherImage", teacherImage);
+        Log.i("UpdateTeacherRequest", String.valueOf(hasProfileImage));
+        map.put("hasProfileImage", String.valueOf(hasProfileImage));
     }
 
     @Nullable

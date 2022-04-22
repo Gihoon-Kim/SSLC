@@ -188,6 +188,8 @@ public class TeacherFragment extends Fragment {
                         String teacherClass = intent.getStringExtra(getString(R.string.teacher_class));
                         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
                         String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
+                        boolean hasProfileImage = intent.getIntExtra("hasProfileImage", 0) == 1;
+                        Log.i(TAG, "After Update " + hasProfileImage);
 
                         for (int i = 0; i < teacherList.size(); i++) {
 
@@ -197,6 +199,7 @@ public class TeacherFragment extends Fragment {
                                 teacherList.get(i).setDob(teacherDOB);
                                 teacherList.get(i).setMyClass(teacherClass);
                                 teacherList.get(i).setAboutMe(teacherIntroduce);
+                                teacherList.get(i).setHasProfileImage(hasProfileImage);
                                 teacherFragmentAdapter.notifyItemChanged(i);
                                 break;
                             }

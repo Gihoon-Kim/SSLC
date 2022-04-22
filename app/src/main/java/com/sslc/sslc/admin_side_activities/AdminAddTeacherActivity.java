@@ -186,7 +186,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
 
             if (!binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
 
-                // TODO : UPLOAD PROFILE IMAGE TO FIREBASE
                 hasProfileImage = 1;
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -264,7 +263,6 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                     intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
                     intent.putExtra(getString(R.string.teacher_number), jsonResponse.getInt("rowCount") + 1);
                     intent.putExtra("hasProfileImage", hasProfileImage);
-                    intent.putExtra("profileImageUri", selectedImageUri);
                     setResult(9003, intent);
                     finish();
                 } else {

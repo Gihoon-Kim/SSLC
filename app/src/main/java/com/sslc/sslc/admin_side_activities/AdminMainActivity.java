@@ -35,28 +35,8 @@ public class AdminMainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         ButterKnife.bind(this);
 
-        // add the tabs
-        tabLayout.addTab(tabLayout.newTab().setText("News"));
-        tabLayout.addTab(tabLayout.newTab().setText("Teacher"));
-        tabLayout.addTab(tabLayout.newTab().setText("Student"));
-        tabLayout.addTab(tabLayout.newTab().setText("Class"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.AppData;
 import com.sslc.sslc.databinding.ActivityAdminTeacherDetailBinding;
@@ -36,7 +34,6 @@ import com.sslc.sslc.requests.UpdateTeacherRequest;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,8 +47,7 @@ import java.util.Objects;
  */
 public class AdminTeacherDetailActivity
         extends AppCompatActivity
-        implements ChangeNewsTitleDialogListener, ApplyClassListListener
-{
+        implements ChangeNewsTitleDialogListener, ApplyClassListListener {
 
     private static final String TAG = AdminTeacherDetailActivity.class.getSimpleName();
 
@@ -59,6 +55,8 @@ public class AdminTeacherDetailActivity
     private ActivityResultLauncher<Intent> updateTeacherProfileImageFromGalleryResultLauncher;
 
     int teacherNumber;
+    Uri selectedImageUri;
+    int hasProfileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +75,7 @@ public class AdminTeacherDetailActivity
 
             TeacherClassesDialog teacherClassesDialog = new TeacherClassesDialog(
                     this,
-                    ((AppData)getApplication()).getClassList()
+                    ((AppData) getApplication()).getClassList()
             );
             teacherClassesDialog.callDialog();
         });
@@ -97,11 +95,9 @@ public class AdminTeacherDetailActivity
         Objects.requireNonNull(binding.etTeacherIntroduce).setText(teacherIntroduce);
         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
         Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).setText(teacherDOB);
-        boolean hasProfileImage = intent.getBooleanExtra(getString(R.string.has_profile_image), false);
+        hasProfileImage = intent.getBooleanExtra(getString(R.string.has_profile_image), false) ? 1 : 0;
 
-        if (hasProfileImage) {
-
-            // TODO : GET PROFILE IMAGE FROM FIREBASE
+        if (hasProfileImage == 1) {
 
             File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img");
 
@@ -140,7 +136,6 @@ public class AdminTeacherDetailActivity
                         Toast.makeText(this, R.string.get_image_cancelled, Toast.LENGTH_SHORT).show();
                     } else {
 
-                        Uri selectedImageUri;
                         selectedImageUri = Objects.requireNonNull(result.getData())
                                 .getData();
                         Glide.with(getApplicationContext())
@@ -196,7 +191,7 @@ public class AdminTeacherDetailActivity
                 Integer.parseInt(dayMonthYear[2]),
                 Integer.parseInt(dayMonthYear[1]) - 1,
                 Integer.parseInt(dayMonthYear[0])
-                ).show();
+        ).show();
     }
 
     private void updateTeacher() {
@@ -206,80 +201,82 @@ public class AdminTeacherDetailActivity
         progressDialog.setMessage(getString(R.string.update_in_progress));
         progressDialog.show();
 
-        // Image to String
-        // If the profile image is not selected ( it is based image ),
-        // teacherImage has no value ("")
-        String teacherImage;
-        if (binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
-
-            teacherImage = "";
-        } else {
-
-            BitmapDrawable drawable = (BitmapDrawable) binding.ivTeacherProfileImage.getDrawable();
-            Bitmap bitmap = drawable.getBitmap();
-            teacherImage = bitmapToString(bitmap);
-        }
-
-        Response.Listener<String> responseListener = response -> updateTeacherRequest(
-                progressDialog,
-                teacherImage,
-                response
-        );
-        UpdateTeacherRequest updateTeacherRequest = new UpdateTeacherRequest(
-                teacherNumber,
-                binding.tvTeacherName.getText().toString(),
-                Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString(),
-                Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString(),
-                Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString(),
-                teacherImage,
-                responseListener
-        );
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(updateTeacherRequest);
-    }
-
-    private void updateTeacherRequest(ProgressDialog progressDialog, String teacherImage, String response) {
-
         try {
+            if (!binding.ivTeacherProfileImage.getDrawable().toString().contains(getString(R.string.vector_drawable))) {
 
-            Log.i(TAG, response);
-            JSONObject jsonObject = new JSONObject(response);
-            boolean success = jsonObject.getBoolean(getString(R.string.success));
-            progressDialog.dismiss();
+                hasProfileImage = 1;
 
-            if(success) {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference();
 
-                Intent intent = new Intent(this, TeacherFragment.class);
-                intent.putExtra(getString(R.string.teacher_number), teacherNumber);
-                intent.putExtra(getString(R.string.teacher_name), binding.tvTeacherName.getText().toString());
-                intent.putExtra(getString(R.string.teacher_class), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
-                intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString());
-                intent.putExtra(getString(R.string.teacher_dob), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
-                intent.putExtra(getString(R.string.teacher_image), teacherImage);
-                setResult(9004, intent);
-                finish();
-            } else {
+                String fileName = "profile_teacher_".concat(binding.tvTeacherName.getText().toString()).concat(".jpg");
+                StorageReference riversRef = storageReference.child("profile_img/" + fileName);
+                riversRef.delete()
+                        .addOnSuccessListener(unused -> { })
+                        .addOnFailureListener(e -> { });
 
-                Toast.makeText(this, getString(R.string.teacher_update_failed), Toast.LENGTH_SHORT).show();
+                UploadTask uploadTask = riversRef.putFile(selectedImageUri);
+
+                // Save New Profile Image
+                uploadTask.addOnFailureListener(
+                        e -> Toast.makeText(this, "Profile Image Upload Failed", Toast.LENGTH_SHORT).show())
+                        .addOnSuccessListener(
+                                taskSnapshot -> Toast.makeText(this, "Profile Image Uploaded", Toast.LENGTH_SHORT).show()
+                        );
             }
         } catch (Exception e) {
+
             e.printStackTrace();
+        } finally {
+
+            Response.Listener<String> responseListener = response -> {
+
+                try {
+
+                    Log.i(TAG, response);
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean(getString(R.string.success));
+                    progressDialog.dismiss();
+
+                    if (success) {
+
+                        Intent intent = new Intent(this, TeacherFragment.class);
+                        intent.putExtra(getString(R.string.teacher_number), teacherNumber);
+                        intent.putExtra(getString(R.string.teacher_name), binding.tvTeacherName.getText().toString());
+                        intent.putExtra(getString(R.string.teacher_class), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString());
+                        intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString());
+                        intent.putExtra(getString(R.string.teacher_dob), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
+                        intent.putExtra(getString(R.string.has_profile_image), hasProfileImage);
+                        setResult(9004, intent);
+                        finish();
+                    } else {
+
+                        Toast.makeText(this, getString(R.string.teacher_update_failed), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+            UpdateTeacherRequest updateTeacherRequest = new UpdateTeacherRequest(
+                    teacherNumber,
+                    binding.tvTeacherName.getText().toString(),
+                    Objects.requireNonNull(binding.teacherDetailContents.tvTeacherClass).getText().toString(),
+                    Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString(),
+                    Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText().toString(),
+                    hasProfileImage,
+                    responseListener
+            );
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(updateTeacherRequest);
         }
-    }
 
-    private String bitmapToString(Bitmap bitmap) {
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
-        byte[] byteArrayVar = outputStream.toByteArray();
-        return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
     }
 
     @Override
     public void applyNewTitle(String newTitle) {
 
-    binding.tvTeacherName.setText(newTitle);
-}
+        binding.tvTeacherName.setText(newTitle);
+    }
 
     @Override
     public void applyClassList(ArrayList<String> classList) {
