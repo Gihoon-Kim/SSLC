@@ -17,7 +17,6 @@ public class UpdateMeRequest extends StringRequest {
             String userID,
             String userDOB,
             String userIntroduce,
-            String userImage,
             String isTeacher,
             Response.Listener<String> listener
     ) {
@@ -27,7 +26,6 @@ public class UpdateMeRequest extends StringRequest {
         map.put("userID", userID);
         map.put("userDOB", userDOB);
         map.put("userIntroduce", userIntroduce);
-        map.put("userImage", userImage);
         map.put("isTeacher", isTeacher);
     }
 

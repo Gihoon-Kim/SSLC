@@ -7,15 +7,10 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,15 +34,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sslc.sslc.R;
+import com.sslc.sslc.data.Teacher;
 import com.sslc.sslc.databinding.FragmentModifyInformationBinding;
 import com.sslc.sslc.requests.UpdateMeRequest;
 import com.sslc.sslc.teacher_side_activities.TeacherMainViewModel;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
@@ -56,19 +53,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ModifyInformationFragment extends Fragment {
 
-    private ModifyInformationViewModel modifyInformationViewModel;
     private TeacherMainViewModel mainViewModel;
     private FragmentModifyInformationBinding binding;
     private ActivityResultLauncher<Intent> getImageActivityResultLauncher;
 
     private static final String TAG = ModifyInformationFragment.class.getSimpleName();
 
+    private Uri selectedImageUri;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        modifyInformationViewModel =
-                new ViewModelProvider(this).get(ModifyInformationViewModel.class);
         mainViewModel =
                 new ViewModelProvider(requireActivity()).get(TeacherMainViewModel.class);
 
@@ -85,45 +81,25 @@ public class ModifyInformationFragment extends Fragment {
 
     public void setViews() {
 
-        modifyInformationViewModel.setName(requireActivity().getIntent().getStringExtra("teacherName"));
-        modifyInformationViewModel.setDob(requireActivity().getIntent().getStringExtra("teacherDOB"));
-        modifyInformationViewModel.setIntroduce(requireActivity().getIntent().getStringExtra("teacherIntroduce"));
-
         final TextView tv_Name = binding.tvName;
-        modifyInformationViewModel.getName().observe(
-                getViewLifecycleOwner(),
-                tv_Name::setText
-        );
+        tv_Name.setText(Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getName());
 
         final TextView tv_DOB = binding.tvDOB;
-        modifyInformationViewModel.getDOB().observe(
-                getViewLifecycleOwner(),
-                tv_DOB::setText
-        );
+        tv_DOB.setText(mainViewModel.getTeacherInformation().getValue().getDob());
+
         tv_DOB.setOnClickListener(view -> onStudentDOBClicked());
 
         final EditText et_Introduce = binding.etIntroduce;
-        modifyInformationViewModel.getIntroduce().observe(
-                getViewLifecycleOwner(),
-                et_Introduce::setText
-        );
+        et_Introduce.setText(mainViewModel.getTeacherInformation().getValue().getAboutMe());
 
         final CircleImageView iv_ProfileImage = binding.ivProfileImage;
-        if (!requireActivity().getIntent().getStringExtra("teacherProfileImage").equals("")) {
+        if (mainViewModel.getTeacherInformation().getValue().hasProfileImage()) {
 
-            try {
+            selectedImageUri = mainViewModel.getTeacherInformation().getValue().getProfileImage();
+            Glide.with(requireContext())
+                    .load(mainViewModel.getTeacherInformation().getValue().getProfileImage())
+                    .into(iv_ProfileImage);
 
-                byte[] encodeByte = Base64.decode(requireActivity().getIntent().getStringExtra("teacherProfileImage"), Base64.DEFAULT);
-                Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 60, encodeByte.length);
-                modifyInformationViewModel.setImage(profileBitmap);
-                modifyInformationViewModel.getImage().observe(
-                        getViewLifecycleOwner(),
-                        iv_ProfileImage::setImageBitmap
-                );
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
         } else {
 
             Glide.with(requireContext())
@@ -145,13 +121,6 @@ public class ModifyInformationFragment extends Fragment {
         progressDialog.setMessage(requireContext().getString(R.string.update_in_progress));
         progressDialog.show();
 
-        modifyInformationViewModel.setIntroduce(
-                binding.etIntroduce.getText().toString()
-        );
-        modifyInformationViewModel.setDob(
-                binding.tvDOB.getText().toString()
-        );
-
         Response.Listener<String> responseListener = response -> {
 
             try {
@@ -161,6 +130,44 @@ public class ModifyInformationFragment extends Fragment {
                 boolean success = jsonResponse.getBoolean(requireContext().getString(R.string.success));
 
                 if (success) {
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageReference = storage.getReference();
+
+                    String fileName = "profile_teacher_".concat(Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getName()).concat(".jpg");
+                    StorageReference riversRef = storageReference.child("profile_img/" + fileName);
+                    riversRef.delete()
+                            .addOnSuccessListener(unused -> { })
+                            .addOnFailureListener(e -> { });
+
+                    UploadTask uploadTask = riversRef.putFile(selectedImageUri);
+
+                    // Save New Profile Image
+                    uploadTask.addOnFailureListener(
+                            e -> Toast.makeText(requireContext(), "Profile Image Upload Failed", Toast.LENGTH_SHORT).show())
+                            .addOnSuccessListener(
+                                    taskSnapshot -> Toast.makeText(requireContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show()
+                            );
+
+                    Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).setAboutMe(
+                            binding.etIntroduce.getText().toString()
+                    );
+                    mainViewModel.getTeacherInformation().getValue().setDob(
+                            binding.tvDOB.getText().toString()
+                    );
+
+                    Teacher teacher = new Teacher(
+                            Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getName(),
+                            mainViewModel.getTeacherInformation().getValue().getDob(),
+                            mainViewModel.getTeacherInformation().getValue().getMyClass(),
+                            mainViewModel.getTeacherInformation().getValue().getAboutMe(),
+                            mainViewModel.getTeacherInformation().getValue().getId(),
+                            mainViewModel.getTeacherInformation().getValue().getPassword(),
+                            mainViewModel.getTeacherInformation().getValue().hasProfileImage(),
+                            true,
+                            selectedImageUri
+                    );
+                    mainViewModel.setTeacherInformation(teacher);
 
                     Toast.makeText(requireContext(), getString(R.string.update_complete), Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(requireView()).navigate(R.id.action_nav_modify_info_to_nav_home);
@@ -175,86 +182,15 @@ public class ModifyInformationFragment extends Fragment {
             }
         };
 
-        String profileImage;
-        if (modifyInformationViewModel.getImage().getValue() == null) {
-
-            profileImage = "";
-        } else {
-
-            profileImage = bitmapToString(modifyInformationViewModel.getImage().getValue());
-            mainViewModel.setImage(modifyInformationViewModel.getImage().getValue());
-        }
         UpdateMeRequest updateMeRequest = new UpdateMeRequest(
-                requireActivity().getIntent().getStringExtra("teacherID"),
-                modifyInformationViewModel.getDOB().getValue(),
-                modifyInformationViewModel.getIntroduce().getValue(),
-                profileImage,
+                Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getId(),
+                binding.tvDOB.getText().toString(),
+                binding.etIntroduce.getText().toString(),
                 "1",
                 responseListener
         );
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(updateMeRequest);
-    }
-
-    private Bitmap resize(Bitmap bm) {
-
-        Configuration config = getResources().getConfiguration();
-        if (config.smallestScreenWidthDp >= 800)
-            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
-        else if (config.smallestScreenWidthDp >= 600)
-            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
-        else if (config.smallestScreenWidthDp >= 400)
-            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
-        else if (config.smallestScreenWidthDp >= 360)
-            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
-        else
-            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
-        return bm;
-    }
-
-    @NonNull
-    private String bitmapToString(@NonNull Bitmap bitmap) {
-
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-//        byte[] byteArrayVar = outputStream.toByteArray();
-//        return Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
-
-        String image;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
-        image = byteArrayToBinaryString(byteArray);
-
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
-
-    @NonNull
-    private static String byteArrayToBinaryString(@NonNull byte[] byteArray) {
-
-        StringBuilder builder = new StringBuilder();
-
-        for (byte b : byteArray) {
-
-            builder.append(byteToBinaryString(b));
-        }
-
-        return builder.toString();
-    }
-
-    private static String byteToBinaryString(byte b) {
-
-        StringBuilder builder = new StringBuilder("00000000");
-
-        for (int bit = 0; bit < 8; bit++) {
-
-            if (((b >> bit) & 1) > 0) {
-
-                builder.setCharAt(7 - bit, '1');
-            }
-        }
-
-        return builder.toString();
     }
 
     private void onStudentDOBClicked() {
@@ -269,7 +205,7 @@ public class ModifyInformationFragment extends Fragment {
 
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
-            modifyInformationViewModel.setDob(simpleDateFormat.format(myCalendar.getTime()));
+            binding.tvDOB.setText(simpleDateFormat.format(myCalendar.getTime()));
         };
 
         new DatePickerDialog(
@@ -299,35 +235,11 @@ public class ModifyInformationFragment extends Fragment {
             Toast.makeText(requireContext(), "Get image cancelled", Toast.LENGTH_SHORT).show();
         } else {
 
-            Uri selectedImageUri = Objects.requireNonNull(result.getData()).getData();
+            selectedImageUri = Objects.requireNonNull(result.getData()).getData();
 
-            try {
-
-                Bitmap bitmap;
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-
-                    ImageDecoder.Source source = ImageDecoder.createSource(requireActivity().getContentResolver(), selectedImageUri);
-                    bitmap = ImageDecoder.decodeBitmap(source);
-
-                } else {
-
-                    bitmap = MediaStore.Images.Media.getBitmap(
-                            requireContext().getContentResolver(),
-                            selectedImageUri
-                    );
-                }
-
-                bitmap = resize(bitmap);
-
-                modifyInformationViewModel.setImage(bitmap);
-                modifyInformationViewModel.getImage().observe(
-                        getViewLifecycleOwner(),
-                        binding.ivProfileImage::setImageBitmap
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Glide.with(requireActivity())
+                    .load(selectedImageUri)
+                    .into(binding.ivProfileImage);
         }
     }
 

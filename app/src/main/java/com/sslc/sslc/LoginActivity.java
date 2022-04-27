@@ -109,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
                     intent.putExtra("teacherName", jsonResponse.getString("userName"));
-                    intent.putExtra("teacherID", jsonResponse.getString("userID"));
                     intent.putExtra("teacherDOB", jsonResponse.getString("userDOB"));
                     intent.putExtra("teacherClass", jsonResponse.getString("userClass"));
+                    intent.putExtra("teacherID", jsonResponse.getString("userID"));
                     intent.putExtra("teacherIntroduce", jsonResponse.getString("userIntroduce"));
                     intent.putExtra("teacherPassword", jsonResponse.getString("userPassword"));
                     intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));

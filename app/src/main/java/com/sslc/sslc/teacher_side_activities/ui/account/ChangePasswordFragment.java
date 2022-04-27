@@ -26,6 +26,8 @@ import com.sslc.sslc.teacher_side_activities.TeacherMainViewModel;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class ChangePasswordFragment extends Fragment {
 
     private static final String TAG = ChangePasswordFragment.class.getSimpleName();
@@ -60,9 +62,11 @@ public class ChangePasswordFragment extends Fragment {
 
                 viewModel.setError("Please fill all fields out");
             } else if (!binding.etCurrentPassword.getText().toString().equals(
-                    mainViewModel.getPassword().getValue())) {
+                    Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getPassword())) {
 
                 viewModel.setError("Current Password is not right");
+
+                binding.etCurrentPassword.setText("");
             } else if (!binding.etNewPassword.getText().toString().equals(
                     binding.etNewPasswordChecker.getText().toString())) {
 
@@ -93,7 +97,7 @@ public class ChangePasswordFragment extends Fragment {
 
                 if (success) {
 
-                    mainViewModel.setPassword(binding.etNewPassword.getText().toString());
+                    Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).setPassword(binding.etNewPassword.getText().toString());
                     Navigation.findNavController(requireView()).navigate(R.id.action_nav_changePassword_to_nav_home);
                 } else {
 
@@ -106,7 +110,7 @@ public class ChangePasswordFragment extends Fragment {
         };
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest(
-                mainViewModel.getId().getValue(),
+                Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getId(),
                 binding.etNewPassword.getText().toString(),
                 "1",
                 responseListener

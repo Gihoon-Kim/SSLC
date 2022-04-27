@@ -1,21 +1,13 @@
 package com.sslc.sslc.teacher_side_activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,13 +16,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sslc.sslc.ImageViewerActivity;
 import com.sslc.sslc.R;
+import com.sslc.sslc.data.Teacher;
 import com.sslc.sslc.databinding.ActivityTeacherMainBinding;
-import com.google.android.material.navigation.NavigationView;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,11 +32,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeacherMainActivity extends AppCompatActivity {
 
-    private static final String TAG = TeacherMainActivity.class.getSimpleName();
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityTeacherMainBinding binding;
-    private Intent intent;
-
     private TeacherMainViewModel mainViewModel;
 
     @Override
@@ -53,15 +44,24 @@ public class TeacherMainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarTeacherMain.toolbar);
-        intent = getIntent();
 
-        Log.i(TAG, "Teacher Name " + intent.getStringExtra("teacherName") +
-                "\nTeacher DOB " + intent.getStringExtra("teacherDOB") +
-                "\nTeacher ID " + intent.getStringExtra("teacherID") +
-                "\nTeacher Class " + intent.getStringExtra("teacherClass") +
-                "\nTeacher Introduce " + intent.getStringExtra("teacherIntroduce") +
-                "\nTeacher Password " + intent.getStringExtra("teacherPassword") +
-                "\nTeacher Image " + intent.getStringExtra("teacherProfileImage"));
+        // ViewModel
+        mainViewModel = new ViewModelProvider(this, new TeacherMainViewModelFactory())
+                .get(TeacherMainViewModel.class);
+
+        Teacher teacher = new Teacher(
+                getIntent().getStringExtra("teacherName"),
+                getIntent().getStringExtra("teacherDOB"),
+                getIntent().getStringExtra("teacherClass"),
+                getIntent().getStringExtra("teacherIntroduce"),
+                getIntent().getStringExtra("teacherID"),
+                getIntent().getStringExtra("password"),
+                getIntent().getIntExtra("hasProfileImage", 0) == 1,
+                true,
+                null
+        );
+
+        mainViewModel.setTeacherInformation(teacher);
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -83,41 +83,40 @@ public class TeacherMainActivity extends AppCompatActivity {
     private void setNavHeaderView() {
 
         TextView tv_TeacherName = binding.navView.getHeaderView(0).findViewById(R.id.tv_TeacherName);
-        tv_TeacherName.setText(intent.getStringExtra("teacherName"));
+        tv_TeacherName.setText(Objects.requireNonNull(mainViewModel.getTeacherInformation().getValue()).getName());
         TextView tv_Logout = binding.navView.getHeaderView(0).findViewById(R.id.tv_LogOut);
         tv_Logout.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         CircleImageView iv_TeacherProfileImage = binding.navView.getHeaderView(0).findViewById(R.id.iv_TeacherProfileImage);
 
-        // ViewModel
-        mainViewModel = new ViewModelProvider(this, new TeacherMainViewModelFactory())
-                .get(TeacherMainViewModel.class);
+        final Observer<Teacher> teacherObserver = teacher -> {
+            // Update the UI, in this case, a TextView.
+            iv_TeacherProfileImage.setImageURI(teacher.getProfileImage());
+        };
 
-        // Initialize ViewModel
-        mainViewModel.setId(getIntent().getStringExtra("teacherID"));
-        mainViewModel.setDob(getIntent().getStringExtra("teacherDOB"));
-        mainViewModel.setIntroduce(getIntent().getStringExtra("teacherIntroduce"));
-        mainViewModel.setPassword(getIntent().getStringExtra("teacherPassword"));
-
-        // Define Observer - Handlers to handle when data changes events occur.
-        Observer<Bitmap> imageObserver = iv_TeacherProfileImage::setImageBitmap;
-
-        // Attach the observer into ViewModel
-        mainViewModel.getImage().observe(this, imageObserver);
+        mainViewModel.getTeacherInformation().observe(
+                this,
+                teacherObserver
+        );
 
         // Set Profile Image
-        if (intent.getIntExtra("hasProfileImage", 0) == 1) {
+        if (mainViewModel.getTeacherInformation().getValue().hasProfileImage()) {
 
-            // Teacher profile image decode and set profile image up
-            byte[] encodeByte = Base64.decode(intent.getStringExtra("teacherProfileImage"), Base64.DEFAULT);
-            Log.i(TAG, Arrays.toString(encodeByte));
-            Bitmap profileBitmap = BitmapFactory.decodeByteArray(encodeByte, 40, encodeByte.length);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference();
+            storageReference.child("profile_img/".concat("profile_teacher_").concat(mainViewModel.getTeacherInformation().getValue().getName()).concat(".jpg"))
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
 
-            mainViewModel.setImage(profileBitmap);
+                        mainViewModel.getTeacherInformation().getValue().setProfileImage(uri);
+
+                        Glide.with(TeacherMainActivity.this)
+                                .load(mainViewModel.getTeacherInformation().getValue().getProfileImage())
+                                .into(iv_TeacherProfileImage);
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(this, "Download Image Failed", Toast.LENGTH_SHORT).show());
         } else {
 
-            Bitmap bitmap = getBitmapFromVectorDrawable(R.drawable.ic_baseline_person_24);
-
-            mainViewModel.setImage(bitmap);
+            mainViewModel.getTeacherInformation().getValue().setProfileImage(null);
         }
 
         tv_Logout.setOnClickListener(view -> {
@@ -128,44 +127,10 @@ public class TeacherMainActivity extends AppCompatActivity {
 
         iv_TeacherProfileImage.setOnClickListener(view -> {
 
-            //Convert to byte array
-            Bitmap bmp = mainViewModel.getImage().getValue();
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            Objects.requireNonNull(bmp).compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
             Intent imageIntent = new Intent(TeacherMainActivity.this, ImageViewerActivity.class);
-            imageIntent.putExtra("profileImage", byteArray);
+            imageIntent.putExtra("profileImage", mainViewModel.getTeacherInformation().getValue().getProfileImage());
             startActivity(imageIntent);
         });
-    }
-
-    private Bitmap getBitmapFromVectorDrawable(int resId) {
-
-        Drawable drawable = ContextCompat.getDrawable(
-                this,
-                resId
-        );
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
-            drawable = (DrawableCompat.wrap(Objects.requireNonNull(drawable))).mutate();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(
-                Objects.requireNonNull(drawable).getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(),
-                Bitmap.Config.ARGB_8888
-        );
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(
-                0,
-                0,
-                canvas.getWidth(),
-                canvas.getHeight()
-        );
-        drawable.draw(canvas);
-        return bitmap;
     }
 
     @Override

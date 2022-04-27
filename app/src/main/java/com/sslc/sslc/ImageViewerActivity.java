@@ -3,6 +3,7 @@ package com.sslc.sslc;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -29,11 +30,10 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         try {
 
-            byte[] byteArray = getIntent().getByteArrayExtra("profileImage");
-            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            Uri profileImage = getIntent().getParcelableExtra("profileImage");
 
             Glide.with(this)
-                    .load(bmp)
+                    .load(profileImage)
                     .into(iv_ProfileImage);
         } catch (Exception e) {
 

@@ -8,6 +8,8 @@ public class People {
     String dob;
     String myClass;
     String aboutMe;
+    String id;
+    String password;
     Uri profileImage;
     boolean hasProfileImage = false;
     boolean isTeacher;
@@ -32,7 +34,8 @@ public class People {
             String myClass,
             String aboutMe,
             boolean hasProfileImage,
-            boolean isTeacher
+            boolean isTeacher,
+            Uri profileImage
     ) {
 
         this.name = name;
@@ -41,6 +44,7 @@ public class People {
         this.aboutMe = aboutMe;
         this.hasProfileImage = hasProfileImage;
         this.isTeacher = isTeacher;
+        this.profileImage = profileImage;
     }
 
     public People(
@@ -54,6 +58,29 @@ public class People {
         this.dob = dob;
         this.aboutMe = aboutMe;
         this.hasProfileImage = hasProfileImage;
+    }
+
+    public People(
+            String name,
+            String dob,
+            String myClass,
+            String aboutMe,
+            String id,
+            String password,
+            boolean hasProfileImage,
+            boolean isTeacher,
+            Uri profileImageUri
+    ) {
+
+        this.name = name;
+        this.dob = dob;
+        this.myClass = myClass;
+        this.aboutMe = aboutMe;
+        this.id = id;
+        this.password = password;
+        this.hasProfileImage = hasProfileImage;
+        this.isTeacher = isTeacher;
+        this.profileImage = profileImageUri;
     }
 
     public String getName() {
@@ -111,5 +138,21 @@ public class People {
 
     public void setProfileImage(Uri profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

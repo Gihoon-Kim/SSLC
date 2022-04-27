@@ -9,15 +9,13 @@
     $userID = $_POST["userID"];
     $userIntroduce = $_POST["userIntroduce"];
     $userDOB = $_POST["userDOB"];
-    $userImage = $_POST["userImage"];
     $isTeacher = $_POST["isTeacher"];
     
     $statement = mysqli_prepare(
         $conn,
         "UPDATE SSLC_Teacher
             SET teacherDOB = '$userDOB',
-                teacherIntroduce = '$userIntroduce',
-                teacherImage = '$userImage'
+                teacherIntroduce = '$userIntroduce'
             WHERE teacherID = '$userID'"
     );
     
