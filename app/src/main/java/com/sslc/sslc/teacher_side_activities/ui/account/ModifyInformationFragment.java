@@ -93,11 +93,11 @@ public class ModifyInformationFragment extends Fragment {
         et_Introduce.setText(mainViewModel.getTeacherInformation().getValue().getAboutMe());
 
         final CircleImageView iv_ProfileImage = binding.ivProfileImage;
-        if (mainViewModel.getTeacherInformation().getValue().hasProfileImage()) {
+        if (mainViewModel.getTeacherInformation().getValue().getProfileImage() != null) {
 
             selectedImageUri = mainViewModel.getTeacherInformation().getValue().getProfileImage();
             Glide.with(requireContext())
-                    .load(mainViewModel.getTeacherInformation().getValue().getProfileImage())
+                    .load(selectedImageUri)
                     .into(iv_ProfileImage);
 
         } else {

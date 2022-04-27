@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.TeacherClassNewsAdapter;
 import com.sslc.sslc.data.ClassNews;
@@ -41,6 +42,8 @@ public class ClassNewsListFragment extends Fragment {
     private TeacherMyClassDetailViewModel mainViewModel;
 
     private ArrayList<ClassNews> classNewsList;
+
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,8 @@ public class ClassNewsListFragment extends Fragment {
                 DividerItemDecoration.VERTICAL
         ));
 
+        shimmerFrameLayout = binding.shimmerLayout;
+        shimmerFrameLayout.startShimmer();
         // get class news from database and set it to recycler view
         getAllClassNews();
 
@@ -137,6 +142,9 @@ public class ClassNewsListFragment extends Fragment {
                     Log.i(TAG, response);
                 }
             }
+
+            shimmerFrameLayout.stopShimmer();
+            shimmerFrameLayout.setVisibility(View.GONE);
         } catch (Exception e) {
             e.printStackTrace();
         }

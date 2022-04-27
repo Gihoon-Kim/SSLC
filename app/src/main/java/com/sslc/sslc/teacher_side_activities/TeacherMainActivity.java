@@ -3,6 +3,7 @@ package com.sslc.sslc.teacher_side_activities;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class TeacherMainActivity extends AppCompatActivity {
     private ActivityTeacherMainBinding binding;
     private TeacherMainViewModel mainViewModel;
 
+    private static final String TAG = TeacherMainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,8 @@ public class TeacherMainActivity extends AppCompatActivity {
         );
 
         mainViewModel.setTeacherInformation(teacher);
+
+        Log.i(TAG, mainViewModel.getTeacherInformation().getValue().getMyClass().toString());
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -90,7 +95,10 @@ public class TeacherMainActivity extends AppCompatActivity {
 
         final Observer<Teacher> teacherObserver = teacher -> {
             // Update the UI, in this case, a TextView.
-            iv_TeacherProfileImage.setImageURI(teacher.getProfileImage());
+            if (teacher.getProfileImage() != null)
+                iv_TeacherProfileImage.setImageURI(teacher.getProfileImage());
+            else
+                iv_TeacherProfileImage.setImageURI(null);
         };
 
         mainViewModel.getTeacherInformation().observe(
@@ -117,6 +125,10 @@ public class TeacherMainActivity extends AppCompatActivity {
         } else {
 
             mainViewModel.getTeacherInformation().getValue().setProfileImage(null);
+
+            Glide.with(TeacherMainActivity.this)
+                    .load(R.drawable.ic_baseline_person_24)
+                    .into(iv_TeacherProfileImage);
         }
 
         tv_Logout.setOnClickListener(view -> {

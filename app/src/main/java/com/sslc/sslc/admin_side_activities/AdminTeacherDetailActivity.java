@@ -211,10 +211,6 @@ public class AdminTeacherDetailActivity
 
                 String fileName = "profile_teacher_".concat(binding.tvTeacherName.getText().toString()).concat(".jpg");
                 StorageReference riversRef = storageReference.child("profile_img/" + fileName);
-                riversRef.delete()
-                        .addOnSuccessListener(unused -> { })
-                        .addOnFailureListener(e -> { });
-
                 UploadTask uploadTask = riversRef.putFile(selectedImageUri);
 
                 // Save New Profile Image

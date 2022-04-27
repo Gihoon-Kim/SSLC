@@ -2,23 +2,25 @@ package com.sslc.sslc.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.Student;
 import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
-import com.facebook.shimmer.Shimmer;
-import com.facebook.shimmer.ShimmerDrawable;
 
 import java.util.ArrayList;
 
@@ -129,12 +131,15 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
 
             if (hasProfileImage) {
 
-                // TODO : GET PROFILE IMAGE
-                /*
-                Glide.with(context)
-                        .load(profileImage)
-                        .into(iv_profileImage);
-                 */
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference();
+                storageReference.child("profile_img/".concat("profile_student_").concat(name).concat(".jpg"))
+                        .getDownloadUrl()
+                        .addOnSuccessListener(uri ->
+                                Glide.with(context)
+                                        .load(uri)
+                                        .into(iv_profileImage))
+                        .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
             } else {
 
                 Glide.with(context)

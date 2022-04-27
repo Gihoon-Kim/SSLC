@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.TeacherClassHomeworkAdapter;
 import com.sslc.sslc.data.ClassHomework;
@@ -39,6 +40,7 @@ public class ClassHomeWorkListFragment extends Fragment {
 
     private TeacherClassHomeworkAdapter adapter;
     private ArrayList<ClassHomework> classHomeworkList;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,9 @@ public class ClassHomeWorkListFragment extends Fragment {
                 .navigate(R.id.action_classHomeWorkListFragment_to_addClassHomeworkFragment)
         );
 
+        shimmerFrameLayout = binding.shimmerLayout;
+        shimmerFrameLayout.startShimmer();
+
         getClassHomework();
 
         return binding.getRoot();
@@ -112,6 +117,9 @@ public class ClassHomeWorkListFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     }
                 }
+
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();
             }

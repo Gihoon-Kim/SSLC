@@ -1,10 +1,7 @@
 package com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassStudent;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.TeacherClassStudentAdapter;
 import com.sslc.sslc.data.Student;
@@ -41,6 +39,7 @@ public class ClassStudentListFragment extends Fragment {
     private TeacherMyClassDetailViewModel mainViewModel;
     private TeacherClassStudentAdapter adapter;
     private ArrayList<Student> classStudentList;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +78,9 @@ public class ClassStudentListFragment extends Fragment {
                 DividerItemDecoration.VERTICAL
         ));
 
+        shimmerFrameLayout = binding.shimmerLayout;
+        shimmerFrameLayout.startShimmer();
+
         getClassStudents();
         return binding.getRoot();
     }
@@ -107,7 +109,7 @@ public class ClassStudentListFragment extends Fragment {
                                 classStudentItem.getString(getString(R.string.student_dob)),
                                 classStudentItem.getString(getString(R.string.student_introduce)),
                                 classStudentItem.getString(getString(R.string.student_country)),
-                                classStudentItem.getBoolean("hasProfileImage")
+                                classStudentItem.getString("hasProfileImage").equals("1")
                         );
                         classStudentList.add(student);
                         adapter.notifyDataSetChanged();
@@ -116,6 +118,9 @@ public class ClassStudentListFragment extends Fragment {
                         Log.i(TAG, response);
                     }
                 }
+
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
