@@ -263,6 +263,7 @@ public class AdminAddTeacherActivity extends AppCompatActivity implements ApplyC
                     intent.putExtra(getString(R.string.teacher_introduce), teacherIntroduce);
                     intent.putExtra(getString(R.string.teacher_number), jsonResponse.getInt("rowCount") + 1);
                     intent.putExtra("hasProfileImage", hasProfileImage);
+                    intent.putExtra("imageUri", selectedImageUri);
                     setResult(9003, intent);
                     finish();
                 } else {

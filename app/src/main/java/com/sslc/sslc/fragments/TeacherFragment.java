@@ -2,6 +2,7 @@ package com.sslc.sslc.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,7 +132,8 @@ public class TeacherFragment extends Fragment {
                             teacherClass,
                             teacherIntroduce,
                             hasProfileImage,
-                            true
+                            true,
+                            null
                     );
 
                     teacherList.add(teacher);
@@ -161,6 +163,7 @@ public class TeacherFragment extends Fragment {
                         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
                         String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
                         boolean hasProfileImage = intent.getIntExtra("hasProfileImage", 0) == 1;
+                        Uri profileImageUri = intent.getParcelableExtra("imageUri");
 
                         Teacher teacher = new Teacher(
                                 teacherNumber,
@@ -169,7 +172,8 @@ public class TeacherFragment extends Fragment {
                                 teacherClass,
                                 teacherIntroduce,
                                 hasProfileImage,
-                                true
+                                true,
+                                profileImageUri
                         );
                         teacherList.add(teacher);
                         teacherFragmentAdapter.notifyDataSetChanged();
@@ -189,6 +193,7 @@ public class TeacherFragment extends Fragment {
                         String teacherDOB = intent.getStringExtra(getString(R.string.teacher_dob));
                         String teacherIntroduce = intent.getStringExtra(getString(R.string.teacher_introduce));
                         boolean hasProfileImage = intent.getIntExtra("hasProfileImage", 0) == 1;
+                        Uri profileImageUri = intent.getParcelableExtra("imageUri");
                         Log.i(TAG, "After Update " + hasProfileImage);
 
                         for (int i = 0; i < teacherList.size(); i++) {
@@ -200,6 +205,7 @@ public class TeacherFragment extends Fragment {
                                 teacherList.get(i).setMyClass(teacherClass);
                                 teacherList.get(i).setAboutMe(teacherIntroduce);
                                 teacherList.get(i).setHasProfileImage(hasProfileImage);
+                                teacherList.get(i).setProfileImage(profileImageUri);
                                 teacherFragmentAdapter.notifyItemChanged(i);
                                 break;
                             }

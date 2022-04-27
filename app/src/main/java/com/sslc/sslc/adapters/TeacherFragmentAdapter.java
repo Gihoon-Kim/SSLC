@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +92,8 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 teacherList.get(position).getDob(),
                 teacherList.get(position).getMyClass(),
                 teacherList.get(position).getAboutMe(),
-                teacherList.get(position).hasProfileImage()
+                teacherList.get(position).hasProfileImage(),
+                teacherList.get(position).getProfileImage()
         );
 
         holder.itemView.setOnClickListener(view -> {
@@ -210,7 +212,8 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 String teacherDOB,
                 String teacherClass,
                 String teacherIntroduce,
-                boolean hasProfileImage
+                boolean hasProfileImage,
+                Uri profileImage
         ) {
 
             tv_TeacherName.setText(teacherName);
@@ -230,22 +233,30 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                 iv_TeacherProfileImage.setImageResource(R.drawable.ic_baseline_person_24);
             } else {
 
-                File file = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img");
+                if (profileImage == null) {
 
-                if (!file.isDirectory()) {
+                    File file = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img");
 
-                    file.mkdir();
+                    if (!file.isDirectory()) {
+
+                        file.mkdir();
+                    }
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageReference = storage.getReference();
+                    storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
+                            .getDownloadUrl()
+                            .addOnSuccessListener(uri ->
+                                    Glide.with(context)
+                                            .load(uri)
+                                            .into(iv_TeacherProfileImage))
+                            .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
+                } else {
+
+                    Glide.with(context)
+                            .load(profileImage)
+                            .into(iv_TeacherProfileImage);
                 }
-
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReference();
-                storageReference.child("profile_img/".concat("profile_teacher_").concat(teacherName).concat(".jpg"))
-                        .getDownloadUrl()
-                        .addOnSuccessListener(uri ->
-                                Glide.with(context)
-                                        .load(uri)
-                                        .into(iv_TeacherProfileImage))
-                        .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
             }
         }
     }

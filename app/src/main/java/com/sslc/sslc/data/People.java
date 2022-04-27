@@ -8,6 +8,7 @@ public class People {
     String dob;
     String myClass;
     String aboutMe;
+    Uri profileImage;
     boolean hasProfileImage = false;
     boolean isTeacher;
 
@@ -84,6 +85,10 @@ public class People {
         return myClass;
     }
 
+    public Uri getProfileImage() {
+        return profileImage;
+    }
+
     public void setMyClass(String myClass) {
         this.myClass = myClass;
     }
@@ -102,5 +107,9 @@ public class People {
 
     public void setTeacher(boolean teacher) {
         isTeacher = teacher;
+    }
+
+    public void setProfileImage(Uri profileImage) {
+        this.profileImage = profileImage;
     }
 }

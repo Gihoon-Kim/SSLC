@@ -13,8 +13,8 @@ public class Teacher extends People {
             String myClass,
             String aboutMe,
             boolean hasProfileImage,
-            boolean isTeacher
-    ) {
+            boolean isTeacher,
+            Uri profileImageUri) {
         super(name, dob, myClass, aboutMe, hasProfileImage, isTeacher);
 
         this.teacherNumber = teacherNumber;

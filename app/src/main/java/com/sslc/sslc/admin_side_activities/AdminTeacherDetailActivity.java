@@ -247,6 +247,7 @@ public class AdminTeacherDetailActivity
                         intent.putExtra(getString(R.string.teacher_introduce), Objects.requireNonNull(binding.etTeacherIntroduce).getText().toString());
                         intent.putExtra(getString(R.string.teacher_dob), Objects.requireNonNull(binding.teacherDetailContents.tvTeacherDOB).getText());
                         intent.putExtra(getString(R.string.has_profile_image), hasProfileImage);
+                        intent.putExtra("imageUri", selectedImageUri);
                         setResult(9004, intent);
                         finish();
                     } else {
