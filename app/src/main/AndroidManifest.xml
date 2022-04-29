@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.sslc.sslc.data.AppData"
+        android:name=".data.AppData"
         android:allowBackup="true"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
@@ -14,79 +14,84 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
-            android:name="com.sslc.sslc.teacher_side_activities.TeacherNotificationDetailActivity"
+            android:name=".student_side_activities.StudentMainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_student_main"
+            android:theme="@style/Theme.SSLC.NoActionBar" />
+        <activity
+            android:name=".teacher_side_activities.TeacherNotificationDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_teacher_notification_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.teacher_side_activities.TeacherNotificationActivity"
+            android:name=".teacher_side_activities.TeacherNotificationActivity"
             android:exported="false" />
         <activity
-            android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetail"
+            android:name=".teacher_side_activities.ui.myClassMain.TeacherMyClassDetail"
             android:exported="false"
             android:label="@string/title_activity_teacher_my_class_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.teacher_side_activities.TeacherMyClassActivity"
+            android:name=".teacher_side_activities.TeacherMyClassActivity"
             android:exported="false"
             android:label="@string/title_activity_teacher_my_class"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.ImageViewerActivity"
+            android:name=".ImageViewerActivity"
             android:exported="false"
             android:label="ImageViewerActivity"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.teacher_side_activities.TeacherMainActivity"
+            android:name=".teacher_side_activities.TeacherMainActivity"
             android:exported="false"
             android:label="@string/title_activity_teacher_main"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminClassDetailActivity"
+            android:name=".admin_side_activities.AdminClassDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_class_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminAddClassActivity"
+            android:name=".admin_side_activities.AdminAddClassActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_class"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminStudentDetailActivity"
+            android:name=".admin_side_activities.AdminStudentDetailActivity"
             android:exported="false" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminAddStudentActivity"
+            android:name=".admin_side_activities.AdminAddStudentActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_student"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminTeacherDetailActivity"
+            android:name=".admin_side_activities.AdminTeacherDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_teacher_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminAddTeacherActivity"
+            android:name=".admin_side_activities.AdminAddTeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_teacher"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminNewsDetailActivity"
+            android:name=".admin_side_activities.AdminNewsDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_news_detail"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminAddNewsActivity"
+            android:name=".admin_side_activities.AdminAddNewsActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_add_news"
             android:theme="@style/Theme.SSLC.NoActionBar" />
         <activity
-            android:name="com.sslc.sslc.admin_side_activities.AdminMainActivity"
+            android:name=".admin_side_activities.AdminMainActivity"
             android:exported="false" />
         <activity
-            android:name="com.sslc.sslc.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name="com.sslc.sslc.IntroActivity"
+            android:name=".IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

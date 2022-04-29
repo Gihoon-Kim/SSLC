@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.sslc.sslc.admin_side_activities.AdminMainActivity;
 import com.sslc.sslc.requests.LoginRequest;
+import com.sslc.sslc.student_side_activities.StudentMainActivity;
 import com.sslc.sslc.teacher_side_activities.TeacherMainActivity;
 
 import org.json.JSONObject;
@@ -105,9 +105,10 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, response);
                 int isTeacher = jsonResponse.getInt("isTeacher");
 
+                Intent intent;
                 if (isTeacher != 0) {
 
-                    Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
+                    intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
                     intent.putExtra("teacherName", jsonResponse.getString("userName"));
                     intent.putExtra("teacherDOB", jsonResponse.getString("userDOB"));
                     intent.putExtra("teacherClass", jsonResponse.getString("userClass"));
@@ -115,10 +116,18 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("teacherIntroduce", jsonResponse.getString("userIntroduce"));
                     intent.putExtra("teacherPassword", jsonResponse.getString("userPassword"));
                     intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));
-                    startActivity(intent);
                 } else {
-                    Toast.makeText(this, "Student Main Activity", Toast.LENGTH_SHORT).show();
+
+                    intent = new Intent(LoginActivity.this, StudentMainActivity.class);
+                    intent.putExtra("studentName", jsonResponse.getString("userName"));
+                    intent.putExtra("studentDOB", jsonResponse.getString("userDOB"));
+                    intent.putExtra("studentClass", jsonResponse.getString("userClass"));
+                    intent.putExtra("studentID", jsonResponse.getString("userID"));
+                    intent.putExtra("studentIntroduce", jsonResponse.getString("userIntroduce"));
+                    intent.putExtra("studentPassword", jsonResponse.getString("userPassword"));
+                    intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));
                 }
+                startActivity(intent);
             } else {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
