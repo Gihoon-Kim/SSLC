@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
         try {
 
+            Log.i(TAG, response);
             JSONObject jsonResponse = new JSONObject(response);
             boolean success = jsonResponse.getBoolean(getString(R.string.success));
             progressDialog.dismiss();
@@ -126,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("studentIntroduce", jsonResponse.getString("userIntroduce"));
                     intent.putExtra("studentPassword", jsonResponse.getString("userPassword"));
                     intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));
+                    intent.putExtra("country", jsonResponse.getString("country"));
                 }
                 startActivity(intent);
             } else {

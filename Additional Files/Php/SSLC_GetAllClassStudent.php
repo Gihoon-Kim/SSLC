@@ -10,7 +10,7 @@
 
      $result = mysqli_query(
          $conn,
-         "SELECT studentName, studentDOB, studentIntroduce, Country, studentProfileImage
+         "SELECT studentName, studentDOB, studentIntroduce, Country, hasProfileImage
             FROM SSLC_Student
             WHERE studentClass = '$classTitle';"
      );
@@ -25,7 +25,7 @@
                 'studentDOB' => $row[1],
                 'studentIntroduce' => $row[2],
                 'studentCountry' => $row[3],
-                'studentProfileImage' => $row[4]
+                'hasProfileImage' => $row[4]
             )
             );
      }

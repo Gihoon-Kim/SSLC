@@ -3,7 +3,6 @@ package com.sslc.sslc.teacher_side_activities;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +36,6 @@ public class TeacherMainActivity extends AppCompatActivity {
     private ActivityTeacherMainBinding binding;
     private TeacherMainViewModel mainViewModel;
 
-    private static final String TAG = TeacherMainActivity.class.getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +62,6 @@ public class TeacherMainActivity extends AppCompatActivity {
         );
 
         mainViewModel.setTeacherInformation(teacher);
-
-        Log.i(TAG, mainViewModel.getTeacherInformation().getValue().getMyClass().toString());
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
