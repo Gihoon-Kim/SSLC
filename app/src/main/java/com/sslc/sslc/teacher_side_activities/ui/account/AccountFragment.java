@@ -32,7 +32,10 @@ public class AccountFragment extends Fragment {
         Log.i(TAG, requireActivity().getIntent().getStringExtra("teacherPassword"));
 
         final TextView tv_Error = binding.tvError;
-        accountViewModel.getText().observe(getViewLifecycleOwner(), tv_Error::setText);
+        accountViewModel.getText().observe(
+                getViewLifecycleOwner(),
+                tv_Error::setText
+        );
 
         final TextView tv_ChangePassword = binding.tvChangePassword;
         tv_ChangePassword.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -54,7 +57,8 @@ public class AccountFragment extends Fragment {
                 accountViewModel.setText("Password you entered is not correct");
             } else {
 
-                Navigation.findNavController(requireView()).navigate(R.id.action_nav_account_to_nav_modify_info);
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.action_nav_account_to_nav_modify_info);
             }
         });
 

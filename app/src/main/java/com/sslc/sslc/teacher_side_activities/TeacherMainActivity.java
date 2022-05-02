@@ -29,7 +29,6 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class TeacherMainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -55,7 +54,7 @@ public class TeacherMainActivity extends AppCompatActivity {
                 getIntent().getStringExtra("teacherClass"),
                 getIntent().getStringExtra("teacherIntroduce"),
                 getIntent().getStringExtra("teacherID"),
-                getIntent().getStringExtra("password"),
+                getIntent().getStringExtra("teacherPassword"),
                 getIntent().getIntExtra("hasProfileImage", 0) == 1,
                 true,
                 null

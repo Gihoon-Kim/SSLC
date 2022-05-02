@@ -10,10 +10,14 @@ public class AccountViewModel extends ViewModel {
 
     public AccountViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
     }
 
     public LiveData<String> getText() {
         return mText;
+    }
+
+    public void setText(String error) {
+
+        mText.setValue(error);
     }
 }
