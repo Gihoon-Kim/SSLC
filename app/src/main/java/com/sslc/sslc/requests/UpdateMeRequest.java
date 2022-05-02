@@ -18,6 +18,7 @@ public class UpdateMeRequest extends StringRequest {
             String userDOB,
             String userIntroduce,
             String isTeacher,
+            Boolean hasProfileImage,
             Response.Listener<String> listener
     ) {
         super(Method.POST, URL, listener, null);
@@ -27,6 +28,7 @@ public class UpdateMeRequest extends StringRequest {
         map.put("userDOB", userDOB);
         map.put("userIntroduce", userIntroduce);
         map.put("isTeacher", isTeacher);
+        map.put("hasProfileImage", hasProfileImage ? "1" : "0");
     }
 
     @Nullable
