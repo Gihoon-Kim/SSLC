@@ -1,7 +1,6 @@
 package com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassStudent;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.sslc.sslc.R;
 import com.sslc.sslc.databinding.FragmentClassStudentDetailBinding;
 import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class ClassStudentDetailFragment extends Fragment {
@@ -59,15 +57,12 @@ public class ClassStudentDetailFragment extends Fragment {
 
         if (mainViewModel.getClassStudentLiveData().getValue().hasProfileImage()) {
 
-            // TODO : GET PROFILE IMAGE FROM FIREBASE
-            /*
             Glide.with(requireContext())
-                    .load(mainViewModel.getClassStudentLiveData().getValue().getImage())
-                    .into(binding.ivDeveloper);
-             */
+                    .load(mainViewModel.getClassStudentLiveData().getValue().getProfileImage())
+                    .into(binding.ivProfileImage);
         }
 
-        binding.ivDeveloper.setOnClickListener(view -> seeProfileImage());
+        binding.ivProfileImage.setOnClickListener(view -> seeProfileImage());
 
         binding.btnBack.setOnClickListener(this::backToMain);
     }
@@ -76,12 +71,10 @@ public class ClassStudentDetailFragment extends Fragment {
 
         if (Objects.requireNonNull(mainViewModel.getClassStudentLiveData().getValue()).hasProfileImage()) {
 
-            // TODO : GET PROFILE IMAGE FROM FIREBASE
-            /*
-            Intent imageIntent = new Intent(requireContext(), ImageViewerActivity.class);
-            imageIntent.putExtra("profileImage", byteArray);
+
+            Intent imageIntent = new Intent(requireActivity(), ImageViewerActivity.class);
+            imageIntent.putExtra("profileImage", mainViewModel.getClassStudentLiveData().getValue().getProfileImage());
             startActivity(imageIntent);
-             */
         } else {
 
             Toast.makeText(requireContext(), "No Profile Image", Toast.LENGTH_SHORT).show();

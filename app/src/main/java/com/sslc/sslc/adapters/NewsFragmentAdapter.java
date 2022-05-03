@@ -25,7 +25,7 @@ import com.sslc.sslc.R;
 import com.sslc.sslc.admin_side_activities.AdminNewsDetailActivity;
 import com.sslc.sslc.data.NewsData;
 import com.sslc.sslc.requests.DeleteNewsRequest;
-import com.sslc.sslc.teacher_side_activities.TeacherNotificationDetailActivity;
+import com.sslc.sslc.NotificationDetailActivity;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 
@@ -130,7 +130,7 @@ public class NewsFragmentAdapter extends RecyclerView.Adapter<NewsFragmentAdapte
 
             holder.cv_Item.setOnClickListener(view -> {
 
-                Intent intent = new Intent(context, TeacherNotificationDetailActivity.class);
+                Intent intent = new Intent(context, NotificationDetailActivity.class);
                 intent.putExtra(context.getString(R.string.news_title), newsDataList.get(position).getTitle());
                 intent.putExtra(context.getString(R.string.news_description), newsDataList.get(position).getDescription());
                 intent.putExtra(context.getString(R.string.news_createdAt), newsDataList.get(position).getCreatedAt());

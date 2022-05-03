@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.sslc.sslc.NotificationActivity;
 import com.sslc.sslc.databinding.FragmentHomeBinding;
 import com.sslc.sslc.teacher_side_activities.TeacherMyClassActivity;
-import com.sslc.sslc.teacher_side_activities.TeacherNotificationActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class HomeFragment extends Fragment {
@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout ll_notification = binding.llNotification;
         ll_notification.setOnClickListener(view ->
-                startActivity(new Intent(getActivity(), TeacherNotificationActivity.class))
+                startActivity(new Intent(getActivity(), NotificationActivity.class))
         );
 
         LinearLayout ll_event = binding.llEvent;

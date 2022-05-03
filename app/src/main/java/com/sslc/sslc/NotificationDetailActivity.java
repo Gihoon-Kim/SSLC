@@ -1,23 +1,22 @@
-package com.sslc.sslc.teacher_side_activities;
+package com.sslc.sslc;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sslc.sslc.R;
-import com.sslc.sslc.databinding.ActivityTeacherNotificationDetailBinding;
+import com.sslc.sslc.databinding.ActivityNotificationDetailBinding;
 
 import java.util.Objects;
 
-public class TeacherNotificationDetailActivity extends AppCompatActivity {
+public class NotificationDetailActivity extends AppCompatActivity {
 
-    private ActivityTeacherNotificationDetailBinding binding;
+    private ActivityNotificationDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTeacherNotificationDetailBinding.inflate(getLayoutInflater());
+        binding = ActivityNotificationDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         initUI();

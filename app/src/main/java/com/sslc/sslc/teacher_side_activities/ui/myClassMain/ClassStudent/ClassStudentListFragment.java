@@ -19,6 +19,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.TeacherClassStudentAdapter;
 import com.sslc.sslc.data.Student;
@@ -27,6 +29,7 @@ import com.sslc.sslc.requests.GetClassStudentRequest;
 import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -41,6 +44,8 @@ public class ClassStudentListFragment extends Fragment {
     private ArrayList<Student> classStudentList;
     private ShimmerFrameLayout shimmerFrameLayout;
 
+    private StorageReference storageReference;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,9 @@ public class ClassStudentListFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState
     ) {
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         binding = FragmentClassStudentListBinding.inflate(
                 inflater,
@@ -104,15 +112,45 @@ public class ClassStudentListFragment extends Fragment {
 
                         Log.i(TAG, classStudentItem.toString());
 
-                        Student student = new Student(
-                                classStudentItem.getString(getString(R.string.student_name)),
-                                classStudentItem.getString(getString(R.string.student_dob)),
-                                classStudentItem.getString(getString(R.string.student_introduce)),
-                                classStudentItem.getString(getString(R.string.student_country)),
-                                classStudentItem.getString("hasProfileImage").equals("1")
-                        );
-                        classStudentList.add(student);
-                        adapter.notifyDataSetChanged();
+                        if (classStudentItem.getString("hasProfileImage").equals("1")) {
+
+                            storageReference.child("profile_img/".concat("profile_student_")
+                                    .concat(classStudentItem.getString(getString(R.string.student_name))).concat(".jpg"))
+                                    .getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+
+                                        try {
+                                            Student student = new Student(
+                                                    classStudentItem.getString(getString(R.string.student_name)),
+                                                    classStudentItem.getString(getString(R.string.student_dob)),
+                                                    classStudentItem.getString(getString(R.string.student_introduce)),
+                                                    classStudentItem.getString(getString(R.string.student_country)),
+                                                    classStudentItem.getString("hasProfileImage").equals("1"),
+                                                    uri
+                                            );
+                                            classStudentList.add(student);
+
+                                            adapter.notifyDataSetChanged();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
+                        } else {
+
+                            Student student = new Student(
+                                    classStudentItem.getString(getString(R.string.student_name)),
+                                    classStudentItem.getString(getString(R.string.student_dob)),
+                                    classStudentItem.getString(getString(R.string.student_introduce)),
+                                    classStudentItem.getString(getString(R.string.student_country)),
+                                    classStudentItem.getString("hasProfileImage").equals("1"),
+                                    null
+                            );
+
+                            classStudentList.add(student);
+
+                            adapter.notifyDataSetChanged();
+                        }
+
                     } else {
 
                         Log.i(TAG, response);

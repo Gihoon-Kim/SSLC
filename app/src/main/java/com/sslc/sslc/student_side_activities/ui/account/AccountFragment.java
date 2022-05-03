@@ -35,11 +35,10 @@ public class AccountFragment extends Fragment {
 
         final TextView tv_ChangePassword = binding.tvChangePassword;
         tv_ChangePassword.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-        tv_ChangePassword.setOnClickListener(view -> {
-            Navigation
-                    .findNavController(requireView())
-                    .navigate(R.id.action_nav_account_to_changePasswordFragment);
-        });
+        tv_ChangePassword.setOnClickListener(view ->
+                Navigation
+                        .findNavController(requireView())
+                        .navigate(R.id.action_nav_account_to_changePasswordFragment));
 
         final Button btn_Processing = binding.btnProcess;
         btn_Processing.setOnClickListener(view -> {

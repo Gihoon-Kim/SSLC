@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".teacher_side_activities.TeacherNotificationDetailActivity">
+    tools:context=".NotificationDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -55,6 +55,6 @@
 
     <include
         android:id="@+id/content"
-        layout="@layout/activity_teacher_notification_detail_content_scrolling" />
+        layout="@layout/activity_notification_detail_content_scrolling" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

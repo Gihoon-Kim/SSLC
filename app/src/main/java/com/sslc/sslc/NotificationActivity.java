@@ -1,4 +1,4 @@
-package com.sslc.sslc.teacher_side_activities;
+package com.sslc.sslc;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.NewsFragmentAdapter;
 import com.sslc.sslc.data.NewsData;
 import com.sslc.sslc.requests.GetNewsRequest;
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TeacherNotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity {
 
-    private static final String TAG = TeacherNotificationActivity.class.getSimpleName();
+    private static final String TAG = NotificationActivity.class.getSimpleName();
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_News)
     RecyclerView rv_News;
@@ -42,7 +41,7 @@ public class TeacherNotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_notification);
+        setContentView(R.layout.activity_notification);
 
         ButterKnife.bind(this);
 

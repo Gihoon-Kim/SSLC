@@ -40,9 +40,10 @@ public class Student extends People {
             String studentDOB,
             String studentIntroduce,
             String studentCountry,
-            boolean hasProfileImage
+            boolean hasProfileImage,
+            Uri imageUri
     ) {
-        super(studentName, studentDOB, studentIntroduce, hasProfileImage);
+        super(studentName, studentDOB, studentIntroduce, hasProfileImage, imageUri);
 
         this.studentCountry = studentCountry;
     }

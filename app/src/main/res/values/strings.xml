@@ -195,5 +195,8 @@
     </string>
     <string name="has_profile_image">hasProfileImage</string>
     <string name="title_activity_student_main">StudentMainActivity</string>
+    <string name="title_activity_student_my_class_main">StudentMyClassMainActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>

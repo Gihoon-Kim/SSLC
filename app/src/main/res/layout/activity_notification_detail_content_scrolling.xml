@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".teacher_side_activities.TeacherNotificationDetailActivity"
-    tools:showIn="@layout/activity_teacher_notification_detail">
+    tools:context=".NotificationDetailActivity"
+    tools:showIn="@layout/activity_notification_detail">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

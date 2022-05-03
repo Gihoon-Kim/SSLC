@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -16,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.Student;
 import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
@@ -75,11 +72,7 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
 
         holder.onBind(
                 context,
-                classStudentArrayList.get(position).getName(),
-                classStudentArrayList.get(position).getDob(),
-                classStudentArrayList.get(position).getAboutMe(),
-                classStudentArrayList.get(position).getStudentCountry(),
-                classStudentArrayList.get(position).hasProfileImage()
+                classStudentArrayList.get(position)
         );
 
         holder.itemView.setOnClickListener(view -> {
@@ -122,24 +115,18 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
             ButterKnife.bind(this, itemView);
         }
 
-        void onBind(Context context, String name, String DOB, String introduce, String country, boolean hasProfileImage) {
+        void onBind(Context context, Student student) {
 
-            tv_name.setText(name);
-            tv_DOB.setText(DOB);
-            tv_introduce.setText(introduce);
-            tv_country.setText(country);
+            tv_name.setText(student.getName());
+            tv_DOB.setText(student.getDob());
+            tv_introduce.setText(student.getAboutMe());
+            tv_country.setText(student.getStudentCountry());
 
-            if (hasProfileImage) {
+            if (student.hasProfileImage()) {
 
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReference();
-                storageReference.child("profile_img/".concat("profile_student_").concat(name).concat(".jpg"))
-                        .getDownloadUrl()
-                        .addOnSuccessListener(uri ->
-                                Glide.with(context)
-                                        .load(uri)
-                                        .into(iv_profileImage))
-                        .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
+                Glide.with(context)
+                        .load(student.getProfileImage())
+                        .into(iv_profileImage);
             } else {
 
                 Glide.with(context)

@@ -51,13 +51,15 @@ public class People {
             String name,
             String dob,
             String aboutMe,
-            boolean hasProfileImage
+            boolean hasProfileImage,
+            Uri imageUri
     ) {
 
         this.name = name;
         this.dob = dob;
         this.aboutMe = aboutMe;
         this.hasProfileImage = hasProfileImage;
+        this.profileImage = imageUri;
     }
 
     public People(
