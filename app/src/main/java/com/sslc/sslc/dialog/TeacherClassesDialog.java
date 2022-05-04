@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.Window;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,10 @@ public class TeacherClassesDialog {
 
         dialog.setContentView(R.layout.teacher_class_dialog);
         dialog.show();
+
+        Window window = dialog.getWindow();
+        window.setLayout(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+
         listener = (ApplyClassListListener) context;
 
         RecyclerView rv_ClassList = dialog.findViewById(R.id.rv_Class);
