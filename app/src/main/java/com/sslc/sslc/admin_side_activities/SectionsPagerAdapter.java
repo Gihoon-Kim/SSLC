@@ -15,6 +15,9 @@ import com.sslc.sslc.fragments.NewsFragment;
 import com.sslc.sslc.fragments.StudentFragment;
 import com.sslc.sslc.fragments.TeacherFragment;
 
+/*
+ * This adapter is to change fragment on TabLayout.
+ */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = SectionsPagerAdapter.class.getSimpleName();
@@ -48,11 +51,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public CharSequence getPageTitle(int position) {
+
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
     @Override
     public int getCount() {
+
         return TAB_TITLES.length;
     }
 }

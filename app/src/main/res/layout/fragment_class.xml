@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp" />
 
+    <!-- ShimmerFrameLayout for making looks nicer while connecting to server to get classes -->
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_Layout"
         android:layout_width="match_parent"

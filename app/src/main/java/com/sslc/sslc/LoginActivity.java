@@ -30,7 +30,7 @@ import butterknife.OnClick;
  * People who not admin ( Student, Teacher ) cannot register.
  * Only admin can create new user for students and teachers.
  * After admin create new user and provide login info (userID and Password), teachers and students can login
- * with provided info.
+ * with provided information.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,11 +51,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Hide actionbar
         Objects.requireNonNull(getSupportActionBar()).hide();
         ButterKnife.bind(this);
     }
 
-    // Login Process
+    /*
+     * Login Process.
+     */
     @SuppressLint("NonConstantResourceId")
     @OnClick(R.id.btn_Login)
     void onLoginButtonClicked() {
@@ -68,14 +71,20 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage(getString(R.string.validate_in_progress));
         progressDialog.show();
 
-        if (userID.equals(getString(R.string.admin_id)) && userPassword.equals(getString(R.string.admin_pwd))) {
+        // If the user who trying to login is admin, move to AdminMainActivity
+        if (userID.equals(getString(R.string.admin_id)) &&
+                userPassword.equals(getString(R.string.admin_pwd))) {
 
             startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
             progressDialog.dismiss();
         } else {
 
             Response.Listener<String> responseListener = this::loginRequest;
-            LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener);
+            LoginRequest loginRequest = new LoginRequest(
+                    userID,
+                    userPassword,
+                    responseListener
+            );
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(loginRequest);
         }
@@ -92,6 +101,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /*
+     * Connect to server to get user login information is correct or not.
+     * If correct, verify the user is an admin, a teacher, or a student.
+     */
     private void loginRequest(String response) {
 
         try {
@@ -109,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent;
                 if (isTeacher != 0) {
 
+                    // if the use who is logging in is a teacher
                     intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
                     intent.putExtra("teacherName", jsonResponse.getString("userName"));
                     intent.putExtra("teacherDOB", jsonResponse.getString("userDOB"));
@@ -119,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("hasProfileImage", jsonResponse.getInt("hasProfileImage"));
                 } else {
 
+                    // if the user who is logging in is a student.
                     intent = new Intent(LoginActivity.this, StudentMainActivity.class);
                     intent.putExtra("studentName", jsonResponse.getString("userName"));
                     intent.putExtra("studentDOB", jsonResponse.getString("userDOB"));

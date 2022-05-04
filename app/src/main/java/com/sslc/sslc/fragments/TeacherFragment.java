@@ -36,6 +36,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * This Fragment is for showing all teachers in the database.
+ */
 public class TeacherFragment extends Fragment {
 
     private static final String TAG = TeacherFragment.class.getSimpleName();

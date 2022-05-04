@@ -27,7 +27,8 @@ import butterknife.ButterKnife;
 
 /*
  * Splash Screen
- * While splashed animation is working, processing that getting all class titles and teacher names are being worked.
+ * While splashed animation is working, processing that getting all class titles and teacher names for setting spinner in
+ * class and teacher fragments and activities are being worked.
  */
 public class IntroActivity extends AppCompatActivity {
 

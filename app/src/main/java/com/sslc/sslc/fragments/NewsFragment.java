@@ -3,7 +3,6 @@ package com.sslc.sslc.fragments;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.sslc.sslc.admin_side_activities.AdminAddNewsActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.sslc.sslc.R;
 import com.sslc.sslc.adapters.NewsFragmentAdapter;
+import com.sslc.sslc.admin_side_activities.AdminAddNewsActivity;
 import com.sslc.sslc.data.NewsData;
 import com.sslc.sslc.requests.GetNewsRequest;
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,9 +35,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * This Fragment is for showing all the news (College side news)
+ */
 public class NewsFragment extends Fragment {
-
-    private static final String TAG = NewsFragment.class.getSimpleName();
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_News)
@@ -55,8 +55,12 @@ public class NewsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(
                 R.layout.fragment_news,
@@ -75,9 +79,9 @@ public class NewsFragment extends Fragment {
 
         // Create RecyclerView
         rv_News.setHasFixedSize(true);
-        rv_News.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        rv_News.setLayoutManager(new LinearLayoutManager(this.requireContext()));
         newsFragmentAdapter = new NewsFragmentAdapter(
-                getContext(),
+                requireContext(),
                 newsDataList,
                 updateNewsActivityResultLauncher
         );
@@ -149,7 +153,8 @@ public class NewsFragment extends Fragment {
         // Get News
         newsDataList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = this::getNewsRequest;
+        @SuppressLint("NotifyDataSetChanged")
+        Response.Listener<String> responseListener = this::getNewsRequest;
         GetNewsRequest getNewsRequest = new GetNewsRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getNewsRequest);
@@ -157,9 +162,9 @@ public class NewsFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void getNewsRequest(String response) {
+
         try {
 
-            Log.i(TAG, "response : " + response);
             JSONObject jsonResponse = new JSONObject(response);
             JSONArray jsonArray = jsonResponse.getJSONArray(getString(R.string.news));
 
@@ -196,7 +201,10 @@ public class NewsFragment extends Fragment {
     @OnClick(R.id.fab_News)
     public void onFabNewsClicked() {
 
-        Intent intent = new Intent(getContext(), AdminAddNewsActivity.class);
+        Intent intent = new Intent(
+                requireContext(),
+                AdminAddNewsActivity.class
+        );
         addNewsActivityResultLauncher.launch(intent);
     }
 }

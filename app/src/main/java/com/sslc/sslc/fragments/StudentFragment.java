@@ -37,11 +37,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * This Fragment is to show all the student in the database
+ */
 public class StudentFragment extends Fragment {
 
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rv_Student)
     RecyclerView rv_Student;
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.shimmer_Layout)
     ShimmerFrameLayout shimmerFrameLayout;
     StudentFragmentAdapter studentFragmentAdapter;
@@ -52,8 +56,12 @@ public class StudentFragment extends Fragment {
     ActivityResultLauncher<Intent> updateStudentActivityResultLauncher;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(
                 R.layout.fragment_student,

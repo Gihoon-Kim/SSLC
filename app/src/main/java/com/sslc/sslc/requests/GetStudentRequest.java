@@ -6,6 +6,9 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This request is for getting all students from database.
+ */
 public class GetStudentRequest extends StringRequest {
 
     private final static String URL = "http://hoonyhosting.dothome.co.kr/Practice/SSLC/php/SSLC_GetStudent.php";

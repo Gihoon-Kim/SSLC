@@ -8,6 +8,10 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This request requires id and password to login.
+ * If the id and password are validated, return success as true, otherwise, return as false.
+ */
 public class LoginRequest extends StringRequest {
 
     final static private String URL = "http://hoonyhosting.dothome.co.kr/Practice/SSLC/php/SSLC_UserLogin.php";

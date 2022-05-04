@@ -14,11 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSLC">
         <activity
-            android:name=".student_side_activities.ui.myClassMain.StudentMyClassMainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_student_my_class_main"
-            android:theme="@style/Theme.SSLC.NoActionBar" />
-        <activity
             android:name=".student_side_activities.StudentMainActivity"
             android:exported="false"
             android:label="@string/title_activity_student_main"

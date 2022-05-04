@@ -6,6 +6,9 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This request is for getting all news from database
+ */
 public class GetNewsRequest extends StringRequest {
 
     private final static String URL = "http://hoonyhosting.dothome.co.kr/Practice/SSLC/php/SSLC_GetNews.php";

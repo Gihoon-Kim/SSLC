@@ -32,9 +32,11 @@ public class AdminMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
 
+        // Hide ActionBar
         Objects.requireNonNull(getSupportActionBar()).hide();
         ButterKnife.bind(this);
 
+        // Set Adapter for tab pager
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

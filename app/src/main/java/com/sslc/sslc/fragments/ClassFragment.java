@@ -36,6 +36,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+ * Fragment for showing all Classes in database.
+ */
 public class ClassFragment extends Fragment {
 
     private static final String TAG = ClassFragment.class.getSimpleName();
@@ -47,15 +50,19 @@ public class ClassFragment extends Fragment {
     @BindView(R.id.rv_Class)
     RecyclerView rv_Class;
 
-    ClassFragmentAdapter classFragmentAdapter;
-    ArrayList<Programs> programDataList = new ArrayList<>();
+    private ClassFragmentAdapter classFragmentAdapter;
+    private final ArrayList<Programs> programDataList = new ArrayList<>();
 
-    ActivityResultLauncher<Intent> addClassResultLauncher;
-    ActivityResultLauncher<Intent> updateClassResultLauncher;
+    private ActivityResultLauncher<Intent> addClassResultLauncher;
+    private ActivityResultLauncher<Intent> updateClassResultLauncher;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(
                 R.layout.fragment_class,
@@ -64,12 +71,13 @@ public class ClassFragment extends Fragment {
         );
         ButterKnife.bind(this, view);
 
+        // ShimmerFrameLayout for looking nicer while get classes.
         shimmerFrameLayout.startShimmer();
 
         // Get Classes from database
         getPrograms();
         // Initialize activityResultLaunchers
-        activityResultLauncherInit();
+        initActivityResultLauncher();
 
         // Create RecyclerView
         rv_Class.setHasFixedSize(true);
@@ -84,12 +92,15 @@ public class ClassFragment extends Fragment {
         return view;
     }
 
+    /*
+     * Get classes (programs) from database
+     */
     private void getPrograms() {
 
         programDataList.clear();
 
-        @SuppressLint("NotifyDataSetChanged") Response.Listener<String> responseListener = this::getClassRequest;
-
+        @SuppressLint("NotifyDataSetChanged")
+        Response.Listener<String> responseListener = this::getClassRequest;
         GetClassRequest getClassRequest = new GetClassRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(getClassRequest);
@@ -142,8 +153,11 @@ public class ClassFragment extends Fragment {
         }
     }
 
+    /*
+     * Initialize all activity result launchers.
+     */
     @SuppressLint("NotifyDataSetChanged")
-    private void activityResultLauncherInit() {
+    private void initActivityResultLauncher() {
 
         addClassResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
