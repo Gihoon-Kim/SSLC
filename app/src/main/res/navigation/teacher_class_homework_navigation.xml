@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/classHomeWorkListFragment"
-        android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.ClassHomeWorkListFragment"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassHomeWork.ClassHomeWorkListFragment"
         android:label="fragment_class_homework_list"
         tools:layout="@layout/fragment_class_homework_list" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/addClassHomeworkFragment"
-        android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.AddClassHomeworkFragment"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassHomeWork.AddClassHomeworkFragment"
         android:label="fragment_class_homework_add"
         tools:layout="@layout/fragment_class_homework_add" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailClassHomeworkFragment"
-        android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassHomeWork.DetailClassHomeworkFragment"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassHomeWork.DetailClassHomeworkFragment"
         android:label="fragment_class_homework_detail"
         tools:layout="@layout/fragment_class_homework_detail" >
         <action

@@ -17,7 +17,7 @@ import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.Student;
-import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
+import com.sslc.sslc.common_fragment_activities.ui.myClassMain.MyClassDetailViewModel;
 
 import java.util.ArrayList;
 
@@ -29,12 +29,12 @@ public class TeacherClassStudentAdapter extends RecyclerView.Adapter<TeacherClas
 
     ArrayList<Student> classStudentArrayList;
     Context context;
-    TeacherMyClassDetailViewModel mainViewModel;
+    MyClassDetailViewModel mainViewModel;
 
     public TeacherClassStudentAdapter(
             Context context,
             ArrayList<Student> classStudentList,
-            TeacherMyClassDetailViewModel mainViewModel
+            MyClassDetailViewModel mainViewModel
     ) {
 
         this.context = context;

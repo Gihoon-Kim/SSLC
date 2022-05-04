@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/classStudentListFragment"
-        android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassStudent.ClassStudentListFragment"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassStudent.ClassStudentListFragment"
         android:label="fragment_class_student_list"
         tools:layout="@layout/fragment_class_student_list" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/classStudentDetailFragment"
-        android:name="com.sslc.sslc.teacher_side_activities.ui.myClassMain.ClassStudent.ClassStudentDetailFragment"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassStudent.ClassStudentDetailFragment"
         android:label="fragment_class_student_detail"
         tools:layout="@layout/fragment_class_student_detail" >
         <action

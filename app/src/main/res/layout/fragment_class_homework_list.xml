@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".teacher_side_activities.ui.myClassMain.ClassHomeWork.ClassHomeWorkListFragment">
+    tools:context=".common_fragment_activities.ClassHomeWork.ClassHomeWorkListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_ClassHomeworkList"

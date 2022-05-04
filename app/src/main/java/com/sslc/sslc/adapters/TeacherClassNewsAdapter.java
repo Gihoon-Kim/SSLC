@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.ClassNews;
-import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetailViewModel;
+import com.sslc.sslc.common_fragment_activities.ui.myClassMain.MyClassDetailViewModel;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 
@@ -28,12 +28,12 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
 
     ArrayList<ClassNews> classNewsArrayList;
     Context context;
-    TeacherMyClassDetailViewModel mainViewModel;
+    MyClassDetailViewModel mainViewModel;
 
     public TeacherClassNewsAdapter(
             Context context,
             ArrayList<ClassNews> classNewsArrayList,
-            TeacherMyClassDetailViewModel mainViewModel
+            MyClassDetailViewModel mainViewModel
     ) {
 
         this.context = context;

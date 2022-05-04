@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sslc.sslc.R;
 import com.sslc.sslc.data.Programs;
-import com.sslc.sslc.teacher_side_activities.ui.myClassMain.TeacherMyClassDetail;
+import com.sslc.sslc.common_fragment_activities.ui.myClassMain.MyClassDetail;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class MyClassListAdapter extends RecyclerView.Adapter<MyClassListAdapter.
         
         holder.tv_ViewDetail.setOnClickListener(view -> {
 
-            Intent intent = new Intent(context, TeacherMyClassDetail.class);
+            Intent intent = new Intent(context, MyClassDetail.class);
             intent.putExtra(context.getString(R.string.class_title), arrayList.get(holder.getAdapterPosition()).getProgramTitle());
             context.startActivity(intent);
         });
