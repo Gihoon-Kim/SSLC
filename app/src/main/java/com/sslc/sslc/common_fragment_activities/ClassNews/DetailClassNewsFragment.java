@@ -119,7 +119,7 @@ public class DetailClassNewsFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(getString(R.string.delete))
-                .setMessage("Do you really want to delete News " + Objects.requireNonNull(mainViewModel.getClassNewsLiveData().getValue()).getClassTitle() + "?")
+                .setMessage("Do you really want to delete News " + (Objects.requireNonNull(mainViewModel.getClassNewsLiveData().getValue()).getNewsTitle() + "?"))
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
 
                     ProgressDialog progressDialog = new ProgressDialog(requireContext());

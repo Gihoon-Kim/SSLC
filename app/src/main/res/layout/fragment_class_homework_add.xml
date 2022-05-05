@@ -49,6 +49,14 @@
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Theme.SSLC.PopupOverlay" />
 
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:scaleX="2"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:contentDescription="Back to main screen" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

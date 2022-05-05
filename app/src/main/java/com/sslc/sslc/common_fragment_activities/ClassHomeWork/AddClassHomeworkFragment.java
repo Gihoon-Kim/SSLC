@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,9 @@ public class AddClassHomeworkFragment extends Fragment {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.fab_AddHomework)
     FloatingActionButton fab_addHomework;
+    @SuppressLint("NonConstantResourceId")
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -82,6 +86,14 @@ public class AddClassHomeworkFragment extends Fragment {
         String dateFormat = getString(R.string.date_format);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         tv_homeworkDeadLine.setText(simpleDateFormat.format(myCalendar.getTime()));
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @OnClick(R.id.iv_back)
+    public void onBackClicked() {
+
+        Navigation.findNavController(iv_back)
+                .navigate(R.id.action_addClassHomeworkFragment_to_classHomeWorkListFragment);
     }
 
     @SuppressLint("NonConstantResourceId")

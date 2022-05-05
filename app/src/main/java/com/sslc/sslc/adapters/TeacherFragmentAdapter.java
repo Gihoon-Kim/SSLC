@@ -250,7 +250,7 @@ public class TeacherFragmentAdapter extends RecyclerView.Adapter<TeacherFragment
                                     Glide.with(context)
                                             .load(uri)
                                             .into(iv_TeacherProfileImage))
-                            .addOnFailureListener(e -> Toast.makeText(context, "Download Image Failed", Toast.LENGTH_SHORT).show());
+                            .addOnFailureListener(e -> {});
                 } else {
 
                     Glide.with(context)
