@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_classHomeWorkListFragment_to_detailClassHomeworkFragment"
             app:destination="@id/detailClassHomeworkFragment" />
+        <action
+            android:id="@+id/action_classHomeWorkListFragment_to_detailClassHomeworkFragmentS"
+            app:destination="@id/detailClassHomeworkFragmentS" />
     </fragment>
     <fragment
         android:id="@+id/addClassHomeworkFragment"
@@ -33,6 +36,15 @@
         tools:layout="@layout/fragment_class_homework_detail" >
         <action
             android:id="@+id/action_detailClassHomeworkFragment_to_classHomeWorkListFragment"
+            app:destination="@id/classHomeWorkListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailClassHomeworkFragmentS"
+        android:name="com.sslc.sslc.common_fragment_activities.ClassHomeWork.DetailClassHomeworkFragmentS"
+        android:label="DetailClassHomeworkFragmentS"
+        tools:layout="@layout/fragment_class_homework_detail_student">
+        <action
+            android:id="@+id/action_detailClassHomeworkFragmentS_to_classHomeWorkListFragment"
             app:destination="@id/classHomeWorkListFragment" />
     </fragment>
 </navigation>

@@ -29,16 +29,19 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
     ArrayList<ClassNews> classNewsArrayList;
     Context context;
     MyClassDetailViewModel mainViewModel;
+    Boolean isTeacher;
 
     public TeacherClassNewsAdapter(
             Context context,
             ArrayList<ClassNews> classNewsArrayList,
-            MyClassDetailViewModel mainViewModel
+            MyClassDetailViewModel mainViewModel,
+            Boolean isTeacher
     ) {
 
         this.context = context;
         this.classNewsArrayList = classNewsArrayList;
         this.mainViewModel = mainViewModel;
+        this.isTeacher = isTeacher;
     }
 
     @NonNull
@@ -78,12 +81,20 @@ public class TeacherClassNewsAdapter extends RecyclerView.Adapter<TeacherClassNe
 
         holder.cv_Item.setOnClickListener(view -> {
 
+            if (isTeacher) {
+
+                Navigation
+                        .findNavController(view)
+                        .navigate(R.id.action_fragment_class_news_list_to_detailClassNewsFragment);
+            } else {
+
+                Navigation
+                        .findNavController(view)
+                        .navigate(R.id.action_fragment_class_news_list_to_detailClassNewsFragmentS);
+            }
             mainViewModel.setClassNewsLiveData(
                     classNewsArrayList.get(position)
             );
-            Navigation
-                    .findNavController(view)
-                    .navigate(R.id.action_fragment_class_news_list_to_detailClassNewsFragment);
         });
     }
 

@@ -29,16 +29,18 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
     ArrayList<ClassHomework> classHomeworkList;
     Context context;
     MyClassDetailViewModel mainViewModel;
+    Boolean isTeacher;
 
     public TeacherClassHomeworkAdapter(
             Context context,
             ArrayList<ClassHomework> classHomeworkList,
-            MyClassDetailViewModel mainViewModel
-    ) {
+            MyClassDetailViewModel mainViewModel,
+            boolean isTeacher) {
 
         this.context = context;
         this.classHomeworkList = classHomeworkList;
         this.mainViewModel = mainViewModel;
+        this.isTeacher = isTeacher;
     }
 
     @NonNull
@@ -77,9 +79,17 @@ public class TeacherClassHomeworkAdapter extends RecyclerView.Adapter<TeacherCla
         );
 
         holder.cv_Item.setOnClickListener(view -> {
-                    Navigation
-                            .findNavController(view)
-                            .navigate(R.id.action_classHomeWorkListFragment_to_detailClassHomeworkFragment);
+
+                    if (isTeacher) {
+                        Navigation
+                                .findNavController(view)
+                                .navigate(R.id.action_classHomeWorkListFragment_to_detailClassHomeworkFragment);
+                    } else {
+
+                        Navigation
+                                .findNavController(view)
+                                .navigate(R.id.action_classHomeWorkListFragment_to_detailClassHomeworkFragmentS);
+                    }
                     mainViewModel.setClassHomeworkLiveData(classHomeworkList.get(position));
                 }
         );

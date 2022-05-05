@@ -43,12 +43,14 @@ public class HomeFragment extends Fragment {
                 Log.i(TAG, requireActivity().getIntent().getStringExtra("teacherID"));
                 Intent intent = new Intent(getActivity(), TeacherMyClassActivity.class);
                 intent.putExtra("teacherID", requireActivity().getIntent().getStringExtra("teacherID"));
+                intent.putExtra("isTeacher", true);
                 startActivity(intent);
 
             } else {
 
                 Intent intent = new Intent(getActivity(), MyClassDetail.class);
                 intent.putExtra("classTitle", Objects.requireNonNull(mainViewModel.getStudentInformation().getValue()).getMyClass());
+                intent.putExtra("isTeacher", false);
                 startActivity(intent);
             }
         });

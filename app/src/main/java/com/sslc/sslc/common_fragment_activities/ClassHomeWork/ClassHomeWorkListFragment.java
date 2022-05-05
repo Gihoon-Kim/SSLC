@@ -65,7 +65,8 @@ public class ClassHomeWorkListFragment extends Fragment {
         adapter = new TeacherClassHomeworkAdapter(
                 requireContext(),
                 classHomeworkList,
-                mainViewModel
+                mainViewModel,
+                requireActivity().getIntent().getBooleanExtra("isTeacher", true)
         );
 
         RecyclerView rv_ClassHomeworkList = binding.rvClassHomeworkList;
@@ -77,10 +78,17 @@ public class ClassHomeWorkListFragment extends Fragment {
                 DividerItemDecoration.VERTICAL
         ));
 
-        binding.fab.setOnClickListener(view -> Navigation
-                .findNavController(view)
-                .navigate(R.id.action_classHomeWorkListFragment_to_addClassHomeworkFragment)
-        );
+        if (requireActivity().getIntent().getBooleanExtra("isTeacher", true)) {
+
+            binding.fab.setVisibility(View.VISIBLE);
+            binding.fab.setOnClickListener(view -> Navigation
+                    .findNavController(view)
+                    .navigate(R.id.action_classHomeWorkListFragment_to_addClassHomeworkFragment)
+            );
+        } else {
+
+            binding.fab.setVisibility(View.INVISIBLE);
+        }
 
         shimmerFrameLayout = binding.shimmerLayout;
         shimmerFrameLayout.startShimmer();

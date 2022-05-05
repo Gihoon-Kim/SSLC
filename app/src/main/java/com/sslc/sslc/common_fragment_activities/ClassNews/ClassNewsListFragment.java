@@ -77,7 +77,8 @@ public class ClassNewsListFragment extends Fragment {
         adapter = new TeacherClassNewsAdapter(
                 requireContext(),
                 classNewsList,
-                mainViewModel
+                mainViewModel,
+                requireActivity().getIntent().getBooleanExtra("isTeacher", true)
         );
 
         RecyclerView rv_ClassNewsList = binding.rvClassNewsList;
@@ -94,10 +95,17 @@ public class ClassNewsListFragment extends Fragment {
         // get class news from database and set it to recycler view
         getAllClassNews();
 
-        binding.fab.setOnClickListener(view -> Navigation
-                .findNavController(view)
-                .navigate(R.id.action_fragment_class_news_list_to_addClassNewsFragment)
-        );
+        if (requireActivity().getIntent().getBooleanExtra("isTeacher", true)) {
+
+            binding.fab.setVisibility(View.VISIBLE);
+            binding.fab.setOnClickListener(view -> Navigation
+                    .findNavController(view)
+                    .navigate(R.id.action_fragment_class_news_list_to_addClassNewsFragment)
+            );
+        } else {
+
+            binding.fab.setVisibility(View.INVISIBLE);
+        }
 
         return binding.getRoot();
     }
